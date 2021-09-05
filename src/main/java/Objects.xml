@@ -1,0 +1,773 @@
+<?xml version="1.0"?>
+<!DOCTYPE objectList PUBLIC
+"-//org.lightless//HeroScribe Object List 1.5//EN"
+"http://lightless.org/files/xml/objectList-1.5.dtd">
+
+<objectList
+version="1.0"
+vectorPrefix="Icons/Vector/" vectorSuffix=".eps.gz"
+rasterPrefix="Icons/Raster/" rasterSuffix=".png"
+samplePrefix="Icons/Sample/" sampleSuffix=".png"
+>
+
+<kind id="hero" name="Heroes" />
+<kind id="monster" name="Monsters" />
+<kind id="man-at-arms" name="Men-at-Arms" />
+<kind id="furniture" name="Furniture" />
+<kind id="door" name="Doors" />
+<kind id="mark" name="Marks" />
+<kind id="trap" name="Traps" />
+<kind id="room" name="Rooms" />
+<kind id="various" name="Various" />
+
+<board width="26" height="19" borderDoorsOffset="0.08" adjacentBoardsOffset="-0.5">
+<icon region="Europe" path="Europe/Board_EU" />
+<icon region="USA" path="USA/Board_US" />
+
+<!-- Border corridors -->
+<corridor left="1" top="1" width="26" height="1" />
+<corridor left="1" top="19" width="26" height="1" />
+<corridor left="1" top="1" width="1" height="19" />
+<corridor left="26" top="1" width="1" height="19" />
+
+<!-- 2x7 corridors -->
+<corridor left="13" top="1" width="2" height="7" />
+<corridor left="13" top="13" width="2" height="7" />
+
+<!-- 10x1 corridors -->
+<corridor left="1" top="10" width="10" height="1" />
+<corridor left="17" top="10" width="10" height="1" />
+
+<!-- 1x7 corridors -->
+<corridor left="10" top="7" width="1" height="7" />
+<corridor left="17" top="7" width="1" height="7" />
+
+<!-- 8x1 corridors -->
+<corridor left="10" top="7" width="8" height="1" />
+<corridor left="10" top="13" width="8" height="1" />
+</board>
+
+<object name="Alchemist's Bench" id="AlchemistsBench" width="3" height="2" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/AlchemistsBench_EU" />
+<icon region="USA" path="USA/Base/AlchemistsBench_US" />
+</object>
+
+<object name="Arrow" id="Arrow" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Arrow_EU" />
+<icon region="USA" path="USA/NonOriginal/Arrow_US" original="false"/>
+</object>
+
+<object name="Barbarian" id="Barbarian" width="1" height="1" kind="hero">
+<icon region="Europe" path="Europe/NonOriginal/Barbarian_EU" original="false"/>
+<icon region="USA" path="USA/Base/Barbarian_US" />
+</object>
+
+<object name="Bookcase" id="Bookcase" width="3" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Bookcase_EU" />
+<icon region="USA" path="USA/Base/Bookcase_US" />
+</object>
+
+<object name="Chaos Warrior" id="ChaosWarrior" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/ChaosWarrior_EU" />
+<icon region="USA" path="USA/Base/ChaosWarrior_US" />
+</object>
+
+<object name="Cupboard" id="Cupboard" width="3" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Cupboard_EU" />
+<icon region="USA" path="USA/Base/Cupboard_US" />
+</object>
+
+<object name="Door" id="Door" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/Base/Door_EU" />
+<icon region="USA" path="USA/Base/Door_US" />
+</object>
+
+<object name="Door In" id="DoorIn" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.DoorIn_EU" yoffset="-0.239"/>
+<icon region="USA" path="USA/Base/DoorIn_US" yoffset="-0.219" />
+</object>
+
+<object name="Door Out" id="DoorOut" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.DoorOut_EU" yoffset="0.281"/>
+<icon region="USA" path="USA/Base/DoorOut_US" yoffset="0.286" />
+</object>
+
+<object name="Double Arrow Door" id="DoubleArrowDoor" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/NonOriginal/DoubleArrowDoor_EU" yoffset="0.245" original="false" />
+<icon region="USA" path="USA/Base/DoubleArrowDoor_US" yoffset="0.245"/>
+</object>
+
+<object name="Double Blocked Square" id="DoubleBlockedSquare" width="2" height="1"  kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/DoubleBlockedSquare_EU" />
+<icon region="USA" path="USA/Base/DoubleBlockedSquare_US" />
+</object>
+
+<object name="Dwarf" id="Dwarf" width="1" height="1" kind="hero">
+<icon region="Europe" path="Europe/NonOriginal/Dwarf_EU" original="false"/>
+<icon region="USA" path="USA/NonOriginal/Dwarf_US" original="false"/>
+<note>
+There isn't a Dwarf icon in any of the Hero Quest books.
+
+The icon you see is copyright of Luis Bermudez (a.k.a. Wolf): he kindly created it for HeroScribe.
+Many thanks to him!
+</note>
+</object>
+
+<object name="Elf" id="Elf" width="1" height="1" kind="hero">
+<icon region="Europe" path="Europe/Base/Elf_EU" />
+<icon region="USA" path="USA/Base/Elf_US" />
+</object>
+
+<object name="Falling Rock" id="FallingRock" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/Base/FallingRock_EU" />
+<icon region="USA" path="USA/Base/FallingRock_US" />
+</object>
+
+<object name="Fimir" id="Fimir" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Fimir_EU" />
+<icon region="USA" path="USA/Base/Fimir_US" />
+</object>
+
+<object name="Fireplace" id="Fireplace" width="3" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Fireplace_EU" />
+<icon region="USA" path="USA/Base/Fireplace_US" />
+</object>
+
+<object name="Gargoyle" id="Gargoyle" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Gargoyle_EU" />
+<icon region="USA" path="USA/Base/Gargoyle_US" />
+</object>
+
+<object name="Goblin" id="Goblin" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Goblin_EU" />
+<icon region="USA" path="USA/Base/Goblin_US" />
+</object>
+
+<object name="Letter A" id="LetterA" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterA_EU" />
+<icon region="USA" path="USA/Base/LetterA_US" />
+</object>
+
+<object name="Letter B" id="LetterB" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterB_EU" />
+<icon region="USA" path="USA/Base/LetterB_US" />
+</object>
+
+<object name="Letter C" id="LetterC" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterC_EU" />
+<icon region="USA" path="USA/Base/LetterC_US" />
+</object>
+
+<object name="Letter D" id="LetterD" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterD_EU" />
+<icon region="USA" path="USA/Base/LetterD_US" />
+</object>
+
+<object name="Letter E" id="LetterE" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterE_EU" />
+<icon region="USA" path="USA/Base/LetterE_US" />
+</object>
+
+<object name="Letter F" id="LetterF" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterF_EU" />
+<icon region="USA" path="USA/Base/LetterF_US" />
+</object>
+
+<object name="Letter G" id="LetterG" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterG_EU" />
+<icon region="USA" path="USA/Base/LetterG_US" />
+</object>
+
+<object name="Letter H" id="LetterH" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterH_EU" />
+<icon region="USA" path="USA/Base/LetterH_US" />
+</object>
+
+<object name="Letter I" id="LetterI" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterI_EU" />
+<icon region="USA" path="USA/Base/LetterI_US" />
+</object>
+
+<object name="Letter J" id="LetterJ" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterJ_EU" />
+<icon region="USA" path="USA/Base/LetterJ_US" />
+</object>
+
+<object name="Letter K" id="LetterK" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterK_EU" />
+<icon region="USA" path="USA/Base/LetterK_US" />
+</object>
+
+<object name="Letter L" id="LetterL" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterL_EU" />
+<icon region="USA" path="USA/Base/LetterL_US" />
+</object>
+
+<object name="Letter M" id="LetterM" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterM_EU" />
+<icon region="USA" path="USA/Base/LetterM_US" />
+</object>
+
+<object name="Mummy" id="Mummy" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Mummy_EU" />
+<icon region="USA" path="USA/Base/Mummy_US" />
+</object>
+
+<object name="Numbers 1 and 2" id="Number1-2" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number1-2_EU" />
+<icon region="USA" path="USA/Base/Number1-2_US" />
+</object>
+
+<object name="Number 1" id="Number1" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number1_EU" />
+<icon region="USA" path="USA/Base/Number1_US" />
+</object>
+
+<object name="Numbers 2 and 12" id="Number2-12" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number2-12_EU" />
+<icon region="USA" path="USA/Base/Number2-12_US" />
+</object>
+
+<object name="Number 2" id="Number2" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number2_EU" />
+<icon region="USA" path="USA/Base/Number2_US" />
+</object>
+
+<object name="Number 3" id="Number3" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number3_EU" />
+<icon region="USA" path="USA/Base/Number3_US" />
+</object>
+
+<object name="Number 4" id="Number4" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number4_EU" />
+<icon region="USA" path="USA/Base/Number4_US" />
+</object>
+
+<object name="Number 5" id="Number5" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number5_EU" />
+<icon region="USA" path="USA/Base/Number5_US" />
+</object>
+
+<object name="Number 6" id="Number6" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number6_EU" />
+<icon region="USA" path="USA/Base/Number6_US" />
+</object>
+
+<object name="Number 7" id="Number7" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number7_EU" />
+<icon region="USA" path="USA/Base/Number7_US" />
+</object>
+
+<object name="Number 8" id="Number8" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number8_EU" />
+<icon region="USA" path="USA/Base/Number8_US" />
+</object>
+
+<object name="Number 9" id="Number9" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number9_EU" />
+<icon region="USA" path="USA/Base/Number9_US" />
+</object>
+
+<object name="Number 10" id="Number10" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number10_EU" />
+<icon region="USA" path="USA/Base/Number10_US" />
+</object>
+
+<object name="Number 11" id="Number11" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/Number11_EU" />
+<icon region="USA" path="USA/Base/Number11_US" />
+</object>
+
+<object name="Open Door" id="OpenDoor" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/Base/OpenDoor_EU"/>
+<icon region="USA" path="USA/NonOriginal/OpenDoor_US" original="false"/>
+</object>
+
+<object name="Orc" id="Orc" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Orc_EU" />
+<icon region="USA" path="USA/Base/Orc_US" />
+</object>
+
+<object name="Pit Trap" id="PitTrap" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/Base/PitTrap_EU" xoffset="0.068" yoffset="-0.005"/>
+<icon region="USA" path="USA/Base/PitTrap_US" />
+</object>
+
+<object name="Rack" id="Rack" width="2" height="3" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Rack_EU" />
+<icon region="USA" path="USA/Base/Rack_US" />
+</object>
+
+<object name="Secret Door" id="SecretDoor" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/SecretDoor_EU" yoffset="-0.208"/>
+<icon region="USA" path="USA/Base/SecretDoor_US" yoffset="-0.208"/>
+</object>
+
+<object name="Secret Door Alternate" id="SecretDoorAlternate" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/SecretDoorAlternate_EU" yoffset="-0.385"/>
+<icon region="USA" path="USA/Base/SecretDoorAlternate_US" yoffset="-0.385"/>
+</object>
+
+<object name="Single Blocked Square" id="SingleBlockedSquare" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/SingleBlockedSquare_EU" />
+<icon region="USA" path="USA/Base/SingleBlockedSquare_US" />
+</object>
+
+<object name="Skeleton" id="Skeleton" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Skeleton_EU" />
+<icon region="USA" path="USA/Base/Skeleton_US" />
+</object>
+
+<object name="Sorcerer's Table" id="SorcerersTable" width="3" height="2" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/SorcerersTable_EU" />
+<icon region="USA" path="USA/Base/SorcerersTable_US" />
+</object>
+
+<object name="Spear Trap" id="SpearTrap" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/Base/SpearTrap_EU" xoffset="-0.052" yoffset="0.005"/>
+<icon region="USA" path="USA/Base/SpearTrap_US" />
+</object>
+
+<object name="Stairway" id="Stairway" width="2" height="2" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Stairway_EU" />
+<icon region="USA" path="USA/Base/Stairway_US" />
+</object>
+
+<object name="Table" id="Table" width="3" height="2" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Table_EU" />
+<icon region="USA" path="USA/Base/Table_US" />
+</object>
+
+<object name="Throne" id="Throne" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Throne_EU" />
+<icon region="USA" path="USA/Base/Throne_US" />
+</object>
+
+<object name="Tomb" id="Tomb" width="2" height="3" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/Tomb_EU" />
+<icon region="USA" path="USA/Base/Tomb_US" />
+</object>
+
+<object name="Treasure Chest" id="TreasureChest" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/TreasureChest_EU" />
+<icon region="USA" path="USA/Base/TreasureChest_US" />
+</object>
+
+<object name="Treasure Chest with Trap" id="TreasureChestTrap" width="1" height="1" kind="furniture" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/Base/TreasureChest_EU" />
+<icon region="USA" path="USA/Base/TreasureChestTrap_US" />
+<note>
+Use this icon if the chest contains a trap, so it'll be shown with orange background in an american map.
+</note>
+</object>
+
+<object name="Weapons Rack" id="WeaponsRack" width="3" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/Base/WeaponsRack_EU" />
+<icon region="USA" path="USA/Base/WeaponsRack_US" />
+</object>
+
+<object name="Wizard" id="Wizard" width="1" height="1" kind="hero">
+<icon region="Europe" path="Europe/Base/Wizard_EU" />
+<icon region="USA" path="USA/Base/Wizard_US" />
+</object>
+
+<object name="Letter X" id="LetterX" width="1" height="1" kind="mark" zorder="5.0">
+<icon region="Europe" path="Europe/Base/LetterX_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.LetterX_US" />
+</object>
+
+<object name="Zombie" id="Zombie" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/Base/Zombie_EU" />
+<icon region="USA" path="USA/Base/Zombie_US" />
+</object>
+
+<object name="Battle Room" id="BattleRoom" width="4" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.BattleRoom_EU"/>
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.BattleRoom_US" original="false"/>
+</object>
+
+<object name="Carpet Room" id="CarpetRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.CarpetRoom_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.CarpetRoom_US" original="false" />
+</object>
+
+<object name="Chaos Room" id="ChaosRoom" width="8" height="7" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.ChaosRoom_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.ChaosRoom_US" original="false"/>
+</object>
+
+<object name="Deep Pit Trap" id="DeepPitTrap" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.DeepPitTrap_EU"/>
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.DeepPitTrap_US" original="false"/>
+</object>
+
+<object name="Ogre Champion" id="OgreChampion" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.OgreChampion_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.OgreChampion_US" original="false"/>
+</object>
+
+<object name="Ogre Chieftain" id="OgreChieftain" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.OgreChieftain_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.OgreChieftain_US" original="false"/>
+</object>
+
+<object name="Ogre Lord" id="OgreLord" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.OgreLord_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.OgreLord_US" original="false"/>
+</object>
+
+<object name="Ogre Throne" id="OgreThrone" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.OgreThrone_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.OgreThrone_US" original="false"/>
+</object>
+
+<object name="Ogre Warrior" id="OgreWarrior" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.OgreWarrior_EU" />
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.OgreWarrior_US" />
+</object>
+
+<object name="Pit Room" id="PitRoom" width="4" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.PitRoom_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.PitRoom_US" original="false" />
+</object>
+
+<object name="Stone Doorway" id="StoneDoorway" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.StoneDoorway_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.StoneDoorway_US" original="false"/>
+</object>
+
+<object name="Sun Eye Room" id="SunEyeRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.SunEyeRoom_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.SunEyeRoom_US" original="false"/>
+</object>
+
+<object name="Surface" id="Surface" width="8" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.Surface_EU" xoffset="-0.016" yoffset="-0.016"/>
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.Surface_US" xoffset="-0.016" yoffset="-0.016" original="false"/>
+</object>
+
+<object name="Swinging Blade Trap" id="SwingingBladeTrap" width="1" height="1" kind="trap" trap="true">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.SwingingBladeTrap_EU" />
+<icon region="USA" path="USA/NonOriginal/AgainstTheOgreHoard.SwingingBladeTrap_US" original="false"/>
+</object>
+
+<object name="Cliff Corridor" id="CliffCorridor" width="8" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.CliffCorridor_EU" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.CliffCorridor_US" />
+</object>
+
+<object name="Cloud of Chaos" id="CloudOfChaos" width="3" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.CloudOfChaos_EU" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.CloudOfChaos_US" />
+</object>
+
+<object name="Dwarven Forge / Weapons Forge" id="DwarvenForge" width="3" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.DwarvenForge_EU" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.WeaponsForge_US" />
+
+<note>
+"Dwarven Forge" is the european name, "Weapons Forge" is the american one.
+</note>
+</object>
+
+<object name="Giant Stone Boulder" id="GiantStoneBoulder" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/KellarsKeep.GiantStoneBoulder_EU" original="false"/>
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.GiantStoneBoulder_US" />
+</object>
+
+<object name="Long Stairway" id="LongStairway" width="1" height="5" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/KellarsKeep.LongStairway_EU" original="false" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.LongStairway_US" />
+</object>
+
+<object name="Short Stairway" id="ShortStairway" width="1" height="3" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/KellarsKeep.ShortStairway_EU" original="false" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.ShortStairway_US" />
+</object>
+
+<object name="Stairs" id="Stairs" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.Stairs_EU" />
+<icon region="USA" path="USA/NonOriginal/KellarsKeep.Stairs_US" original="false" />
+</object>
+
+<object name="Star Burst" id="StarBurst" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.StarBurst_EU" />
+<icon region="USA" path="USA/KellarsKeep/KellarsKeep.StarBurst_US" />
+</object>
+
+<object name="Trap Door" id="TrapDoor" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.TrapDoor_EU" />
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.TrapDoor_US" />
+</object>
+
+<object name="Dark Arrow" id="DarkArrow" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/KellarsKeep/KellarsKeep.DarkArrow_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.DarkArrow_US" />
+</object>
+
+<object name="Coffin" id="Coffin" width="1" height="2" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/ReturnOfTheWitchLord/ReturnOfTheWitchLord.Coffin_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.Coffin_US" />
+</object>
+
+<object name="Death Mist" id="DeathMist" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/ReturnOfTheWitchLord/ReturnOfTheWitchLord.DeathMist_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.DeathMist_US" />
+</object>
+
+<object name="Fog" id="Fog" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/ReturnOfTheWitchLord/ReturnOfTheWitchLord.Fog_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.Fog_US" />
+</object>
+
+<object name="Revolving Room" id="RevolvingRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/ReturnOfTheWitchLord/ReturnOfTheWitchLord.RevolvingRoom_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.RevolvingRoom_US" />
+</object>
+
+<object name="Throne Room" id="ThroneRoom" width="5" height="6" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/ReturnOfTheWitchLord/ReturnOfTheWitchLord.ThroneRoom_EU" />
+<icon region="USA" path="USA/ReturnOfTheWitchLord/ReturnOfTheWitchLord.ThroneRoom_US" />
+</object>
+
+<object name="Dark Warrior" id="DarkWarrior" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/TheDarkCompany/TheDarkCompany.DarkWarrior_EU" />
+<icon region="USA" path="USA/NonOriginal/TheDarkCompany.DarkWarrior_US"  original="false"/>
+</object>
+
+<object name="Bottomless Chasm" id="BottomlessChasm" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.BottomlessChasm_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.BottomlessChasm_US" />
+</object>
+
+<object name="Cage Room" id="CageRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.CageRoom_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.CageRoom_US" />
+</object>
+
+<object name="Crossbowman" id="Crossbowman" width="1" height="1" kind="man-at-arms">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Crossbowman_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Crossbowman_US" />
+</object>
+
+<object name="Crystal Key" id="CrystalKey" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.CrystalKey_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.CrystalKey_US" />
+</object>
+
+<object name="Frozen Crypt Room" id="FrozenCryptRoom" width="3" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.FrozenCryptRoom_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.FrozenCryptRoom_US" />
+</object>
+
+<object name="Frozen Horror" id="FrozenHorror" width="2" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.FrozenHorror_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.FrozenHorror_US" />
+</object>
+
+<object name="Halberdier" id="Halberdier" width="1" height="1" kind="man-at-arms">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Halberdier_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Halberdier_US" />
+</object>
+
+<object name="Ice Cave Entrance" id="IceCaveEntrance" width="6" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceCaveEntrance_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceCaveEntrance_US" />
+</object>
+
+<object name="Ice Gremlin" id="IceGremlin" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceGremlin_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceGremlin_US" />
+</object>
+
+<object name="Ice Gremlin Treasure Room" id="IceGremlinTreasureRoom" width="3" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceGremlinTreasureRoom_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceGremlinTreasureRoom_US" />
+</object>
+
+<object name="Ice Ledge" id="IceLedge" width="3" height="5" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceLedge_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceLedge_US" />
+</object>
+
+<object name="Ice Slide" id="IceSlide" width="1" height="8" kind="various" zorder="-5.0" >
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceSlide_EU"  original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceSlide_US" />
+</object>
+
+<object name="Ice Tunnel A" id="IceTunnelA" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceTunnelA_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceTunnelA_US" />
+</object>
+
+<object name="Ice Tunnel B" id="IceTunnelB" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceTunnelB_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceTunnelB_US" />
+</object>
+
+<object name="Ice Tunnel C" id="IceTunnelC" width="1" height="1" kind="furniture" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceTunnelC_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceTunnelC_US" />
+</object>
+
+<object name="Ice Vault 2x3" id="IceVault2x3" width="2" height="3" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceVault2x3_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceVault2x3_US" />
+</object>
+
+<object name="Ice Vault 3x4" id="IceVault3x4" width="3" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IceVault3x4_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IceVault3x4_US" />
+</object>
+
+<object name="Icy River 1x3" id="IcyRiver1x3" width="1" height="3" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IcyRiver1x3_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IcyRiver1x3_US" />
+</object>
+
+<object name="Icy River 1x8" id="IcyRiver1x8" width="1" height="8" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.IcyRiver1x8_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.IcyRiver1x8_US" />
+</object>
+
+<object name="Living Fog Room" id="LivingFogRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.LivingFogRoom_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.LivingFogRoom_US" />
+</object>
+
+<object name="Polar Warbear" id="PolarWarbear" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.PolarWarbear_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.PolarWarbear_US" />
+</object>
+
+<object name="Scepter Room" id="ScepterRoom" width="4" height="4" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.ScepterRoom_EU" original="false" />
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.ScepterRoom_US" />
+</object>
+
+<object name="Scout" id="Scout" width="1" height="1" kind="man-at-arms">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Scout_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Scout_US" />
+</object>
+
+<object name="Seat of Power" id="SeatOfPower" width="5" height="6" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.SeatOfPower_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SeatOfPower_US" />
+</object>
+
+<object name="Slippery Ice 1x1" id="SlipperyIce1x1" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.SlipperyIce1x1_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SlipperyIce1x1_US" />
+</object>
+
+<object name="Slippery Ice 2x1" id="SlipperyIce2x1" width="2" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.SlipperyIce2x1_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SlipperyIce2x1_US" />
+</object>
+
+<object name="Slippery Ice 3x1" id="SlipperyIce3x1" width="3" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.SlipperyIce3x1_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SlipperyIce3x1_US" />
+</object>
+
+<object name="Slippery Ice 2x3" id="SlipperyIce2x3" width="2" height="3" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.SlipperyIce2x3_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SlipperyIce2x3_US" />
+</object>
+
+<object name="Stalactite" id="Stalactite" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Stalactite_EU" xoffset="-0.029" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Stalactite_US" xoffset="-0.029"/>
+</object>
+
+<object name="Swinging Axe" id="SwingingAxe" width="1" height="1" kind="trap" trap="true">
+<icon region="Europe" path="Europe/AgainstTheOgreHoard/AgainstTheOgreHoard.SwingingAxe_EU" />
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.SwingingAxe_US" />
+</object>
+
+<object name="Swordsman" id="Swordsman" width="1" height="1" kind="man-at-arms">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Swordsman_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Swordsman_US" />
+</object>
+
+<object name="Wandering Monster" id="WanderingMonster" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.WanderingMonster_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.WanderingMonster_US" />
+</object>
+
+<object name="Yeti" id="Yeti" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheFrozenHorror.Yeti_EU" original="false"/>
+<icon region="USA" path="USA/TheFrozenHorror/TheFrozenHorror.Yeti_US" />
+</object>
+
+<object name="Door with Trap" id="DoorTrap" width="1" height="2" kind="door" zorder="-1.0" door="true">
+<icon region="Europe" path="Europe/Base/Door_EU"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.DoorTrap_US" />
+
+<note>
+Use this icon if the door contains a trap, so it'll be shown with orange background in an american map.
+</note>
+
+</object>
+
+<object name="Elven Archer" id="ElvenArcher" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.ElvenArcher_EU" original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.ElvenArcher_US" />
+</object>
+
+<object name="Elven Warrior" id="ElvenWarrior" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.ElvenWarrior_EU" original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.ElvenWarrior_US" />
+</object>
+
+<object name="Giant Wolf" id="GiantWolf" width="2" height="1" kind="monster">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.GiantWolf_EU" original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.GiantWolf_US" />
+</object>
+
+<object name="Inner Sanctum" id="InnerSanctum" width="5" height="6" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.InnerSanctum_EU" xoffset="-0.005" yoffset="-0.068" original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.InnerSanctum_US" xoffset="-0.005" yoffset="-0.068"/>
+</object>
+
+<object name="Long Pit Trap" id="LongPitTrap" width="2" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.LongPitTrap_EU"  original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.LongPitTrap_US" />
+</object>
+<object name="Portcullis" id="Portcullis" width="1" height="2" kind="door" zorder="-1.0" door="true">
+
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.Portcullis_EU"  original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.Portcullis_US" />
+</object>
+
+<object name="Quicksand" id="Quicksand" width="5" height="6" kind="room" zorder="-10.0">
+<icon region="Europe" path="Europe/NonOriginal/TheMageOfTheMirror.Quicksand_EU" original="false"/>
+<icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.Quicksand_US" />
+</object>
+
+<object name="Deep Pit Trap Alternate" id="DeepPitTrapAlternate" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.DeepPitTrapAlternate_EU" />
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.DeepPitTrapAlternate_US" original="false"/>
+</object>
+
+<object name="Fireburst Trap" id="FireburstTrap" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.FireburstTrap_EU" />
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.FireburstTrap_US" original="false"/>
+</object>
+
+<object name="Hurricane Trap" id="HurricaneTrap" width="1" height="1" kind="trap" zorder="-5.0" trap="true">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.HurricaneTrap_EU" />
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.HurricaneTrap_US" original="false"/>
+</object>
+
+<object name="Teleport Trap A" id="TeleportTrapA" width="1" height="1" kind="various" zorder="-5.0">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.TeleportTrapA_EU" />
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.TeleportTrapA_US" original="false"/>
+</object>
+
+<object name="Teleport Trap B" id="TeleportTrapB" width="1" height="1" kind="various">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.TeleportTrapB_EU" />
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.TeleportTrapB_US" original="false"/>
+</object>
+
+</objectList>
