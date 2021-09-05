@@ -27,13 +27,14 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.helper.ResourceHelper;
 
 public class List {
 	public LBoard board;
-	
+
 	public TreeMap list;
 	public TreeSet kinds;
-	
+
 	public String version;
 	public String vectorPrefix, vectorSuffix;
 	public String rasterPrefix, rasterSuffix;
@@ -47,7 +48,7 @@ public class List {
 	public Iterator objectsIterator() {
 		/* I know it's unefficient, but I need the objects ordered by value, not key
 		 * (i.e. by name, not id) */
-		
+
 		return new TreeSet(list.values()).iterator();
 	}
 
@@ -58,15 +59,14 @@ public class List {
 	public LObject getObject(String id) {
 		return (LObject) list.get(id);
 	}
-	
-	
+
 	// HSE - get an object by its name
 	public LObject getObjectByName(String name) {
 		Iterator i = list.entrySet().iterator();
-		Map.Entry e; 
+		Map.Entry e;
 		LObject myObj = new LObject();
 		while (i.hasNext()) {
-			e = (Map.Entry)i.next(); 
+			e = (Map.Entry) i.next();
 			if (e.getValue().toString().contentEquals(name)) {
 				myObj = (LObject) list.get(e.getKey());
 			}
@@ -81,10 +81,10 @@ public class List {
 	public Kind getKind(String id) {
 		Iterator iterator = kindsIterator();
 		Kind found = null;
-		
-		while ( iterator.hasNext() ) {
+
+		while (iterator.hasNext()) {
 			Kind kind = (Kind) iterator.next();
-			if ( id.equals(kind.id) ) {
+			if (id.equals(kind.id)) {
 				found = kind;
 				break;
 			}
@@ -92,35 +92,41 @@ public class List {
 
 		return (Kind) found;
 	}
-	
+
 	public String getVectorPath(String id, String region) {
-		return OS.getAbsolutePath(vectorPrefix +
-				getObject(id).getIcon(region).path + vectorSuffix);
+		String relative = vectorPrefix + getObject(id).getIcon(region).path + vectorSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+		//return OS.getAbsolutePath(relative);
 	}
 
 	public String getRasterPath(String id, String region) {
-		return OS.getAbsolutePath(rasterPrefix +
-				getObject(id).getIcon(region).path + rasterSuffix);
+		String relative = rasterPrefix + getObject(id).getIcon(region).path + rasterSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+		//return OS.getAbsolutePath(relative);
 	}
 
 	public String getSamplePath(String id, String region) {
-		return OS.getAbsolutePath(samplePrefix +
-					getObject(id).getIcon(region).path + sampleSuffix);
+		String relative = samplePrefix + getObject(id).getIcon(region).path + sampleSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+		//return OS.getAbsolutePath(relative);
 	}
 
 	public String getVectorPath(String region) {
-		return OS.getAbsolutePath(vectorPrefix +
-				getBoard().getIcon(region).path + vectorSuffix);
+		String relative = vectorPrefix + getBoard().getIcon(region).path + vectorSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+		//return OS.getAbsolutePath(relative);
 	}
 
 	public String getRasterPath(String region) {
-		return OS.getAbsolutePath(rasterPrefix +
-				getBoard().getIcon(region).path + rasterSuffix);
+		String relative = rasterPrefix + getBoard().getIcon(region).path + rasterSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+//		return OS.getAbsolutePath(relative);
 	}
 
 	public String getSamplePath(String region) {
-		return OS.getAbsolutePath(samplePrefix +
-				getBoard().getIcon(region).path + sampleSuffix);
+		String relative = samplePrefix + getBoard().getIcon(region).path + sampleSuffix;
+		return ResourceHelper.getResourceUrl(relative).getFile();
+		//return OS.getAbsolutePath(relative);
 	}
 
 }

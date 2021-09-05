@@ -26,7 +26,7 @@ import javax.xml.parsers.*;
 
 public class Read extends DefaultHandler {
 	private List objects;
-	
+
 	private boolean onBoard;
 	private LObject piece;
 	private LBoard board;
@@ -47,11 +47,11 @@ public class Read extends DefaultHandler {
 	public List getObjects() {
 		return objects;
 	}
-	
+
 	/* --- */
 
 	public InputSource resolveEntity(String publicId, String systemId) {
-		if ( publicId.equals("-//org.lightless//HeroScribe Object List 1.5//EN") )
+		if (publicId.equals("-//org.lightless//HeroScribe Object List 1.5//EN"))
 			return new InputSource("DtdXsd/objectList-1.5.dtd");
 		else
 			return null;
@@ -71,10 +71,10 @@ public class Read extends DefaultHandler {
 
 		if (qName == "objectList") {
 			objects.version = attrs.getValue("version");
-			
-			if ( ! objects.version.equals( org.lightless.heroscribe.Constants.objectVersion ) )
+
+			if (!objects.version.equals(org.lightless.heroscribe.Constants.objectVersion))
 				throw new SAXException("HeroScribe's objectVersion and Objects.xml's version numbers don't match.");
-			
+
 			objects.vectorPrefix = attrs.getValue("vectorPrefix");
 			objects.vectorSuffix = attrs.getValue("vectorSuffix");
 
@@ -84,18 +84,14 @@ public class Read extends DefaultHandler {
 			objects.samplePrefix = attrs.getValue("samplePrefix");
 			objects.sampleSuffix = attrs.getValue("sampleSuffix");
 		} else if (qName == "kind") {
-			objects.kinds.add(
-				new Kind(attrs.getValue("id"), attrs.getValue("name")) );
+			objects.kinds.add(new Kind(attrs.getValue("id"), attrs.getValue("name")));
 		} else if (qName == "board") {
-			board = new LBoard(Integer.parseInt(attrs.getValue("width")),
-				Integer.parseInt(attrs.getValue("height")));
-			
-			board.borderDoorsOffset =
-				Float.parseFloat(attrs.getValue("borderDoorsOffset"));
-			
-			board.adjacentBoardsOffset =
-				Float.parseFloat(attrs.getValue("adjacentBoardsOffset"));
-			
+			board = new LBoard(Integer.parseInt(attrs.getValue("width")), Integer.parseInt(attrs.getValue("height")));
+
+			board.borderDoorsOffset = Float.parseFloat(attrs.getValue("borderDoorsOffset"));
+
+			board.adjacentBoardsOffset = Float.parseFloat(attrs.getValue("adjacentBoardsOffset"));
+
 			onBoard = true;
 		} else if (qName == "object") {
 			piece = new LObject();
@@ -104,31 +100,31 @@ public class Read extends DefaultHandler {
 			piece.name = attrs.getValue("name");
 
 			piece.kind = attrs.getValue("kind");
-					
-			piece.door = Boolean.valueOf( attrs.getValue("door") ).booleanValue();
-			piece.trap = Boolean.valueOf( attrs.getValue("trap") ).booleanValue();
-			
+
+			piece.door = Boolean.valueOf(attrs.getValue("door")).booleanValue();
+			piece.trap = Boolean.valueOf(attrs.getValue("trap")).booleanValue();
+
 			piece.width = Integer.parseInt(attrs.getValue("width"));
 			piece.height = Integer.parseInt(attrs.getValue("height"));
-			
+
 			piece.zorder = Float.parseFloat(attrs.getValue("zorder"));
-			
+
 			piece.note = null;
 		} else if (qName == "icon") {
 			Icon icon = new Icon();
-			
+
 			icon.path = attrs.getValue("path");
-			icon.xoffset = Float.parseFloat( attrs.getValue("xoffset") );
-			icon.yoffset = Float.parseFloat( attrs.getValue("yoffset") );
-			
-			icon.original = Boolean.valueOf( attrs.getValue("original") ).booleanValue();
-			
-			if ( onBoard )
+			icon.xoffset = Float.parseFloat(attrs.getValue("xoffset"));
+			icon.yoffset = Float.parseFloat(attrs.getValue("yoffset"));
+
+			icon.original = Boolean.valueOf(attrs.getValue("original")).booleanValue();
+
+			if (onBoard)
 				board.putIcon(icon, attrs.getValue("region"));
 			else
 				piece.putIcon(icon, attrs.getValue("region"));
 		} else if (qName == "corridor") {
-			if ( onBoard ) {
+			if (onBoard) {
 				int width, height;
 				int left, top;
 
@@ -137,14 +133,13 @@ public class Read extends DefaultHandler {
 				left = Integer.parseInt(attrs.getValue("left"));
 				top = Integer.parseInt(attrs.getValue("top"));
 
-				if ( left + width - 1 > board.width || left < 1 ||
-					top + height - 1 > board.height || top < 1 )
+				if (left + width - 1 > board.width || left < 1 || top + height - 1 > board.height || top < 1)
 					throw new SAXException("Corridors: out of border");
 
 				for (int i = 0; i < width; i++)
 					for (int j = 0; j < height; j++)
 						board.corridors[i + left][j + top] = true;
-				
+
 			}
 		}
 	}
@@ -154,21 +149,19 @@ public class Read extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		if (qName == "board" ) {
-			if ( !board.region.containsKey("Europe") ||
-				 !board.region.containsKey("USA") )
-				 throw new SAXException("There should be both icons for each board.");
+		if (qName == "board") {
+			if (!board.region.containsKey("Europe") || !board.region.containsKey("USA"))
+				throw new SAXException("There should be both icons for each board.");
 
 			objects.board = board;
-				
+
 			onBoard = false;
-		} else if ( qName =="object") {
-			if ( !piece.region.containsKey("Europe") ||
-				 !piece.region.containsKey("USA") )
-				 throw new SAXException("There should be both icons for each object.");
-			
+		} else if (qName == "object") {
+			if (!piece.region.containsKey("Europe") || !piece.region.containsKey("USA"))
+				throw new SAXException("There should be both icons for each object.");
+
 			objects.list.put(piece.id, piece);
-			
+
 		} else if (qName == "note") {
 			piece.note = new String(content);
 		}

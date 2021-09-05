@@ -24,6 +24,7 @@ package org.lightless.heroscribe.quest;
 import java.io.File;
 
 import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.list.*;
 
 import org.xml.sax.*;
@@ -60,15 +61,24 @@ public class Read extends DefaultHandler {
 
 	/* --- */
 
+	@Override
 	public InputSource resolveEntity(String publicId, String systemId) {
-		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.4//EN"))
-			return new InputSource(OS.getAbsolutePath("DtdXsd/quest-1.4.dtd"));
-		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.3//EN"))
-			return new InputSource(OS.getAbsolutePath("DtdXsd/quest-1.3.dtd"));
-		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.2//EN"))
-			return new InputSource(OS.getAbsolutePath("DtdXsd/quest-1.2.dtd"));
-		else
-			return null;
+		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.4//EN")) {
+			var relative = "DtdXsd/quest-1.4.dtd";
+			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+		}
+
+		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.3//EN")) {
+			var relative = "DtdXsd/quest-1.3.dtd";
+			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+		}
+
+		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.2//EN")) {
+			var relative = "DtdXsd/quest-1.2.dtd";
+			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+		}
+
+		return null;
 	}
 
 	public void error(SAXParseException e) throws SAXException {
@@ -79,12 +89,7 @@ public class Read extends DefaultHandler {
 		content = new StringBuffer();
 	}
 
-	public void startElement(
-		String uri,
-		String localName,
-		String qName,
-		Attributes attrs)
-		throws SAXException {
+	public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException {
 		content = new StringBuffer();
 
 		if (qName.equals("quest")) {
@@ -100,7 +105,7 @@ public class Read extends DefaultHandler {
 				height = 1;
 			}
 
-			if ( width < 1 || height < 1 )
+			if (width < 1 || height < 1)
 				throw new SAXException("Both width and height should be at least 1.");
 
 			boardCount = 0;
@@ -110,8 +115,7 @@ public class Read extends DefaultHandler {
 			quest.setName(attrs.getValue("name"));
 			quest.setRegion(attrs.getValue("region"));
 
-			if (!org.lightless.heroscribe.Constants
-				.questVersion.equals(attrs.getValue("version")))
+			if (!org.lightless.heroscribe.Constants.questVersion.equals(attrs.getValue("version")))
 				throw new SAXException("Heroscribe's and quest's version numbers don't match.");
 
 		} else if (qName.equals("board")) {
@@ -119,11 +123,7 @@ public class Read extends DefaultHandler {
 			if (boardCount >= width * height)
 				throw new SAXException("Too many boards in the quest.");
 
-			board =
-				new QBoard(
-					objects.getBoard().width,
-					objects.getBoard().height,
-					quest);
+			board = new QBoard(objects.getBoard().width, objects.getBoard().height, quest);
 
 			quest.setBoard(board, boardCount % width, boardCount / width);
 
@@ -137,12 +137,12 @@ public class Read extends DefaultHandler {
 			row = Integer.parseInt(attrs.getValue("row")) - 1;
 			position = Integer.parseInt(attrs.getValue("position"));
 
-			if ( "horizontal".equals( attrs.getValue("orientation") ) ) {
+			if ("horizontal".equals(attrs.getValue("orientation"))) {
 				quest.setHorizontalBridge(true, column, row, position);
-			} else if ( "vertical".equals( attrs.getValue("orientation") ) ) {
+			} else if ("vertical".equals(attrs.getValue("orientation"))) {
 				quest.setVerticalBridge(true, column, row, position);
 			} else
-				throw new SAXException("Orientation not understood.");			
+				throw new SAXException("Orientation not understood.");
 
 		} else if (qName.equals("dark")) {
 			int width, height;
@@ -153,10 +153,7 @@ public class Read extends DefaultHandler {
 			left = Integer.parseInt(attrs.getValue("left"));
 			top = Integer.parseInt(attrs.getValue("top"));
 
-			if (left + width - 1 > objects.getBoard().width
-				|| left < 1
-				|| top + height - 1 > objects.getBoard().height
-				|| top < 1)
+			if (left + width - 1 > objects.getBoard().width || left < 1 || top + height - 1 > objects.getBoard().height || top < 1)
 				throw new SAXException("Dark: out of border");
 
 			for (int i = 0; i < width; i++)
@@ -190,8 +187,7 @@ public class Read extends DefaultHandler {
 				throw new SAXException("Rotation not understood.");
 
 			if (board.addObject(obj) == false)
-				System.err.println(
-					"Ignoring an object as there's one exactly equal.");
+				System.err.println("Ignoring an object as there's one exactly equal.");
 		}
 	}
 
@@ -199,17 +195,15 @@ public class Read extends DefaultHandler {
 		content.append(ch, start, length);
 	}
 
-	public void endElement(String uri, String localName, String qName)
-		throws SAXException {
+	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (qName.equals("speech")) {
 			quest.setSpeech(new String(content));
 		} else if (qName.equals("note")) {
 			// HSE - parse out wandering monster data
 			String elementString = new String(content);
 			if (elementString.contains("Wandering Monster in this quest")) {
-				quest.setWandering(elementString.substring(33),elementString.substring(33).replaceAll(" ", ""));
-			}
-			else {
+				quest.setWandering(elementString.substring(33), elementString.substring(33).replaceAll(" ", ""));
+			} else {
 				quest.addNote(new String(content));
 			}
 		} else if (qName.equals("quest")) {

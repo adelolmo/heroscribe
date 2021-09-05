@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<preferences>
+<ghostscript path="/usr/bin/gs"/>
+<defaultDir path="/opt/git/heroscribe"/>
+</preferences>

@@ -22,6 +22,7 @@ import java.io.File;
 import javax.swing.UIManager;
 
 import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
@@ -49,7 +50,8 @@ public class HeroScribe {
 
 			preferences = new Preferences(Constants.preferencesFile);
 
-			objects = new org.lightless.heroscribe.list.Read(new File("Objects.xml")).getObjects();
+			File objectsFile = ResourceHelper.getResourceAsFile("Objects.xml");
+			objects = new org.lightless.heroscribe.list.Read(objectsFile).getObjects();
 
 			System.err.println("objects read.");
 

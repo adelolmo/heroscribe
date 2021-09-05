@@ -26,49 +26,51 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.list.LObject;
 import org.lightless.heroscribe.list.List;
-
 
 public class SplashScreenImageLoader extends JWindow {
 	Image splash;
 
 	MediaTracker mt;
 	Toolkit tk;
-	
+
 	int splashID = 1;
-	
+
 	public SplashScreenImageLoader(List objects) throws Exception {
 		super();
-		
+
 		mt = new MediaTracker(this);
 		tk = Toolkit.getDefaultToolkit();
 
-		splash = tk.createImage("Splash.jpg");
+		String splashFile = ResourceHelper.getResourceUrl("Splash.jpg").getFile();
+		splash = tk.createImage(splashFile);
 		mt.addImage(splash, splashID);
-		
+
 		mt.waitForID(splashID);
-		if (mt.isErrorID(splashID))
-			throw new Exception("Can't load all PNG icons.");
 		
+		if (mt.isErrorID(splashID)) {
+			throw new RuntimeException("Can't load all PNG icons.");
+		}
+
 		setSize(splash.getWidth(null), splash.getHeight(null));
-		
-		setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
-			(tk.getScreenSize().height - this.getHeight()) / 2);
-		
+
+		setLocation((tk.getScreenSize().width - this.getWidth()) / 2, (tk.getScreenSize().height - this.getHeight()) / 2);
+
 		setVisible(true);
-		
+
 		loadIcons(objects);
 
 		setVisible(false);
 	}
-	
+
 	public void paint(Graphics g) {
-		if ( mt.checkID(splashID) ) {
+		if (mt.checkID(splashID)) {
 			g.drawImage(splash, 0, 0, this);
 		}
 	}
-	
+
 	private void loadIcons(List objects) throws Exception {
 		Iterator iterator;
 		Image img;
@@ -103,12 +105,12 @@ public class SplashScreenImageLoader extends JWindow {
 
 		mt.waitForAll();
 
-		if (mt.isErrorAny())
-			throw new Exception("Can't load all PNG icons.");
+		if (mt.isErrorAny()) {
+			throw new RuntimeException("Can't load all PNG icons.");
+		}
 
 		end = System.currentTimeMillis();
 
-		System.err.println(
-			"PNGs loaded (" + String.valueOf(end - start) + "ms).");
+		System.err.println("PNGs loaded (" + String.valueOf(end - start) + "ms).");
 	}
 }
