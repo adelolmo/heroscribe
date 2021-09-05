@@ -18,7 +18,7 @@
 
 package org.lightless.heroscribe.list;
 
-public class Kind implements Comparable{
+public class Kind implements Comparable<Kind> {
 	public String id, name;
 
 	private int order;
@@ -35,8 +35,9 @@ public class Kind implements Comparable{
 		return count++;
 	}
 	
-	public int compareTo(Object o) {
-		Kind that = (Kind) o;
+	@Override
+	public int compareTo(Kind o) {
+		Kind that = o;
 		
 		if ( this.order < that.order )
 			return -1;

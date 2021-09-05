@@ -31,6 +31,8 @@ import org.lightless.heroscribe.list.LObject;
 import org.lightless.heroscribe.list.List;
 
 public class SplashScreenImageLoader extends JWindow {
+	private static final long serialVersionUID = 1L;
+
 	Image splash;
 
 	MediaTracker mt;
@@ -72,7 +74,7 @@ public class SplashScreenImageLoader extends JWindow {
 	}
 
 	private void loadIcons(List objects) throws Exception {
-		Iterator iterator;
+		Iterator<LObject> iterator;
 		Image img;
 
 		long start, end;

@@ -24,42 +24,39 @@ import java.lang.reflect.Method;
 public class OS {
 	public static void openURL(File file, String ref) {
 		try {
-			if ( ref != null)
+			if (ref != null)
 				openURL(file.toURI().toURL().toString() + "#" + ref);
 			else
 				openURL(file.toURI().toURL().toString());
-			
-		}
-		catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void openURL(String url) {
 		try {
-			if ( isWindows() ) {
+			if (isWindows()) {
 				Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler \"" + url + "\"");
-			} else if ( isMacOsX() ) {
-				Class utils = Class.forName("com.apple.mrj.MRJFileUtils");
-				Method openURL = utils.getDeclaredMethod("openURL",
-					new Class[] { String.class } );
-					
-				openURL.invoke(null, new String[] { url } );
+			} else if (isMacOsX()) {
+				Class<?> utils = Class.forName("com.apple.mrj.MRJFileUtils");
+				Method openURL = utils.getDeclaredMethod("openURL", String.class);
+
+				openURL.invoke(null, url);
 			} else {
 				/* sadly, can't think of anything better for gnu/linux, *bsd,
 				 * etc...
 				 * If the (physical :) reader want to suggest something better,
 				 * I'm all ears :)
 				 */
-				 
+
 				Runtime.getRuntime().exec("mozilla " + url);
 			}
-		}	
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static boolean isWindows() {
 		return System.getProperty("os.name").startsWith("Win");
 	}
@@ -67,7 +64,7 @@ public class OS {
 	public static boolean isMacOsX() {
 		return System.getProperty("mrj.version") != null;
 	}
-	
+
 	public static String getAbsolutePath(String relative) {
 		return new File(System.getProperty("user.dir"), relative).getAbsolutePath();
 	}

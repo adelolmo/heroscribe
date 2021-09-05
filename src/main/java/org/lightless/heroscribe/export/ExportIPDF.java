@@ -18,20 +18,14 @@
 
 package org.lightless.heroscribe.export;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 
 import org.lightless.heroscribe.helper.BoardPainter;
-import com.itextpdf.text.Document;
 
+import com.itextpdf.text.Document;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.DefaultFontMapper;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.Image;
 
 public class ExportIPDF {
 	public static void write(File file, BoardPainter boardPainter) throws Exception {

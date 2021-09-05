@@ -21,19 +21,18 @@
 
 package org.lightless.heroscribe.list;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.lightless.heroscribe.helper.OS;
 import org.lightless.heroscribe.helper.ResourceHelper;
 
 public class List {
 	public LBoard board;
 
-	public TreeMap list;
-	public TreeSet kinds;
+	public TreeMap<String, LObject> list;
+	public TreeSet<Kind> kinds;
 
 	public String version;
 	public String vectorPrefix, vectorSuffix;
@@ -41,34 +40,34 @@ public class List {
 	public String samplePrefix, sampleSuffix;
 
 	public List() {
-		list = new TreeMap();
-		kinds = new TreeSet();
+		list = new TreeMap<>();
+		kinds = new TreeSet<>();
 	}
 
-	public Iterator objectsIterator() {
+	public Iterator<LObject> objectsIterator() {
 		/* I know it's unefficient, but I need the objects ordered by value, not key
 		 * (i.e. by name, not id) */
 
-		return new TreeSet(list.values()).iterator();
+		return new TreeSet<LObject>(list.values()).iterator();
 	}
 
-	public Iterator kindsIterator() {
+	public Iterator<Kind> kindsIterator() {
 		return kinds.iterator();
 	}
 
 	public LObject getObject(String id) {
-		return (LObject) list.get(id);
+		return list.get(id);
 	}
 
 	// HSE - get an object by its name
 	public LObject getObjectByName(String name) {
-		Iterator i = list.entrySet().iterator();
-		Map.Entry e;
+		var i = list.entrySet().iterator();
+		Map.Entry<String, LObject> e;
 		LObject myObj = new LObject();
 		while (i.hasNext()) {
-			e = (Map.Entry) i.next();
+			e = i.next();
 			if (e.getValue().toString().contentEquals(name)) {
-				myObj = (LObject) list.get(e.getKey());
+				myObj = list.get(e.getKey());
 			}
 		}
 		return myObj;
@@ -79,18 +78,18 @@ public class List {
 	}
 
 	public Kind getKind(String id) {
-		Iterator iterator = kindsIterator();
+		Iterator<Kind> iterator = kindsIterator();
 		Kind found = null;
 
 		while (iterator.hasNext()) {
-			Kind kind = (Kind) iterator.next();
+			Kind kind = iterator.next();
 			if (id.equals(kind.id)) {
 				found = kind;
 				break;
 			}
 		}
 
-		return (Kind) found;
+		return found;
 	}
 
 	public String getVectorPath(String id, String region) {

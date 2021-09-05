@@ -21,18 +21,9 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.list.*;
-import org.lightless.heroscribe.quest.*;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Event;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -44,8 +35,33 @@ import java.io.File;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
+
+import org.lightless.heroscribe.Preferences;
+import org.lightless.heroscribe.helper.BoardPainter;
+import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.helper.ResourceHelper;
+import org.lightless.heroscribe.list.List;
+import org.lightless.heroscribe.quest.Quest;
+
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private List objects;
 	private Quest quest;
 	private Preferences prefs;
@@ -57,7 +73,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	JFileChooser fileChooser, ghostscriptChooser;
 
-	TreeMap filters;
+	TreeMap<String, FileFilter> filters;
 
 	JRadioButtonMenuItem europeItem, usaItem;
 	JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey, quitKey, listKey, aboutKey, dirKey,
@@ -65,7 +81,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	JScrollPane scrollPane;
 
-	Vector newSpecialKeys;
+	Vector<JMenuItem> newSpecialKeys;
 
 	JLabel hint, status;
 
@@ -77,7 +93,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		this.objects = objects;
 		this.quest = quest;
 
-		filters = new TreeMap();
+		filters = new TreeMap<>();
 
 		ghostscriptChooser = new JFileChooser();
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
@@ -94,7 +110,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		tools = new ToolsPanel(this, quest);
 		board = new Board(this);
 
-		newSpecialKeys = new Vector();
+		newSpecialKeys = new Vector<>();
 		newSpecialKeys.add(new SpecialQuestMenuItem(1, 2));
 		newSpecialKeys.add(new SpecialQuestMenuItem(2, 1));
 		newSpecialKeys.add(new SpecialQuestMenuItem(2, 2));
@@ -539,8 +555,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				}
 			}
 		} else if (source == ghostscriptKey) {
-			File file;
-
 			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
 
 			if (ghostscriptChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -556,7 +570,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			// HSE - get default directory
 			JFileChooser chooser;
 			String choosertitle = "Default Directory";
-			int result;
 
 			chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new java.io.File("."));
@@ -605,7 +618,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			fileChooser.setSelectedFile(new File(path));
 		}
 
-		fileChooser.setFileFilter((FileFilter) filters.get(extension));
+		fileChooser.setFileFilter(filters.get(extension));
 
 		if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 			File saveFile = fileChooser.getSelectedFile();
@@ -693,6 +706,7 @@ class ActualFileFilter extends FileFilter {
 }
 
 class SpecialQuestMenuItem extends JMenuItem {
+	private static final long serialVersionUID = 1L;
 	private int questWidth, questHeight;
 
 	public SpecialQuestMenuItem(int questWidth, int questHeight) {

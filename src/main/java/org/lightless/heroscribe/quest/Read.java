@@ -23,13 +23,16 @@ package org.lightless.heroscribe.quest;
 
 import java.io.File;
 
-import org.lightless.heroscribe.helper.OS;
-import org.lightless.heroscribe.helper.ResourceHelper;
-import org.lightless.heroscribe.list.*;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.*;
+import org.lightless.heroscribe.helper.ResourceHelper;
+import org.lightless.heroscribe.list.List;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-import javax.xml.parsers.*;
 
 public class Read extends DefaultHandler {
 	private Quest quest;
