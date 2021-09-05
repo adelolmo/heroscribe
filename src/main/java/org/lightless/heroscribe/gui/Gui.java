@@ -44,17 +44,15 @@ import java.io.File;
 import java.util.TreeMap;
 import java.util.Vector;
 
-public class Gui
-	extends JFrame
-	implements WindowListener, ItemListener, ActionListener {
-	
+public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
+
 	private List objects;
 	private Quest quest;
 	private Preferences prefs;
 
 	ToolsPanel tools;
 	Board board;
-	
+
 	BoardPainter boardPainter;
 
 	JFileChooser fileChooser, ghostscriptChooser;
@@ -62,16 +60,15 @@ public class Gui
 	TreeMap filters;
 
 	JRadioButtonMenuItem europeItem, usaItem;
-	JMenuItem newKey, openKey, saveKey, saveAsKey,
-		exportPdfKey, exportEpsKey, exportPngKey, 
-		ghostscriptKey, quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail;
-	
+	JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey, quitKey, listKey, aboutKey, dirKey,
+			readMeKey, exportPdf2Key, exportThumbNail;
+
 	JScrollPane scrollPane;
-		
+
 	Vector newSpecialKeys;
 
 	JLabel hint, status;
-	
+
 	public Gui(Preferences preferences, List objects, Quest quest) throws Exception {
 		super();
 		// HSE - set app icon
@@ -79,9 +76,9 @@ public class Gui
 		this.prefs = preferences;
 		this.objects = objects;
 		this.quest = quest;
-		
+
 		filters = new TreeMap();
-		
+
 		ghostscriptChooser = new JFileChooser();
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 
@@ -91,7 +88,7 @@ public class Gui
 		filters.put("eps", new ActualFileFilter("eps", "EPS files (*.eps)"));
 		filters.put("png", new ActualFileFilter("png", "PNG files (*.png)"));
 		filters.put("xml", new ActualFileFilter("xml", "HeroScribe Quests (*.xml)"));
-		
+
 		boardPainter = new BoardPainter(this);
 
 		tools = new ToolsPanel(this, quest);
@@ -116,8 +113,7 @@ public class Gui
 
 		Toolkit tk = Toolkit.getDefaultToolkit();
 
-		setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
-			(tk.getScreenSize().height - this.getHeight()) / 2);
+		setLocation((tk.getScreenSize().width - this.getWidth()) / 2, (tk.getScreenSize().height - this.getHeight()) / 2);
 
 		this.setVisible(true);
 	}
@@ -125,13 +121,8 @@ public class Gui
 	public void updateTitle() {
 		StringBuffer sb;
 
-		sb =
-			new StringBuffer(
-				org.lightless.heroscribe.Constants.applicationName
-					+ " "
-					+ org.lightless.heroscribe.Constants.version
-					+ org.lightless.heroscribe.Constants.applicationVersionSuffix
-					+ " - ");
+		sb = new StringBuffer(org.lightless.heroscribe.Constants.applicationName + " " + org.lightless.heroscribe.Constants.version
+				+ org.lightless.heroscribe.Constants.applicationVersionSuffix + " - ");
 
 		if (quest.getFile() == null)
 			sb.append("Untitled");
@@ -150,7 +141,7 @@ public class Gui
 		JMenu file = new JMenu("File");
 		JMenu region = new JMenu("Region");
 		JMenu help = new JMenu("Help");
-	
+
 		JMenu newMenu = new JMenu("New");
 		JMenu exportMenu = new JMenu("Export");
 		JMenu prefsMenu = new JMenu("Preferences");
@@ -160,77 +151,82 @@ public class Gui
 		ButtonGroup regionGroup = new ButtonGroup();
 
 		/* New Menu */
-		newKey = new JMenuItem("Quest", new ImageIcon("Icons/new.png"));
+		var newIcon = "Icons/new.png";
+		newKey = new JMenuItem("Quest", new ImageIcon(ResourceHelper.getResourceUrl(newIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl+N'
-		newKey.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		newKey.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		newKey.addActionListener(this);
 		newMenu.add(newKey);
 
 		newMenu.addSeparator();
 
-		for ( int i = 0 ; i < newSpecialKeys.size() ; i++ ) {
-			SpecialQuestMenuItem menuItem =
-				(SpecialQuestMenuItem) newSpecialKeys.get(i);			
+		for (int i = 0; i < newSpecialKeys.size(); i++) {
+			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) newSpecialKeys.get(i);
 
 			menuItem.addActionListener(this);
 			newMenu.add(menuItem);
 		}
 
 		/* Export Menu */
-		exportPdfKey = new JMenuItem("PDF (high quality, requires GhostScript) ...", new ImageIcon("Icons/export.png"));
+		var exportIcon = "Icons/export.png";
+		exportPdfKey = new JMenuItem("PDF (high quality, requires GhostScript) ...",
+				new ImageIcon(ResourceHelper.getResourceUrl(exportIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl-P'
-		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke('P', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke('P', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		exportPdfKey.addActionListener(this);
 		exportMenu.add(exportPdfKey);
-		
+
 		exportPdf2Key = new JMenuItem("PDF (low quality, no GhostScript required) ...");
 		// HSE - add menu modifier 'Ctrl+Shift-P'
-		exportPdf2Key.setAccelerator(KeyStroke.getKeyStroke('P', Event.CTRL_MASK | Event.SHIFT_MASK,false));
+		exportPdf2Key.setAccelerator(KeyStroke.getKeyStroke('P', Event.CTRL_MASK | Event.SHIFT_MASK, false));
 		exportPdf2Key.addActionListener(this);
 		exportMenu.add(exportPdf2Key);
-				
+
 		exportThumbNail = new JMenuItem("PDF Thumbnail (high quality, requires GhostScript) ...");
 		// HSE - add menu modifier 'Ctrl-T'
-		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke('T', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke('T', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		exportThumbNail.addActionListener(this);
 		exportMenu.add(exportThumbNail);
 		exportMenu.addSeparator();
-		
+
 		exportEpsKey = new JMenuItem("EPS (high quality) ...");
 		// HSE - add menu modifier 'Ctrl-E'
-		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke('E', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke('E', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		exportEpsKey.addActionListener(this);
 		exportMenu.add(exportEpsKey);
 		exportMenu.addSeparator();
-		
+
 		exportPngKey = new JMenuItem("PNG (low quality) ...");
 		// HSE - add menu modifier 'Ctrl+G'
-		exportPngKey.setAccelerator(KeyStroke.getKeyStroke('G', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		exportPngKey.setAccelerator(KeyStroke.getKeyStroke('G', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		exportPngKey.addActionListener(this);
 		exportMenu.add(exportPngKey);
 
 		/* Prefs Menu */
-		ghostscriptKey = new JMenuItem("GhostScript path...", new ImageIcon("Icons/prefs.png"));
+		var prefsIcon = "Icons/prefs.png";
+		ghostscriptKey = new JMenuItem("GhostScript path...", new ImageIcon(ResourceHelper.getResourceUrl(prefsIcon).getFile()));
 		ghostscriptKey.addActionListener(this);
 		prefsMenu.add(ghostscriptKey);
-		
+
 		dirKey = new JMenuItem("Default directory...");
 		dirKey.addActionListener(this);
 		prefsMenu.add(dirKey);
-		
+
 		/* File Menu */
 		file.add(newMenu);
 
-		openKey = new JMenuItem("Open Quest...", new ImageIcon("Icons/open.png"));
+		var openIcon = "Icons/open.png";
+		openKey = new JMenuItem("Open Quest...", new ImageIcon(ResourceHelper.getResourceUrl(openIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl+O'
-		openKey.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		openKey.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		openKey.addActionListener(this);
 		file.add(openKey);
 		file.addSeparator();
 
-		saveKey = new JMenuItem("Save Quest", new ImageIcon("Icons/save.png"));
+		var saveIcon = "Icons/save.png";
+		saveKey = new JMenuItem("Save Quest", new ImageIcon(ResourceHelper.getResourceUrl(saveIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl-S'
-		saveKey.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(),false));
+		saveKey.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
 		saveKey.addActionListener(this);
 		file.add(saveKey);
 		saveAsKey = new JMenuItem("Save Quest as...");
@@ -262,16 +258,16 @@ public class Gui
 		region.add(usaItem);
 
 		menu.add(region);
-		
+
 		/* Help menu */
 		listKey = new JMenuItem("Objects...");
 		listKey.addActionListener(this);
 		help.add(listKey);
-		
+
 		readMeKey = new JMenuItem("Read Me...");
 		readMeKey.addActionListener(this);
 		help.add(readMeKey);
-		
+
 		help.addSeparator();
 
 		aboutKey = new JMenuItem("About");
@@ -306,7 +302,7 @@ public class Gui
 		bottom.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
 		/* MacOSX: bar on top; other os: bar on bottom */
-		if ( OS.isMacOsX() ) {
+		if (OS.isMacOsX()) {
 			content.add(bottom, BorderLayout.NORTH);
 		} else {
 			content.add(bottom, BorderLayout.SOUTH);
@@ -349,19 +345,18 @@ public class Gui
 	}
 
 	public void updateHint() {
-		if ( "add".equals( tools.getCommand() ) ) {
+		if ("add".equals(tools.getCommand())) {
 			if (tools.selectorPanel.getSelectedObject() == null) {
 				hint.setText("Select an object.");
 			} else {
-				hint.setText(
-					"Click on a square to add. Right Click or CTRL Click to turn.");
+				hint.setText("Click on a square to add. Right Click or CTRL Click to turn.");
 			}
-		} else if ( "select".equals( tools.getCommand() ) ) {
+		} else if ("select".equals(tools.getCommand())) {
 			hint.setText("Click on a square to select it.");
-		} else if ( "darken".equals( tools.getCommand() ) ) {
+		} else if ("darken".equals(tools.getCommand())) {
 			hint.setText("Click to darken a square or to add a bridge. Right Click or CTRL Click to clear.");
-			
-		} else if ( tools.getCommand() == null ) {
+
+		} else if (tools.getCommand() == null) {
 			hint.setText("Select a command.");
 		} else {
 			hint.setText("!! COMMAND WITHOUT HINTS !!");
@@ -373,19 +368,12 @@ public class Gui
 
 		if (source == newKey) {
 			if (!quest.isModified()
-				|| JOptionPane.showConfirmDialog(
-					this,
-					"The current quest has not been saved.\n"
-						+ "Do you really want to create a new one?",
-					"New Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION)
-					== JOptionPane.YES_OPTION) {
+					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to create a new one?",
+							"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				Quest newQuest;
 
-				newQuest =
-					new Quest(1, 1,	objects.getBoard(), null);
+				newQuest = new Quest(1, 1, objects.getBoard(), null);
 
 				tools.none.doClick();
 				tools.clearQuestForm();
@@ -404,22 +392,14 @@ public class Gui
 			}
 		} else if (newSpecialKeys.contains(source)) {
 			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) source;
-			
+
 			if (!quest.isModified()
-				|| JOptionPane.showConfirmDialog(
-					this,
-					"The current quest has not been saved.\n"
-						+ "Do you really want to create a new one?",
-					"New Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION)
-					== JOptionPane.YES_OPTION) {
+					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to create a new one?",
+							"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				Quest newQuest;
 
-				newQuest =
-					new Quest(menuItem.getQuestWidth(), menuItem.getQuestHeight(),
-						objects.getBoard(), null);
+				newQuest = new Quest(menuItem.getQuestWidth(), menuItem.getQuestHeight(), objects.getBoard(), null);
 
 				tools.none.doClick();
 				tools.clearQuestForm();
@@ -439,37 +419,24 @@ public class Gui
 
 		} else if (source == openKey) {
 			if (!quest.isModified()
-				|| JOptionPane.showConfirmDialog(
-					this,
-					"The current quest has not been saved.\n"
-						+ "Do you really want to open a new one?",
-					"Open Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION)
-					== JOptionPane.YES_OPTION) {
+					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to open a new one?",
+							"Open Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				fileChooser.resetChoosableFileFilters();
-				
-				if ( fileChooser.getSelectedFile() != null ) {
+
+				if (fileChooser.getSelectedFile() != null) {
 					String path = fileChooser.getSelectedFile().getAbsolutePath();
-			
+
 					path = path.replaceFirst("[.][^.]*$", ".xml");
-			
+
 					fileChooser.setSelectedFile(new File(path));
 				}
 
 				fileChooser.setFileFilter((FileFilter) filters.get("xml"));
 
-				if (fileChooser.showOpenDialog(this)
-					== JFileChooser.APPROVE_OPTION) {
+				if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 					try {
-						Quest newQuest =
-							new org
-								.lightless
-								.heroscribe
-								.quest
-								.Read(fileChooser.getSelectedFile(), objects)
-								.getQuest();
+						Quest newQuest = new org.lightless.heroscribe.quest.Read(fileChooser.getSelectedFile(), objects).getQuest();
 
 						tools.none.doClick();
 						quest = newQuest;
@@ -480,18 +447,14 @@ public class Gui
 
 						tools.refreshQuestData(quest);
 						quest.setModified(false);
-						
+
 						boardPainter.init();
 
 						board.setSize();
 						board.repaint();
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(
-							this,
-							"Can't open file.",
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-							
+						JOptionPane.showMessageDialog(this, "Can't open file.", "Error", JOptionPane.ERROR_MESSAGE);
+
 						ex.printStackTrace();
 					}
 				}
@@ -506,11 +469,7 @@ public class Gui
 					quest.save();
 					updateTitle();
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file.", "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -522,11 +481,7 @@ public class Gui
 					quest.save();
 					updateTitle();
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file.",
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file.", "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -534,18 +489,10 @@ public class Gui
 			File file;
 			if ((file = askPath("pdf")) != null) {
 				try {
-					org.lightless.heroscribe.export.ExportPDF.write(
-						prefs.ghostscriptExec,
-						file,
-						quest,
-						objects,
-						true);
+					org.lightless.heroscribe.export.ExportPDF.write(prefs.ghostscriptExec, file, quest, objects, true);
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(),
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(), "Error",
+							JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -554,13 +501,9 @@ public class Gui
 			File file;
 			if ((file = askPath("pdf")) != null) {
 				try {
-					org.lightless.heroscribe.export.ExportIPDF.write(file,boardPainter);
+					org.lightless.heroscribe.export.ExportIPDF.write(file, boardPainter);
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file. Detailed Error: " + ex.getMessage(),
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file. Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -569,17 +512,9 @@ public class Gui
 			File file;
 			if ((file = askPath("pdf")) != null) {
 				try {
-					org.lightless.heroscribe.export.ExportPDF.write(prefs.ghostscriptExec,
-							file,
-							quest,
-							objects,
-							false);
+					org.lightless.heroscribe.export.ExportPDF.write(prefs.ghostscriptExec, file, quest, objects, false);
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file. Detailed Error: " + ex.getMessage(),
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file. Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -587,16 +522,9 @@ public class Gui
 			File file;
 			if ((file = askPath("eps")) != null) {
 				try {
-					org.lightless.heroscribe.export.ExportEPS.writeMultiPage(
-						file,
-						quest,
-						objects);
+					org.lightless.heroscribe.export.ExportEPS.writeMultiPage(file, quest, objects);
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file.  Detailed Error: " + ex.getMessage(),
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file.  Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -604,14 +532,9 @@ public class Gui
 			File file;
 			if ((file = askPath("png")) != null) {
 				try {
-					org.lightless.heroscribe.export.ExportRaster.write(
-						file, "png", boardPainter);
+					org.lightless.heroscribe.export.ExportRaster.write(file, "png", boardPainter);
 				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(
-						this,
-						"Can't save file.  Detailed Error: " + ex.getMessage(),
-						"Error",
-						JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Can't save file.  Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					ex.printStackTrace();
 				}
 			}
@@ -620,14 +543,12 @@ public class Gui
 
 			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
 
-			if (ghostscriptChooser.showOpenDialog(this)
-				== JFileChooser.APPROVE_OPTION) {
+			if (ghostscriptChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				prefs.ghostscriptExec = ghostscriptChooser.getSelectedFile();
-				
+
 				try {
 					prefs.write();
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
@@ -636,64 +557,51 @@ public class Gui
 			JFileChooser chooser;
 			String choosertitle = "Default Directory";
 			int result;
-	        
-		    chooser = new JFileChooser(); 
-		    chooser.setCurrentDirectory(new java.io.File("."));
-		    chooser.setDialogTitle(choosertitle);
-		    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		    // disable the "All files" option.
-		    chooser.setAcceptAllFileFilterUsed(false);
-		    if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
-		    	prefs.defaultDir = chooser.getSelectedFile();
+
+			chooser = new JFileChooser();
+			chooser.setCurrentDirectory(new java.io.File("."));
+			chooser.setDialogTitle(choosertitle);
+			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			// disable the "All files" option.
+			chooser.setAcceptAllFileFilterUsed(false);
+			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				prefs.defaultDir = chooser.getSelectedFile();
 				try {
 					prefs.write();
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-		    }     
+			}
 		} else if (source == quitKey) {
 			windowClosing(null);
 		} else if (source == listKey) {
 			String object = tools.selectorPanel.getSelectedObject();
-			
-			if ( "add".equals( tools.getCommand() ) && object != null )
-				org.lightless.heroscribe.helper.
-					OS.openURL(new File( "Objects.html" ), "object_" + object);
-			else 
-				org.lightless.heroscribe.helper.
-					OS.openURL(new File( "Objects.html" ), null);
+
+			if ("add".equals(tools.getCommand()) && object != null)
+				org.lightless.heroscribe.helper.OS.openURL(new File("Objects.html"), "object_" + object);
+			else
+				org.lightless.heroscribe.helper.OS.openURL(new File("Objects.html"), null);
 		} else if (source == readMeKey) {
-			org.lightless.heroscribe.helper.OS.openURL(new File( "Readme.html" ), null);
+			org.lightless.heroscribe.helper.OS.openURL(new File("Readme.html"), null);
 		} else if (source == aboutKey) {
-			JOptionPane.showMessageDialog(
-				this,
-				org.lightless.heroscribe.Constants.applicationName
-					+ " "
-					+ org.lightless.heroscribe.Constants.version
-					+ org.lightless.heroscribe.Constants.applicationVersionSuffix
-					+ "\n"
-					+ org.lightless.heroscribe.Constants.applicationName
-					+ org.lightless.heroscribe.Constants.applicationVersionSuffix
-					+ " modifications (C) 2011 Jason Allen.\n"
+			JOptionPane.showMessageDialog(this, org.lightless.heroscribe.Constants.applicationName + " " + org.lightless.heroscribe.Constants.version
+					+ org.lightless.heroscribe.Constants.applicationVersionSuffix + "\n" + org.lightless.heroscribe.Constants.applicationName
+					+ org.lightless.heroscribe.Constants.applicationVersionSuffix + " modifications (C) 2011 Jason Allen.\n"
 					+ org.lightless.heroscribe.Constants.applicationName
 					+ " original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
-					+ org.lightless.heroscribe.Constants.applicationName
-					+ " is free software, distributed under the terms of the GNU GPL 2.\n"
-					+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
-				"About",
-				JOptionPane.PLAIN_MESSAGE);
+					+ org.lightless.heroscribe.Constants.applicationName + " is free software, distributed under the terms of the GNU GPL 2.\n"
+					+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n", "About", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 
 	private File askPath(String extension) {
 		fileChooser.resetChoosableFileFilters();
 
-		if ( fileChooser.getSelectedFile() != null ) {
+		if (fileChooser.getSelectedFile() != null) {
 			String path = fileChooser.getSelectedFile().getAbsolutePath();
-			
+
 			path = path.replaceFirst("[.][^.]*$", "." + extension);
-			
+
 			fileChooser.setSelectedFile(new File(path));
 		}
 
@@ -713,42 +621,32 @@ public class Gui
 	}
 
 	public void windowClosing(WindowEvent e) {
-		if (!quest.isModified()
-			|| JOptionPane.showConfirmDialog(
-				this,
-				"The current quest has not been saved.\n"
-					+ "Do you really want to quit?",
-				"Quit",
-				JOptionPane.WARNING_MESSAGE,
-				JOptionPane.YES_NO_OPTION)
-				== JOptionPane.YES_OPTION) {
+		if (!quest.isModified() || JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to quit?",
+				"Quit", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 			try {
 				prefs.write();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
-			
+
 			System.exit(0);
 
 		}
 	}
 
-	public void windowActivated(WindowEvent e) {
-	}
-	public void windowClosed(WindowEvent e) {
-	}
-	public void windowDeactivated(WindowEvent e) {
-	}
-	public void windowDeiconified(WindowEvent e) {
-	}
-	public void windowIconified(WindowEvent e) {
-	}
-	public void windowOpened(WindowEvent e) {
-	}
-}
+	public void windowActivated(WindowEvent e) {}
 
+	public void windowClosed(WindowEvent e) {}
+
+	public void windowDeactivated(WindowEvent e) {}
+
+	public void windowDeiconified(WindowEvent e) {}
+
+	public void windowIconified(WindowEvent e) {}
+
+	public void windowOpened(WindowEvent e) {}
+}
 
 class GhostScriptFileFilter extends FileFilter {
 	public GhostScriptFileFilter() {
@@ -756,21 +654,20 @@ class GhostScriptFileFilter extends FileFilter {
 	}
 
 	public boolean accept(File f) {
-		if ( f.isDirectory() )
+		if (f.isDirectory())
 			return true;
-			
-		if ( OS.isWindows() && (f.getName().toLowerCase().equals("gswin32c.exe") || f.getName().toLowerCase().equals("gswin64c.exe")) )
+
+		if (OS.isWindows() && (f.getName().toLowerCase().equals("gswin32c.exe") || f.getName().toLowerCase().equals("gswin64c.exe")))
 			return true;
-			
-		if ( !OS.isWindows() &&
-			f.getName().toLowerCase().equals("gs") )
+
+		if (!OS.isWindows() && f.getName().toLowerCase().equals("gs"))
 			return true;
-			
+
 		return false;
 	}
 
 	public String getDescription() {
-		if ( OS.isWindows() )
+		if (OS.isWindows())
 			return "Ghostscript Shell (gswin32c.exe, gswin64c.exe)";
 		else
 			return "Ghostscript Shell (gs)";
@@ -787,8 +684,7 @@ class ActualFileFilter extends FileFilter {
 	}
 
 	public boolean accept(File f) {
-		return f.isDirectory()
-			|| f.getName().toLowerCase().endsWith("." + extension);
+		return f.isDirectory() || f.getName().toLowerCase().endsWith("." + extension);
 	}
 
 	public String getDescription() {
@@ -798,14 +694,14 @@ class ActualFileFilter extends FileFilter {
 
 class SpecialQuestMenuItem extends JMenuItem {
 	private int questWidth, questHeight;
-	
+
 	public SpecialQuestMenuItem(int questWidth, int questHeight) {
 		super("Quest " + questWidth + "x" + questHeight);
-		
+
 		this.questWidth = questWidth;
 		this.questHeight = questHeight;
 	}
-	
+
 	public int getQuestWidth() {
 		return questWidth;
 	}
