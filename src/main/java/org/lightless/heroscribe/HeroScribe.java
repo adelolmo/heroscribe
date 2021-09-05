@@ -35,36 +35,34 @@ public class HeroScribe {
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			
+
 			/* Doing some MacOS X tweaks */
-			if ( OS.isMacOsX() ) {
+			if (OS.isMacOsX()) {
 				System.setProperty("apple.laf.useScreenMenuBar", "true");
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			System.err.println("starting up.");
-			
+
 			preferences = new Preferences(Constants.preferencesFile);
 
-			objects = new org.lightless.heroscribe.list.
-				Read(new File("Objects.xml")).getObjects();
-			
+			objects = new org.lightless.heroscribe.list.Read(new File("Objects.xml")).getObjects();
+
 			System.err.println("objects read.");
-			
+
 			new SplashScreenImageLoader(objects);
 
 			quest = new Quest(1, 1, objects.getBoard(), null);
-			
+
 			gui = new Gui(preferences, objects, quest);
-			
+
 			System.err.println("gui done.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			System.exit(1);
 		}
 	}
