@@ -24,7 +24,6 @@ package org.lightless.heroscribe.gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -112,7 +111,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		commands = new ButtonGroup();
 
 		add = new JToggleButton("Add object");
-		
+		add.setSelected(true);
 		select = new JToggleButton("Select/Remove object");
 		dark = new JToggleButton("Dark/Bridge");
 		none = new JToggleButton();

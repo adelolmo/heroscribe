@@ -25,40 +25,50 @@ import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.lightless.heroscribe.list.LObject;
 import org.lightless.heroscribe.quest.QObject;
 
-class SquareDisplayer extends JPanel implements ListSelectionListener, ActionListener {
+public class SquareDisplayer extends JPanel implements ListSelectionListener, ActionListener {
+
+	private static final long serialVersionUID = 1L;
+
 	Gui gui;
-	
+
 	JTextField zorder;
 	JButton set, remove, rotate;
-	
-	TreeSet selected;
-	
-	JList list;
+
+	TreeSet<QObject> selected;
+
+	JList<QObject> list;
 	JPanel panel;
-	
+
 	int lastColumn, lastRow;
 	int lastLeft, lastTop;
 
 	public SquareDisplayer(Gui gui) {
 		super();
-		
+
 		this.gui = gui;
-		
+
 		setLayout(new BorderLayout());
 
-		selected = new TreeSet();
+		selected = new TreeSet<>();
 
-		list = new JList(new DefaultListModel());
+		list = new JList<>(new DefaultListModel<>());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
-		
+
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		panel.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
@@ -67,12 +77,12 @@ class SquareDisplayer extends JPanel implements ListSelectionListener, ActionLis
 		set = new JButton("Set zorder");
 		remove = new JButton("Remove");
 		rotate = new JButton("Rotate");
-		
+
 		zorder.setEnabled(false);
 		set.setEnabled(false);
 		remove.setEnabled(false);
 		rotate.setEnabled(false);
-		
+
 		set.addActionListener(this);
 		remove.addActionListener(this);
 		rotate.addActionListener(this);
@@ -85,72 +95,75 @@ class SquareDisplayer extends JPanel implements ListSelectionListener, ActionLis
 		this.add(new JScrollPane(list));
 		this.add(panel, BorderLayout.SOUTH);
 	}
-	
+
 	public void clearList() {
-		((DefaultListModel) list.getModel()).clear();
+		((DefaultListModel<QObject>) list.getModel()).clear();
 	}
-	
+
 	public void createList(int column, int row, int left, int top) {
 		int width, height;
-		
+
 		lastColumn = column;
 		lastRow = row;
 		lastLeft = left;
 		lastTop = top;
 
 		selected.clear();
-		
-		Iterator iterator = gui.getQuest().getBoard(column, row).iterator();
+
+		Iterator<QObject> iterator = gui.getQuest().getBoard(column, row).iterator();
+
 		while (iterator.hasNext()) {
-			QObject qobj = (QObject) iterator.next();
+			QObject qobj = iterator.next();
 			LObject lobj = gui.getObjects().getObject(qobj.id);
 
-			if ( qobj.rotation % 2 == 0 ) {
+			if (qobj.rotation % 2 == 0) {
 				width = lobj.width;
 				height = lobj.height;
 			} else {
 				width = lobj.height;
 				height = lobj.width;
 			}
-			
-			if ( qobj.left <= left && left < qobj.left + width &&
-				qobj.top <= top && top < qobj.top + height ) {
-					selected.add(qobj);
+
+			if (qobj.left <= left && left < qobj.left + width && qobj.top <= top && top < qobj.top + height) {
+				selected.add(qobj);
 			}
 		}
-	
+
 		updateList();
 	}
 
 	public void updateList() {
 		clearList();
+
+		Iterator<QObject> iterator = selected.iterator();
+		DefaultListModel<QObject> listModel = (DefaultListModel<QObject>) list.getModel();
 		
-		Iterator iterator = selected.iterator();
-		while ( iterator.hasNext() ) {
-			QObject qobj = (QObject) iterator.next();
-			
-			((DefaultListModel) list.getModel()).add(0, qobj);
+		while (iterator.hasNext()) {
+			QObject qobj = iterator.next();
+			listModel.add(0, qobj);
 		}
 
-		if ( ((DefaultListModel) list.getModel()).size() > 0 )
+		if (listModel.size() > 0) {
 			list.setSelectedIndex(0);
+		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void valueChanged(ListSelectionEvent e) {
-		JList list = (JList) e.getSource();
-		
+		JList<QObject> list = (JList<QObject>) e.getSource();
+
 		QObject obj = (QObject) list.getSelectedValue();
-		
-		if ( obj != null ) {
+
+		if (obj != null) {
 			zorder.setText(Float.toString(obj.zorder));
-			
+
 			zorder.setEnabled(true);
 			set.setEnabled(true);
 			remove.setEnabled(true);
 			rotate.setEnabled(true);
 		} else {
 			zorder.setText("");
-			
+
 			zorder.setEnabled(false);
 			set.setEnabled(false);
 			remove.setEnabled(false);
@@ -161,34 +174,33 @@ class SquareDisplayer extends JPanel implements ListSelectionListener, ActionLis
 	public void actionPerformed(ActionEvent e) {
 		QObject obj = (QObject) list.getSelectedValue();
 		JButton button = (JButton) e.getSource();
-			
-		if ( obj != null ) {
+
+		if (obj != null) {
 			gui.getQuest().getBoard(lastColumn, lastRow).removeObject(obj);
 			selected.remove(obj);
 		}
 
-		if ( button == set ) {
+		if (button == set) {
 			obj.zorder = Float.parseFloat(zorder.getText());
 			zorder.setText(Float.toString(obj.zorder));
-		} else if ( button == remove ) {
+		} else if (button == remove) {
 			obj = null;
-		} else if ( button == rotate ) {
+		} else if (button == rotate) {
 			obj.rotation = (obj.rotation + 1) % 4;
 		}
 
-		if ( obj != null ) {
+		if (obj != null) {
 			gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj);
 			selected.add(obj);
 		}
-		
+
 		gui.updateTitle();
 		gui.board.repaint();
-		
+
 		updateList();
-		
-		if ( obj != null )
+
+		if (obj != null)
 			list.setSelectedValue(obj, true);
 	}
-	
-	
+
 }

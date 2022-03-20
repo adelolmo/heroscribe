@@ -26,17 +26,10 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
-import org.lightless.heroscribe.quest.Quest;
-
 public class Write {
 	private static String xmlEscape(String in) {
 		if (in != null)
-			return in
-				.replaceAll("&", "&amp;")
-				.replaceAll("<", "&lt;")
-				.replaceAll(">", "&gt;")
-				.replaceAll("\"", "&quot;")
-				.replaceAll("'", "&apos;");
+			return in.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\"", "&quot;").replaceAll("'", "&apos;");
 		else
 			return "";
 	}
@@ -45,9 +38,7 @@ public class Write {
 
 		quest.getFile().delete();
 
-		PrintWriter out =
-			new PrintWriter(
-				new BufferedWriter(new FileWriter(quest.getFile())));
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(quest.getFile())));
 
 		out.println("<?xml version=\"1.0\"?>");
 		out.println("<!DOCTYPE quest PUBLIC");
@@ -56,17 +47,8 @@ public class Write {
 
 		out.println();
 
-		out.println(
-			"<quest name=\""
-				+ xmlEscape(quest.getName())
-				+ "\" region=\""
-				+ xmlEscape(quest.getRegion())
-				+ "\" version=\""
-				+ xmlEscape(org.lightless.heroscribe.Constants.questVersion)
-				+ "\" width=\""
-				+ quest.getWidth()
-				+ "\" height=\""
-				+ quest.getHeight()
+		out.println("<quest name=\"" + xmlEscape(quest.getName()) + "\" region=\"" + xmlEscape(quest.getRegion()) + "\" version=\""
+				+ xmlEscape(org.lightless.heroscribe.Constants.questVersion) + "\" width=\"" + quest.getWidth() + "\" height=\"" + quest.getHeight()
 				+ "\">");
 
 		for (int row = 0; row < quest.getHeight(); row++)
@@ -78,30 +60,27 @@ public class Write {
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
 						if (board.isDark(left, top))
-							out.println(
-								"<dark left=\"" + left + "\" top=\"" + top +
-								"\" width=\"1\" height=\"1\" />");
+							out.println("<dark left=\"" + left + "\" top=\"" + top + "\" width=\"1\" height=\"1\" />");
 
-				Iterator iterator = board.iterator();
+				Iterator<QObject> iterator = board.iterator();
 				while (iterator.hasNext()) {
 					QObject obj = (QObject) iterator.next();
 
 					out.print("<object id=\"" + obj.id + "\" ");
-					out.print(
-						"left=\"" + obj.left + "\" top=\"" + obj.top + "\" ");
+					out.print("left=\"" + obj.left + "\" top=\"" + obj.top + "\" ");
 					out.print("rotation=\"");
 
 					switch (obj.rotation) {
-						case 0 :
+						case 0:
 							out.print("downward");
 							break;
-						case 1 :
+						case 1:
 							out.print("rightward");
 							break;
-						case 2 :
+						case 2:
 							out.print("upward");
 							break;
-						case 3 :
+						case 3:
 							out.print("leftward");
 							break;
 					}
@@ -116,32 +95,29 @@ public class Write {
 			for (int column = 0; column < quest.getWidth(); column++) {
 				QBoard board = quest.getBoard(column, row);
 
-				if ( column < quest.getWidth() - 1 )
-					for (int top = 1 ; top <= board.getHeight() ; top++ )
-						if ( quest.getHorizontalBridge(column, row, top) )
-							out.println("<bridge column=\"" + (column + 1) + 
-								"\" row=\"" + (row + 1) +
-								"\" position=\"" +
-								top + "\" orientation=\"horizontal\"/>");
-				
-				if ( row < quest.getHeight() - 1 )
-					for (int left = 1 ; left <= board.getWidth() ; left++ )	
-						if ( quest.getVerticalBridge(column, row, left) )
-							out.println("<bridge column=\"" + (column + 1) + 
-								"\" row=\"" + (row + 1) +
-								"\" position=\"" +
-								left + "\" orientation=\"vertical\"/>");
+				if (column < quest.getWidth() - 1)
+					for (int top = 1; top <= board.getHeight(); top++)
+						if (quest.getHorizontalBridge(column, row, top))
+							out.println("<bridge column=\"" + (column + 1) + "\" row=\"" + (row + 1) + "\" position=\"" + top
+									+ "\" orientation=\"horizontal\"/>");
+
+				if (row < quest.getHeight() - 1)
+					for (int left = 1; left <= board.getWidth(); left++)
+						if (quest.getVerticalBridge(column, row, left))
+							out.println("<bridge column=\"" + (column + 1) + "\" row=\"" + (row + 1) + "\" position=\"" + left
+									+ "\" orientation=\"vertical\"/>");
 			}
 
 		out.println("<speech>" + xmlEscape(quest.getSpeech()) + "</speech>");
-		
-		Iterator iterator = quest.notesIterator();
-		while (iterator.hasNext())
-			out.println(
-				"<note>" + xmlEscape((String) iterator.next()) + "</note>");
+
+		Iterator<String> iterator = quest.notesIterator();
+
+		while (iterator.hasNext()) {
+			out.println("<note>" + xmlEscape((String) iterator.next()) + "</note>");
+		}
 		// HSE - output wandering monster as quest note
 		out.println("<note>Wandering Monster in this quest: " + xmlEscape(quest.getWandering()) + "</note>");
-		
+
 		out.println("</quest>");
 
 		out.close();

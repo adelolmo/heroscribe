@@ -36,7 +36,6 @@ public class HeroScribe {
 	public static void main(String args[]) {
 		Preferences preferences;
 		List objects;
-		Gui gui;
 		Quest quest;
 
 		try {
@@ -63,7 +62,7 @@ public class HeroScribe {
 
 		quest = new Quest(1, 1, objects.getBoard(), null);
 
-		gui = new Gui(preferences, objects, quest);
+		new Gui(preferences, objects, quest);
 
 		log.info("GUI done.");
 	}
