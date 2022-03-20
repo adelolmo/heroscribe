@@ -23,12 +23,13 @@ package org.lightless.heroscribe.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Event;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -170,7 +171,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		var newIcon = "Icons/new.png";
 		newKey = new JMenuItem("Quest", new ImageIcon(ResourceHelper.getResourceUrl(newIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl+N'
-		newKey.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
+		newKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		newKey.addActionListener(this);
 		newMenu.add(newKey);
 
@@ -188,33 +189,33 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportPdfKey = new JMenuItem("PDF (high quality, requires GhostScript) ...",
 				new ImageIcon(ResourceHelper.getResourceUrl(exportIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl-P'
-		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke('P', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		exportPdfKey.addActionListener(this);
 		exportMenu.add(exportPdfKey);
 
 		exportPdf2Key = new JMenuItem("PDF (low quality, no GhostScript required) ...");
 		// HSE - add menu modifier 'Ctrl+Shift-P'
-		exportPdf2Key.setAccelerator(KeyStroke.getKeyStroke('P', Event.CTRL_MASK | Event.SHIFT_MASK, false));
+		exportPdf2Key.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK, false));
 		exportPdf2Key.addActionListener(this);
 		exportMenu.add(exportPdf2Key);
 
 		exportThumbNail = new JMenuItem("PDF Thumbnail (high quality, requires GhostScript) ...");
 		// HSE - add menu modifier 'Ctrl-T'
-		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke('T', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		exportThumbNail.addActionListener(this);
 		exportMenu.add(exportThumbNail);
 		exportMenu.addSeparator();
 
 		exportEpsKey = new JMenuItem("EPS (high quality) ...");
 		// HSE - add menu modifier 'Ctrl-E'
-		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke('E', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		exportEpsKey.addActionListener(this);
 		exportMenu.add(exportEpsKey);
 		exportMenu.addSeparator();
 
 		exportPngKey = new JMenuItem("PNG (low quality) ...");
 		// HSE - add menu modifier 'Ctrl+G'
-		exportPngKey.setAccelerator(KeyStroke.getKeyStroke('G', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		exportPngKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		exportPngKey.addActionListener(this);
 		exportMenu.add(exportPngKey);
 
@@ -234,7 +235,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		var openIcon = "Icons/open.png";
 		openKey = new JMenuItem("Open Quest...", new ImageIcon(ResourceHelper.getResourceUrl(openIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl+O'
-		openKey.setAccelerator(KeyStroke.getKeyStroke('O', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		openKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		openKey.addActionListener(this);
 		file.add(openKey);
 		file.addSeparator();
@@ -242,7 +243,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		var saveIcon = "Icons/save.png";
 		saveKey = new JMenuItem("Save Quest", new ImageIcon(ResourceHelper.getResourceUrl(saveIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl-S'
-		saveKey.setAccelerator(KeyStroke.getKeyStroke('S', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		saveKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		saveKey.addActionListener(this);
 		file.add(saveKey);
 		saveAsKey = new JMenuItem("Save Quest as...");
