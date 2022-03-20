@@ -29,6 +29,9 @@ import java.util.Vector;
 import org.lightless.heroscribe.list.LBoard;
 
 public class Quest {
+	
+	private static final String DEFAULT_REGION = "USA";
+	
 	private File file;
 
 	private int width, height;
@@ -58,7 +61,7 @@ public class Quest {
 
 		notes = new Vector<>();
 		
-		region = "Europe";
+		region = DEFAULT_REGION;
 
 		name = "";
 		speech = "";

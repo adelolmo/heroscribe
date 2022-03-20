@@ -31,28 +31,29 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-class ObjectSelector extends JPanel implements ItemListener, ListSelectionListener {
+public class ObjectSelector extends JPanel implements ItemListener, ListSelectionListener {
+
+	private static final long serialVersionUID = 1L;
+
 	private Gui gui;
 
 	private JPanel objectsPanel;
-	private CardLayout cardLayout;	
-	private JComboBox kindsComboBox;
-	private TreeMap kindList;	
-	
+	private CardLayout cardLayout;
+	private JComboBox<Kind> kindsComboBox;
+	private TreeMap<String, JList<LObject>> kindList;
+
 	private String selectedObject;
 	private int objectRotation;
 
 	public ObjectSelector(Gui gui) {
 		super();
-		
+
 		this.gui = gui;
 
 		objectsPanel = new JPanel();
 		cardLayout = new CardLayout();
-		kindsComboBox = new JComboBox();
-		kindList = new TreeMap();
-		
-		Iterator iterator;
+		kindsComboBox = new JComboBox<>();
+		kindList = new TreeMap<>();
 
 		selectedObject = null;
 
@@ -62,11 +63,11 @@ class ObjectSelector extends JPanel implements ItemListener, ListSelectionListen
 		add(kindsComboBox);
 		add(objectsPanel);
 
-		iterator = gui.getObjects().kindsIterator();
-		while ( iterator.hasNext() ) {
-			Kind kind = (Kind) iterator.next();
+		Iterator<Kind> kindIterator = gui.getObjects().kindsIterator();
+		while (kindIterator.hasNext()) {
+			Kind kind = kindIterator.next();
 
-			JList list = new JList(new DefaultListModel());
+			JList<LObject> list = new JList<>(new DefaultListModel<>());
 
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -76,22 +77,22 @@ class ObjectSelector extends JPanel implements ItemListener, ListSelectionListen
 
 			objectsPanel.add(new JScrollPane(list), kind.id);
 
-			list.addListSelectionListener( this );
+			list.addListSelectionListener(this);
 		}
-		
-		iterator = gui.getObjects().objectsIterator();
-		while ( iterator.hasNext() ) {
-			LObject obj = (LObject) iterator.next();
-			
-			JList list = (JList) kindList.get( obj.kind );
-			DefaultListModel listModel = (DefaultListModel) list.getModel();
-			
+
+		Iterator<LObject> objIterator = gui.getObjects().objectsIterator();
+		while (objIterator.hasNext()) {
+			LObject obj = objIterator.next();
+
+			JList<LObject> list = kindList.get(obj.kind);
+			DefaultListModel<LObject> listModel = (DefaultListModel<LObject>) list.getModel();
+
 			listModel.addElement(obj);
 		}
 
-		kindsComboBox.addItemListener( this );
+		kindsComboBox.addItemListener(this);
 	}
-	
+
 	public String getSelectedObject() {
 		return selectedObject;
 	}
@@ -101,7 +102,7 @@ class ObjectSelector extends JPanel implements ItemListener, ListSelectionListen
 	}
 
 	private void setSelectedObject(LObject obj) {
-		if ( obj != null ) {
+		if (obj != null) {
 			selectedObject = obj.id;
 		} else {
 			selectedObject = null;
@@ -111,31 +112,27 @@ class ObjectSelector extends JPanel implements ItemListener, ListSelectionListen
 	}
 
 	/* -- */
-	
+
+	@SuppressWarnings("unchecked")
 	public void itemStateChanged(ItemEvent e) {
-		if ( e.getStateChange() == ItemEvent.SELECTED ) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
 			Kind selected;
-			JList list;
-			LObject obj;
-				
-			selected = (Kind) ((JComboBox) e.getSource()).getSelectedItem();
+			JList<LObject> list;
+
+			selected = (Kind) ((JComboBox<Kind>) e.getSource()).getSelectedItem();
 			cardLayout.show(objectsPanel, selected.id);
-			list = (JList) kindList.get(selected.id);
-				
+			list = kindList.get(selected.id);
+
 			setSelectedObject((LObject) list.getSelectedValue());
-			
+
 			gui.updateHint();
 		}
 	}
-		
+
+	@SuppressWarnings("unchecked")
 	public void valueChanged(ListSelectionEvent e) {
-		JList list;
-				
-		list = (JList) e.getSource();
-
+		JList<LObject> list = (JList<LObject>) e.getSource();
 		setSelectedObject((LObject) list.getSelectedValue());
-
 		gui.updateHint();
 	}
 }
-
