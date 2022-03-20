@@ -46,7 +46,7 @@ public class HeroScribe {
 				System.setProperty("apple.laf.useScreenMenuBar", "true");
 			}
 		} catch (Exception e) {
-			log.error("Problema when defining look and feel", e);
+			log.error("Error when defining look and feel", e);
 		}
 
 		log.info("Starting up.");
