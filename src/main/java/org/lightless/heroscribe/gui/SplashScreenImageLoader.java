@@ -26,12 +26,17 @@ import java.util.Iterator;
 
 import javax.swing.*;
 
+import org.lightless.heroscribe.HeroScribeException;
 import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.list.LObject;
 import org.lightless.heroscribe.list.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SplashScreenImageLoader extends JWindow {
+
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(SplashScreenImageLoader.class);
 
 	Image splash;
 
@@ -40,7 +45,7 @@ public class SplashScreenImageLoader extends JWindow {
 
 	int splashID = 1;
 
-	public SplashScreenImageLoader(List objects) throws Exception {
+	public SplashScreenImageLoader(List objects) {
 		super();
 
 		mt = new MediaTracker(this);
@@ -50,15 +55,20 @@ public class SplashScreenImageLoader extends JWindow {
 		splash = tk.createImage(splashFile);
 		mt.addImage(splash, splashID);
 
-		mt.waitForID(splashID);
-		
+		try {
+			mt.waitForID(splashID);
+		} catch (InterruptedException e) {
+			throw new HeroScribeException(e);
+		}
+
 		if (mt.isErrorID(splashID)) {
-			throw new RuntimeException("Can't load all PNG icons.");
+			throw new HeroScribeException("Can't load all PNG icons.");
 		}
 
 		setSize(splash.getWidth(null), splash.getHeight(null));
 
-		setLocation((tk.getScreenSize().width - this.getWidth()) / 2, (tk.getScreenSize().height - this.getHeight()) / 2);
+		setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
+				(tk.getScreenSize().height - this.getHeight()) / 2);
 
 		setVisible(true);
 
@@ -73,7 +83,7 @@ public class SplashScreenImageLoader extends JWindow {
 		}
 	}
 
-	private void loadIcons(List objects) throws Exception {
+	private void loadIcons(List objects) {
 		Iterator<LObject> iterator;
 		Image img;
 
@@ -105,14 +115,18 @@ public class SplashScreenImageLoader extends JWindow {
 			mt.addImage(img, 20);
 		}
 
-		mt.waitForAll();
+		try {
+			mt.waitForAll();
+		} catch (InterruptedException e) {
+			throw new HeroScribeException(e);
+		}
 
 		if (mt.isErrorAny()) {
-			throw new RuntimeException("Can't load all PNG icons.");
+			throw new HeroScribeException("Can't load all PNG icons.");
 		}
 
 		end = System.currentTimeMillis();
 
-		System.err.println("PNGs loaded (" + String.valueOf(end - start) + "ms).");
+		log.info("PNGs loaded (" + String.valueOf(end - start) + "ms).");
 	}
 }

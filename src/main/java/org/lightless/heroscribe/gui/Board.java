@@ -18,20 +18,20 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.LObject;
-import org.lightless.heroscribe.quest.*;
-
-import javax.swing.*;
-import javax.swing.event.MouseInputListener;
-
-import java.util.Iterator;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
+
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.MouseInputListener;
+
+import org.lightless.heroscribe.list.LObject;
+import org.lightless.heroscribe.quest.QBoard;
+import org.lightless.heroscribe.quest.QObject;
 
 public class Board extends JPanel implements MouseInputListener {
 	private Gui gui;
@@ -42,7 +42,7 @@ public class Board extends JPanel implements MouseInputListener {
 	
 	private boolean isPaintingDark, isDark, hasAdded;
 
-	public Board(Gui gui) throws Exception {
+	public Board(Gui gui) {
 		super();
 
 		this.gui = gui;

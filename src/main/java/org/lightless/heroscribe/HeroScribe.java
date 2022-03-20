@@ -26,8 +26,13 @@ import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HeroScribe {
+
+	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
+
 	public static void main(String args[]) {
 		Preferences preferences;
 		List objects;
@@ -42,30 +47,24 @@ public class HeroScribe {
 				System.setProperty("apple.laf.useScreenMenuBar", "true");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Problema when defining look and feel", e);
 		}
 
-		try {
-			System.err.println("starting up.");
+		log.info("Starting up.");
 
-			preferences = new Preferences(Constants.preferencesFile);
+		preferences = new Preferences(Constants.preferencesFile);
 
-			File objectsFile = ResourceHelper.getResourceAsFile("Objects.xml");
-			objects = new org.lightless.heroscribe.list.Read(objectsFile).getObjects();
+		File objectsFile = ResourceHelper.getResourceAsFile("Objects.xml");
+		objects = new org.lightless.heroscribe.list.Read(objectsFile).getObjects();
 
-			System.err.println("objects read.");
+		log.info("Objects read.");
 
-			new SplashScreenImageLoader(objects);
+		new SplashScreenImageLoader(objects);
 
-			quest = new Quest(1, 1, objects.getBoard(), null);
+		quest = new Quest(1, 1, objects.getBoard(), null);
 
-			gui = new Gui(preferences, objects, quest);
+		gui = new Gui(preferences, objects, quest);
 
-			System.err.println("gui done.");
-		} catch (Exception e) {
-			e.printStackTrace();
-
-			System.exit(1);
-		}
+		log.info("GUI done.");
 	}
 }

@@ -50,7 +50,7 @@ public class BoardPainter implements ImageObserver {
 	public float boxEdge;
 	public int adjacentBoardsOffset;
 
-	public BoardPainter(Gui gui) throws Exception {
+	public BoardPainter(Gui gui) {
 		this.gui = gui;
 
 		init();

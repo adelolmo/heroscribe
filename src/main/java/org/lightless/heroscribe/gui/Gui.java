@@ -85,7 +85,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	JLabel hint, status;
 
-	public Gui(Preferences preferences, List objects, Quest quest) throws Exception {
+	public Gui(Preferences preferences, List objects, Quest quest) {
 		super();
 		// HSE - set app icon
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage("HeroScribe.png"));
@@ -170,7 +170,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		var newIcon = "Icons/new.png";
 		newKey = new JMenuItem("Quest", new ImageIcon(ResourceHelper.getResourceUrl(newIcon).getFile()));
 		// HSE - add menu modifier 'Ctrl+N'
-		newKey.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMask(), false));
+		newKey.setAccelerator(KeyStroke.getKeyStroke('N', Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(), false));
 		newKey.addActionListener(this);
 		newMenu.add(newKey);
 

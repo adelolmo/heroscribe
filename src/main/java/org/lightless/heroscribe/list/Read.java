@@ -19,7 +19,9 @@
 package org.lightless.heroscribe.list;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.lightless.heroscribe.HeroScribeException;
 import org.xml.sax.*;
 import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.*;
@@ -32,7 +34,7 @@ public class Read extends DefaultHandler {
 	private LBoard board;
 	private StringBuffer content;
 
-	public Read(File file) throws Exception {
+	public Read(File file) {
 		super();
 
 		objects = new List();
@@ -40,8 +42,13 @@ public class Read extends DefaultHandler {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
 
-		SAXParser saxParser = factory.newSAXParser();
-		saxParser.parse(file, this);
+		SAXParser saxParser;
+		try {
+			saxParser = factory.newSAXParser();
+			saxParser.parse(file, this);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			throw new HeroScribeException(e);
+		}
 	}
 
 	public List getObjects() {
