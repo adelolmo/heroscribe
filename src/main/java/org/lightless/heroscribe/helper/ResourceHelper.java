@@ -4,15 +4,18 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 
-public class ResourceHelper {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	private ResourceHelper() {}
+public class ResourceHelper {
+	
+	private static final Logger log = LoggerFactory.getLogger(ResourceHelper.class);
+
+	private ResourceHelper() {
+	}
 
 	/**
-	 * Retorna um {@link InputStream} com o recurso a ser utilizado no teste, relativo ao diretorio 'src/test/resources'
-	 * 
 	 * @param name
-	 *            Nome do recurso
 	 * @return InputStream
 	 */
 	public static InputStream getResourceAsStream(String name) {
@@ -20,22 +23,18 @@ public class ResourceHelper {
 	}
 
 	/**
-	 * Retorna uma {@link URL} com o recurso a ser utilizado no teste, relativo ao diretorio 'src/test/resources'
-	 * 
 	 * @param name
-	 *            Nome do recurso
-	 * @return InputStream
-	 * @throws ResourceInvalidoException
+	 * @return URL
 	 */
 	public static URL getResourceUrl(String name) {
-		URL url = ClassLoader.getSystemResource(name);
-		if (url == null) {
-			throw new RuntimeException(name);
-		}
-		return url;
+		return ClassLoader.getSystemResource(name);
 	}
 
 	public static File getResourceAsFile(String name) {
-		return new File(getResourceUrl(name).getFile());
+		URL resourceUrl = getResourceUrl(name);
+		log.info(resourceUrl.toString());
+		String file = resourceUrl.getFile();
+		log.info(file);
+		return new File(file);
 	}
 }

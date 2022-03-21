@@ -18,14 +18,16 @@ package org.lightless.heroscribe;
 */
 
 import java.io.File;
+import java.io.InputStream;
 
 import javax.swing.UIManager;
 
+import org.lightless.heroscribe.gui.Gui;
+import org.lightless.heroscribe.gui.SplashScreenImageLoader;
 import org.lightless.heroscribe.helper.OS;
 import org.lightless.heroscribe.helper.ResourceHelper;
-import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.list.*;
-import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.list.List;
+import org.lightless.heroscribe.quest.Quest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +39,7 @@ public class HeroScribe {
 		Preferences preferences;
 		List objects;
 		Quest quest;
+		
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -53,8 +56,11 @@ public class HeroScribe {
 
 		preferences = new Preferences(Constants.preferencesFile);
 
-		File objectsFile = ResourceHelper.getResourceAsFile("Objects.xml");
-		objects = new org.lightless.heroscribe.list.Read(objectsFile).getObjects();
+		InputStream objIs = ResourceHelper.getResourceAsStream("Objects.xml");
+		
+		File objFile = new File("Objects.xml");
+		
+		objects = new org.lightless.heroscribe.list.Read(objFile).getObjects();
 
 		log.info("Objects read.");
 
@@ -66,4 +72,5 @@ public class HeroScribe {
 
 		log.info("GUI done.");
 	}
+
 }

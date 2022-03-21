@@ -100,7 +100,8 @@ public class List {
 
 	public String getRasterPath(String id, String region) {
 		String relative = rasterPrefix + getObject(id).getIcon(region).path + rasterSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
+		return relative;
+		//return ResourceHelper.getResourceUrl(relative).getFile();
 		//return OS.getAbsolutePath(relative);
 	}
 
@@ -118,7 +119,8 @@ public class List {
 
 	public String getRasterPath(String region) {
 		String relative = rasterPrefix + getBoard().getIcon(region).path + rasterSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
+		return relative;
+		//return ResourceHelper.getResourceUrl(relative).getFile();
 //		return OS.getAbsolutePath(relative);
 	}
 

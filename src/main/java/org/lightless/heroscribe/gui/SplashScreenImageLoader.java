@@ -22,9 +22,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 
-import javax.swing.*;
+import javax.swing.JWindow;
 
 import org.lightless.heroscribe.HeroScribeException;
 import org.lightless.heroscribe.helper.ResourceHelper;
@@ -51,8 +53,15 @@ public class SplashScreenImageLoader extends JWindow {
 		mt = new MediaTracker(this);
 		tk = Toolkit.getDefaultToolkit();
 
-		String splashFile = ResourceHelper.getResourceUrl("Splash.jpg").getFile();
-		splash = tk.createImage(splashFile);
+		InputStream imageIs = ResourceHelper.getResourceAsStream("Splash.jpg");
+		byte[] image;
+		try {
+			image = imageIs.readAllBytes();
+		} catch (IOException e) {
+			throw new HeroScribeException(e);
+		}
+
+		splash = tk.createImage(image);
 		mt.addImage(splash, splashID);
 
 		try {

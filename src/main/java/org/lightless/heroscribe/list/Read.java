@@ -20,11 +20,20 @@ package org.lightless.heroscribe.list;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.lightless.heroscribe.HeroScribeException;
-import org.xml.sax.*;
+import org.lightless.heroscribe.helper.ResourceHelper;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-import javax.xml.parsers.*;
 
 public class Read extends DefaultHandler {
 	private List objects;
@@ -34,6 +43,24 @@ public class Read extends DefaultHandler {
 	private LBoard board;
 	private StringBuffer content;
 
+	public Read(InputStream file) {
+		super();
+
+		objects = new List();
+
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setValidating(true);
+
+		SAXParser saxParser;
+		try {
+			saxParser = factory.newSAXParser();
+			saxParser.parse(file, this);
+			// saxParser.parse(file, this);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			throw new HeroScribeException(e);
+		}
+	}
+	
 	public Read(File file) {
 		super();
 
@@ -46,6 +73,7 @@ public class Read extends DefaultHandler {
 		try {
 			saxParser = factory.newSAXParser();
 			saxParser.parse(file, this);
+			// saxParser.parse(file, this);
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new HeroScribeException(e);
 		}
@@ -58,9 +86,10 @@ public class Read extends DefaultHandler {
 	/* --- */
 
 	public InputSource resolveEntity(String publicId, String systemId) {
-		if (publicId.equals("-//org.lightless//HeroScribe Object List 1.5//EN"))
-			return new InputSource("DtdXsd/objectList-1.5.dtd");
-		else
+		if (publicId.equals("-//org.lightless//HeroScribe Object List 1.5//EN")) {
+			InputStream is = ResourceHelper.getResourceAsStream("DtdXsd/objectList-1.5.dtd");
+			return new InputSource(is);
+		} else
 			return null;
 	}
 
