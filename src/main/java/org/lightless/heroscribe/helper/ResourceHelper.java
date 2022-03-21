@@ -28,7 +28,7 @@ public class ResourceHelper {
 	 * @throws ResourceInvalidoException
 	 */
 	public static URL getResourceUrl(String name) {
-		URL url = Thread.currentThread().getContextClassLoader().getResource(name);
+		URL url = ClassLoader.getSystemResource(name);
 		if (url == null) {
 			throw new RuntimeException(name);
 		}

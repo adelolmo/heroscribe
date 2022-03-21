@@ -80,6 +80,45 @@
 					</additionalConfig>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<packageName>org.lightless.heroscribe</packageName>
+							<mainClass>org.lightless.heroscribe.HeroScribe</mainClass>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addClasspath>true</addClasspath>
+							<classpathPrefix>lib/</classpathPrefix>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/resources/assembly.xml</descriptor>
+							</descriptors>
+							<archiverConfig>
+								<directoryMode>0775</directoryMode>
+								<defaultDirectoryMode>0775</defaultDirectoryMode>
+								<fileMode>0664</fileMode>
+							</archiverConfig>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
