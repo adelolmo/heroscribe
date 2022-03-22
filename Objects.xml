@@ -703,11 +703,9 @@ Use this icon if the chest contains a trap, so it'll be shown with orange backgr
 <object name="Door with Trap" id="DoorTrap" width="1" height="2" kind="door" zorder="-1.0" door="true">
 <icon region="Europe" path="Europe/Base/Door_EU"/>
 <icon region="USA" path="USA/TheMageOfTheMirror/TheMageOfTheMirror.DoorTrap_US" />
-
 <note>
 Use this icon if the door contains a trap, so it'll be shown with orange background in an american map.
 </note>
-
 </object>
 
 <object name="Elven Archer" id="ElvenArcher" width="1" height="1" kind="monster">
@@ -768,6 +766,44 @@ Use this icon if the door contains a trap, so it'll be shown with orange backgro
 <object name="Teleport Trap B" id="TeleportTrapB" width="1" height="1" kind="various">
 <icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.TeleportTrapB_EU" />
 <icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.TeleportTrapB_US" original="false"/>
+</object>
+
+<!-- Wizards of Morcar -->
+
+<object name="High Mage" id="HighMage" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.HighMage_EU" yoffset="-0.043"/>
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.HighMage_US" yoffset="-0.043" original="false"/>
+<note>
+There is no High Mage icon in any official HeroQuest release.
+This icon was created by Derfel Link using the image kindly given by fre3men.
+</note>
+</object>
+
+<object name="Necromancer (Derfel's)" id="DerfelNecromancer" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.Necromancer_EU" yoffset="-0.052"/>
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.Necromancer_US" yoffset="-0.052" original="false"/>
+<note>
+There is no Necromancer icon in any official HeroQuest release.
+This icon was created by Derfel Link using the image kindly given by fre3men.
+</note>
+</object>
+
+<object name="Orc Shaman" id="OrcShaman" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.OrcShaman_EU" yoffset="-0.022"/>
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.OrcShaman_US" yoffset="-0.022" original="false"/>
+<note>
+There is no Orc Shaman icon in any official HeroQuest release.
+This icon was created by Derfel Link using the image kindly given by fre3men.
+</note>
+</object>
+
+<object name="Storm Master" id="StormMaster" width="1" height="1" kind="monster">
+<icon region="Europe" path="Europe/WizardsOfMorcar/WizardsOfMorcar.StormMaster_EU" yoffset="0.01"/>
+<icon region="USA" path="USA/NonOriginal/WizardsOfMorcar.StormMaster_US" yoffset="0.01" original="false"/>
+<note>
+There is no Storm Master icon in any official HeroQuest release.
+This icon was created by Derfel Link using the image kindly given by fre3men.
+</note>
 </object>
 
 </objectList>
