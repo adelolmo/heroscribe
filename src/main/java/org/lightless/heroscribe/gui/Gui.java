@@ -75,7 +75,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	BoardPainter boardPainter;
 
-	JFileChooser fileChooser, ghostscriptChooser;
+	private JFileChooser fileChooser;
+	private JFileChooser ghostscriptChooser;
 
 	TreeMap<String, FileFilter> filters;
 
@@ -102,7 +103,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		ghostscriptChooser = new JFileChooser();
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 
-		fileChooser = new JFileChooser();
+		fileChooser = new FileChooser();
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
 		filters.put("pdf", new ActualFileFilter("pdf", "PDF files (*.pdf)"));
 		filters.put("eps", new ActualFileFilter("eps", "EPS files (*.eps)"));
@@ -637,8 +638,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			}
 
 			return saveFile;
-		} else
+		} else {
 			return null;
+		}
 	}
 
 	public void windowClosing(WindowEvent e) {
