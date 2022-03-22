@@ -21,14 +21,16 @@
 
 package org.lightless.heroscribe.list;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.lightless.heroscribe.helper.ResourceHelper;
+public class List implements Serializable {
 
-public class List {
+	private static final long serialVersionUID = 1L;
+
 	public LBoard board;
 
 	public TreeMap<String, LObject> list;
@@ -93,41 +95,27 @@ public class List {
 	}
 
 	public String getVectorPath(String id, String region) {
-		String relative = vectorPrefix + getObject(id).getIcon(region).path + vectorSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
-		//return OS.getAbsolutePath(relative);
+		return vectorPrefix + getObject(id).getIcon(region).path + vectorSuffix;
 	}
 
 	public String getRasterPath(String id, String region) {
-		String relative = rasterPrefix + getObject(id).getIcon(region).path + rasterSuffix;
-		return relative;
-		//return ResourceHelper.getResourceUrl(relative).getFile();
-		//return OS.getAbsolutePath(relative);
+		return rasterPrefix + getObject(id).getIcon(region).path + rasterSuffix;
 	}
 
 	public String getSamplePath(String id, String region) {
-		String relative = samplePrefix + getObject(id).getIcon(region).path + sampleSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
-		//return OS.getAbsolutePath(relative);
+		return samplePrefix + getObject(id).getIcon(region).path + sampleSuffix;
 	}
 
 	public String getVectorPath(String region) {
-		String relative = vectorPrefix + getBoard().getIcon(region).path + vectorSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
-		//return OS.getAbsolutePath(relative);
+		return vectorPrefix + getBoard().getIcon(region).path + vectorSuffix;
 	}
 
 	public String getRasterPath(String region) {
-		String relative = rasterPrefix + getBoard().getIcon(region).path + rasterSuffix;
-		return relative;
-		//return ResourceHelper.getResourceUrl(relative).getFile();
-//		return OS.getAbsolutePath(relative);
+		return rasterPrefix + getBoard().getIcon(region).path + rasterSuffix;
 	}
 
 	public String getSamplePath(String region) {
-		String relative = samplePrefix + getBoard().getIcon(region).path + sampleSuffix;
-		return ResourceHelper.getResourceUrl(relative).getFile();
-		//return OS.getAbsolutePath(relative);
+		return samplePrefix + getBoard().getIcon(region).path + sampleSuffix;
 	}
 
 }

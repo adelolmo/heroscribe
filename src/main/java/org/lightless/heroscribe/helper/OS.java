@@ -21,16 +21,26 @@ package org.lightless.heroscribe.helper;
 import java.io.File;
 import java.lang.reflect.Method;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class OS {
+	
+	private static final Logger log = LoggerFactory.getLogger(OS.class);
+	
+	private OS() {}
+	
 	public static void openURL(File file, String ref) {
 		try {
-			if (ref != null)
+			if (ref != null) {
 				openURL(file.toURI().toURL().toString() + "#" + ref);
-			else
+			}
+			else {
 				openURL(file.toURI().toURL().toString());
+			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 	}
 
@@ -49,11 +59,10 @@ public class OS {
 				 * If the (physical :) reader want to suggest something better,
 				 * I'm all ears :)
 				 */
-
 				Runtime.getRuntime().exec("mozilla " + url);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error", e);
 		}
 	}
 

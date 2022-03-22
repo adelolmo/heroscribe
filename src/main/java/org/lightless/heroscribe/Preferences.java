@@ -21,6 +21,7 @@ package org.lightless.heroscribe;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.xml.parsers.SAXParser;
@@ -99,7 +100,7 @@ public class Preferences extends DefaultHandler {
 	
 	/* Write XML */
 
-	public void write() throws Exception {
+	public void write() throws IOException {
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(Constants.preferencesFile)));
 
 		out.println("<?xml version=\"1.0\"?>");

@@ -58,10 +58,14 @@ import org.lightless.heroscribe.helper.OS;
 import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.quest.Quest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(Gui.class);
+
 	private List objects;
 	private Quest quest;
 	private Preferences prefs;
@@ -448,7 +452,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					fileChooser.setSelectedFile(new File(path));
 				}
 
-				fileChooser.setFileFilter((FileFilter) filters.get("xml"));
+				fileChooser.setFileFilter(filters.get("xml"));
 
 				if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 					try {
@@ -470,8 +474,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 						board.repaint();
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(this, "Can't open file.", "Error", JOptionPane.ERROR_MESSAGE);
-
-						ex.printStackTrace();
+						log.error("Can't open file.", ex);
 					}
 				}
 			}
@@ -479,18 +482,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			File file = null;
 			if (quest.getFile() != null || (file = askPath("xml")) != null) {
 				try {
-					if (file != null)
+					if (file != null) {
 						quest.setFile(file);
+					}
 
 					quest.save();
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file.", "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == saveAsKey) {
 			File file;
+
 			if ((file = askPath("xml")) != null) {
 				try {
 					quest.setFile(file);
@@ -498,7 +503,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file.", "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == exportPdfKey) {
@@ -509,7 +514,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(), "Error",
 							JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file. Check your ghostscript path", ex);
 				}
 			}
 		} else if (source == exportPdf2Key) {
@@ -520,7 +525,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					org.lightless.heroscribe.export.ExportIPDF.write(file, boardPainter);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file. Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == exportThumbNail) {
@@ -531,7 +536,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					org.lightless.heroscribe.export.ExportPDF.write(prefs.ghostscriptExec, file, quest, objects, false);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file. Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == exportEpsKey) {
@@ -541,7 +546,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					org.lightless.heroscribe.export.ExportEPS.writeMultiPage(file, quest, objects);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file.  Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == exportPngKey) {
@@ -551,7 +556,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					org.lightless.heroscribe.export.ExportRaster.write(file, "png", boardPainter);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this, "Can't save file.  Detailed Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
+					log.error("Can't save file.", ex);
 				}
 			}
 		} else if (source == ghostscriptKey) {
@@ -563,7 +568,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					prefs.write();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					log.error("Error.", ex);
 				}
 			}
 		} else if (source == dirKey) {
@@ -577,12 +582,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			// disable the "All files" option.
 			chooser.setAcceptAllFileFilterUsed(false);
+
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				prefs.defaultDir = chooser.getSelectedFile();
 				try {
 					prefs.write();
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					log.error("Error.", ex);
 				}
 			}
 		} else if (source == quitKey) {
@@ -590,10 +596,12 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (source == listKey) {
 			String object = tools.selectorPanel.getSelectedObject();
 
-			if ("add".equals(tools.getCommand()) && object != null)
+			if ("add".equals(tools.getCommand()) && object != null) {
 				org.lightless.heroscribe.helper.OS.openURL(new File("Objects.html"), "object_" + object);
-			else
+			} else {
 				org.lightless.heroscribe.helper.OS.openURL(new File("Objects.html"), null);
+			}
+
 		} else if (source == readMeKey) {
 			org.lightless.heroscribe.helper.OS.openURL(new File("Readme.html"), null);
 		} else if (source == aboutKey) {
@@ -640,7 +648,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			try {
 				prefs.write();
 			} catch (Exception ex) {
-				ex.printStackTrace();
+				log.error("Error.", ex);
 			}
 
 			System.exit(0);

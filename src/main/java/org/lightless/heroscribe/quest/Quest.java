@@ -22,14 +22,16 @@
 package org.lightless.heroscribe.quest;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Vector;
 
 import org.lightless.heroscribe.list.LBoard;
 
-public class Quest {
+public class Quest implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private static final String DEFAULT_REGION = "USA";
 	
 	private File file;

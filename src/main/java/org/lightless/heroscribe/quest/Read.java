@@ -22,7 +22,9 @@
 package org.lightless.heroscribe.quest;
 
 import java.io.File;
+import java.io.IOException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -44,7 +46,7 @@ public class Read extends DefaultHandler {
 	private QBoard board;
 	private int width, height, boardCount;
 
-	public Read(File file, List objects) throws Exception {
+	public Read(File file, List objects) throws ParserConfigurationException, SAXException, IOException {
 		super();
 
 		this.file = file;
@@ -68,17 +70,17 @@ public class Read extends DefaultHandler {
 	public InputSource resolveEntity(String publicId, String systemId) {
 		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.4//EN")) {
 			var relative = "DtdXsd/quest-1.4.dtd";
-			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+			return new InputSource(ResourceHelper.getResourceAsStream(relative));
 		}
 
 		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.3//EN")) {
 			var relative = "DtdXsd/quest-1.3.dtd";
-			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+			return new InputSource(ResourceHelper.getResourceAsStream(relative));
 		}
 
 		if (publicId.equals("-//org.lightless//HeroScribe Quest 1.2//EN")) {
 			var relative = "DtdXsd/quest-1.2.dtd";
-			return new InputSource(ResourceHelper.getResourceUrl(relative).getFile());
+			return new InputSource(ResourceHelper.getResourceAsStream(relative));
 		}
 
 		return null;

@@ -111,7 +111,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		commands = new ButtonGroup();
 
 		add = new JToggleButton("Add object");
-		add.setSelected(true);
 		select = new JToggleButton("Select/Remove object");
 		dark = new JToggleButton("Dark/Bridge");
 		none = new JToggleButton();
