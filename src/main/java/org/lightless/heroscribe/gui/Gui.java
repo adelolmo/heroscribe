@@ -52,6 +52,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
+import org.lightless.heroscribe.Constants;
 import org.lightless.heroscribe.Preferences;
 import org.lightless.heroscribe.helper.BoardPainter;
 import org.lightless.heroscribe.helper.OS;
@@ -142,16 +143,17 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	public void updateTitle() {
 		StringBuffer sb;
 
-		sb = new StringBuffer(org.lightless.heroscribe.Constants.applicationName + " " + org.lightless.heroscribe.Constants.version
-				+ org.lightless.heroscribe.Constants.applicationVersionSuffix + " - ");
+		sb = new StringBuffer(Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
 
-		if (quest.getFile() == null)
+		if (quest.getFile() == null) {
 			sb.append("Untitled");
-		else
+		} else {
 			sb.append(quest.getFile().getName());
+		}
 
-		if (quest.isModified())
+		if (quest.isModified()) {
 			sb.append("*");
+		}
 
 		setTitle(new String(sb));
 	}
@@ -606,13 +608,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (source == readMeKey) {
 			org.lightless.heroscribe.helper.OS.openURL(new File("Readme.html"), null);
 		} else if (source == aboutKey) {
-			JOptionPane.showMessageDialog(this, org.lightless.heroscribe.Constants.applicationName + " " + org.lightless.heroscribe.Constants.version
-					+ org.lightless.heroscribe.Constants.applicationVersionSuffix + "\n" + org.lightless.heroscribe.Constants.applicationName
-					+ org.lightless.heroscribe.Constants.applicationVersionSuffix + " modifications (C) 2011 Jason Allen.\n"
-					+ org.lightless.heroscribe.Constants.applicationName
-					+ " original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
-					+ org.lightless.heroscribe.Constants.applicationName + " is free software, distributed under the terms of the GNU GPL 2.\n"
-					+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n", "About", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(this,
+					Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + "\n" + Constants.applicationName
+							+ " Enhanced modifications (C) 2011 Jason Allen.\n" + Constants.applicationName
+							+ " original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n" + Constants.applicationName
+							+ " is free software, distributed under the terms of the GNU GPL 2.\n"
+							+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
+					"About", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 

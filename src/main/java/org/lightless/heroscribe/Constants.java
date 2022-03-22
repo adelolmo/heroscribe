@@ -20,24 +20,31 @@ package org.lightless.heroscribe;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Constants {
 	public static String applicationName = "HeroScribe";
-	
+
 	public static String objectVersion = "1.0";
 	public static String questVersion = "1.0";
-	public static String version = "1.0.1";
+	public static final String VERSION;
 
-	public static String applicationVersionSuffix = " Enhanced";
-	
+	public static String applicationVersionSuffix = "";
+
 	public static Color europeCorridorColor = new Color(255, 255, 255, 255);
 	public static Color usaCorridorColor = new Color(246, 246, 246, 255);
 
 	public static Color europeDarkColor = new Color(204, 204, 204, 255);
 	public static Color usaDarkColor = new Color(178, 178, 178, 255);
-	
+
 	public static Color europeTrapColor = new Color(0, 0, 0, 0);
 	public static Color usaTrapColor = new Color(250, 125, 51, 255);
-	
+
 	public static File preferencesFile = new File("Preferences.xml");
+
+	static {
+		String appVersion = ResourceBundle.getBundle("version", Locale.ENGLISH).getString("app.version");
+		VERSION = "v" + ("${project.version}".equals(appVersion) ? "" : appVersion);
+	}
 }

@@ -34,6 +34,8 @@ public class HeroScribe {
 	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
 
 	public static void main(String args[]) {
+		log.info("Starting up HeroScribe {}", Constants.VERSION);
+		
 		Preferences preferences;
 		List objects;
 		Quest quest;
@@ -48,8 +50,6 @@ public class HeroScribe {
 		} catch (Exception e) {
 			log.error("Error when defining look and feel", e);
 		}
-
-		log.info("Starting up.");
 
 		preferences = new Preferences(Constants.preferencesFile);
 
