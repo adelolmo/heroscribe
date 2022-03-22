@@ -34,7 +34,7 @@ public class ExportRaster {
 	public static void write(File file, String format, BoardPainter boardPainter) throws Exception {
 		BufferedImage image = new BufferedImage(
 			boardPainter.framePixelSize.width,
-			boardPainter.framePixelSize.height + 400,
+			boardPainter.framePixelSize.height,// + 400,
 			BufferedImage.TYPE_INT_RGB);
 			
 		Graphics2D g = image.createGraphics();
