@@ -35,69 +35,66 @@ import org.xml.sax.helpers.DefaultHandler;
 public class Preferences extends DefaultHandler {
 	public File ghostscriptExec;
 	public File defaultDir;
-	
+
 	public Preferences() {
 		super();
 
 		ghostscriptExec = new File("");
 		defaultDir = new File("");
 
-		if ( OS.isWindows() ) {
+		if (OS.isWindows()) {
 			File base = new File("c:\\gs\\");
-			
-			if ( base.isDirectory() ) {
+
+			if (base.isDirectory()) {
 				File[] files = base.listFiles();
-				
-				for ( int i = 0 ; i < files.length ; i++ ) {
-					if ( files[i].isDirectory() &&
-						new File(files[i], "bin\\gswin32c.exe").isFile() ) {
-							ghostscriptExec = new File(files[i], "bin\\gswin32c.exe");
-							
-							break;
-						}
+
+				for (int i = 0; i < files.length; i++) {
+					if (files[i].isDirectory() && new File(files[i], "bin\\gswin32c.exe").isFile()) {
+						ghostscriptExec = new File(files[i], "bin\\gswin32c.exe");
+
+						break;
+					}
 				}
-			}		
+			}
 		} else {
-			if ( new File("/usr/bin/gs").isFile() )
+			if (new File("/usr/bin/gs").isFile())
 				ghostscriptExec = new File("/usr/bin/gs");
 		}
 	}
-	
+
 	public Preferences(File file) {
 		this();
-		
-		if ( file.isFile() ) {
+
+		if (file.isFile()) {
 			try {
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 
 				SAXParser saxParser = factory.newSAXParser();
 				saxParser.parse(file, this);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
-	
+
 	/* Read XML */
-	
+
 	public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException {
 		if (qName == "ghostscript") {
-			File file = new File( attrs.getValue("path") );
-			
-			if ( file.isFile() ) {
+			File file = new File(attrs.getValue("path"));
+
+			if (file.isFile()) {
 				ghostscriptExec = file;
 			}
 		}
 		if (qName == "defaultDir") {
-			File file = new File( attrs.getValue("path") );
-			if ( file.isDirectory() ) {
+			File file = new File(attrs.getValue("path"));
+			if (file.isDirectory()) {
 				defaultDir = file;
 			}
 		}
 	}
-	
+
 	/* Write XML */
 
 	public void write() throws IOException {
@@ -105,15 +102,11 @@ public class Preferences extends DefaultHandler {
 
 		out.println("<?xml version=\"1.0\"?>");
 		out.println("<preferences>");
-		
-		out.println("<ghostscript path=\"" +
-			ghostscriptExec.getAbsoluteFile().toString().replaceAll("\"", "&quot;") +
-			"\"/>");
-		out.println("<defaultDir path=\"" + 
-			defaultDir.getAbsolutePath().toString().replaceAll("\"", "&quot;") + 
-			"\"/>");
+
+		out.println("<ghostscript path=\"" + ghostscriptExec.getAbsoluteFile().toString().replaceAll("\"", "&quot;") + "\"/>");
+		out.println("<defaultDir path=\"" + defaultDir.getAbsolutePath().toString().replaceAll("\"", "&quot;") + "\"/>");
 		out.println("</preferences>");
-		
+
 		out.close();
 	}
 }

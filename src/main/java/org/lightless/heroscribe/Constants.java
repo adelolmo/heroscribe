@@ -41,10 +41,17 @@ public class Constants {
 	public static Color europeTrapColor = new Color(0, 0, 0, 0);
 	public static Color usaTrapColor = new Color(250, 125, 51, 255);
 
-	public static File preferencesFile = new File("Preferences.xml");
+	public static final File preferencesFile;
 
 	static {
 		String appVersion = ResourceBundle.getBundle("version", Locale.ENGLISH).getString("app.version");
 		VERSION = "v" + ("${project.version}".equals(appVersion) ? "" : appVersion);
+
+		String home = System.getProperty("user.home");
+		File prefDir = new File(home, ".heroscribe");
+		if (!prefDir.exists()) {
+			prefDir.mkdir();
+		}
+		preferencesFile = new File(prefDir, "Preferences.xml");
 	}
 }
