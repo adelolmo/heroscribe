@@ -1,19 +1,19 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-  
+
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
-  Copyright (C) 2011 Jason Allen 
-  
+  Copyright (C) 2011 Jason Allen
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -21,14 +21,14 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.TextArea;
+import org.lightless.heroscribe.list.LObject;
+import org.lightless.heroscribe.quest.Quest;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -37,27 +37,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Iterator;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
-
-import org.lightless.heroscribe.list.LObject;
-import org.lightless.heroscribe.quest.Quest;
-
-public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener {
+public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,7 +57,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	JList<String> note;
 	DefaultListModel<String> noteData = new DefaultListModel<>();
 	JScrollPane scrollPane = new JScrollPane();
-	JButton newNote, delNote;
+	JButton newNote, editNote, delNote;
 
 	JPanel extraPanel;
 
@@ -95,6 +75,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 		// HSE - initialize the quest detail fields
 		newNote = new JButton("New");
+		editNote = new JButton("Edit");
 		delNote = new JButton("Delete");
 		lName = new JLabel("Quest Name:");
 		lSpeech = new JLabel("Quest Speech:");
@@ -123,7 +104,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		// HSE - add the quest detail fields to the layout and set up the layout
 		GridBagConstraints cSetting = new GridBagConstraints();
 		cSetting.gridx = 0;
-		cSetting.gridwidth = 2;
+		cSetting.gridwidth = 3;
 		cSetting.gridy = 0;
 		cSetting.fill = GridBagConstraints.HORIZONTAL;
 		cSetting.insets = new Insets(3, 0, 0, 3);
@@ -156,6 +137,9 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		cSetting.gridy = 10;
 		settingPanel.add(newNote, cSetting);
 		cSetting.gridx = 1;
+		editNote.setEnabled(false);
+		settingPanel.add(editNote, cSetting);
+		cSetting.gridx = 2;
 		settingPanel.add(delNote, cSetting);
 
 		// HSE - populate the combo box for the wandering monster list
@@ -212,8 +196,10 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		wandering.addActionListener(this);
 
 		newNote.addActionListener(this);
+		editNote.addActionListener(this);
 		delNote.addActionListener(this);
 
+		note.addListSelectionListener(this);
 	}
 
 	public void deselectAll() {
@@ -330,14 +316,24 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 		} else if (e.getSource() == newNote) {
 			// HSE - listener for new note click
-			String response = JOptionPane.showInputDialog(null, "Enter the QuestMaster Note:", "Enter Note", JOptionPane.QUESTION_MESSAGE);
-			if (response != null) {
-				if (!response.isEmpty()) {
-					noteData.addElement(response);
-					quest.addNote(response);
+			NoteModalDialog.showMessageDialog(this, null, new NoteModalDialog.NoteModalListener() {
+				@Override
+				public void noteChange(String text) {
+					noteData.addElement(text);
+					quest.addNote(text);
 					quest.setModified(true);
 				}
-			}
+			});
+		} else if (e.getSource() == editNote) {
+			// HSE - listener for edit note click
+			NoteModalDialog.showMessageDialog(this, note.getSelectedValue(), new NoteModalDialog.NoteModalListener() {
+				@Override
+				public void noteChange(String text) {
+					noteData.setElementAt(text, note.getLeadSelectionIndex());
+					quest.setNote(text, note.getLeadSelectionIndex());
+					quest.setModified(true);
+				}
+			});
 		} else if (e.getSource() == delNote) {
 			// HSE - listener for del note click
 			if (note.getSelectedValue() != null) {
@@ -350,6 +346,13 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 					quest.setModified(true);
 				}
 			}
+		}
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getSource() == note) {
+			editNote.setEnabled(true);
 		}
 	}
 }

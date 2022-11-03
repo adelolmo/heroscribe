@@ -1,5 +1,10 @@
+.idea
 /target/
 /.settings/
 /.classpath
 /.project
 /dependency-reduced-pom.xml
+
+debian/files
+debian/heroscribe*
+debian/.debhelper
