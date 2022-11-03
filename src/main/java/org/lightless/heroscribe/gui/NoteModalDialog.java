@@ -21,6 +21,7 @@
 
 package org.lightless.heroscribe.gui;
 
+import org.lightless.heroscribe.helper.ResourceHelper;
 import org.lightless.heroscribe.helper.ScreenSize;
 
 import javax.swing.*;
@@ -32,7 +33,7 @@ import java.awt.event.WindowListener;
 public class NoteModalDialog {
 	private static final int MODAL_WIDTH = 500;
 	private static final int MODAL_HEIGHT = 400;
-	private static final Dimension BUTTON_DIMENSION = new Dimension(100, 40);
+	private static final Dimension BUTTON_DIMENSION = new Dimension(120, 40);
 	private static final int BORDER_SIZE = 8;
 
 	public static void showMessageDialog(JPanel parent, String noteContent, NoteModalListener listener) {
@@ -41,8 +42,8 @@ public class NoteModalDialog {
 		final JDialog dialog = new JDialog(windowAncestor, "Enter Note");
 		final Label label = new Label("Enter the QuestMaster Note:");
 		final JTextArea textArea = new JTextArea(10, 50);
-		final JButton okButton = createButton("OK");
-		final JButton cancelButton = createButton("Cancel");
+		final JButton okButton = createButton("OK", "Icons/ok.png");
+		final JButton cancelButton = createButton("Cancel", "Icons/no.png");
 
 		textArea.setText(noteContent);
 
@@ -62,18 +63,17 @@ public class NoteModalDialog {
 		contentPanel.add(createSeparator());
 		contentPanel.add(createButtonsSection(cancelButton, okButton));
 
-		dialog.setBounds(ScreenSize.getWidth() / 2 - MODAL_WIDTH / 2,
-				ScreenSize.getHeight() / 2 - MODAL_HEIGHT / 2,
-				MODAL_WIDTH,
-				MODAL_HEIGHT);
+		dialog.setBounds(ScreenSize.getWidth() / 2 - MODAL_WIDTH / 2, ScreenSize.getHeight() / 2 - MODAL_HEIGHT / 2, MODAL_WIDTH, MODAL_HEIGHT);
 		dialog.addWindowListener(closeWindow);
 		dialog.setVisible(true);
 		dialog.pack();
 	}
 
-	private static JButton createButton(String text) {
-		final JButton button = new JButton(text);
+	private static JButton createButton(String text, String icon) {
+		final ImageIcon imageIcon = new ImageIcon(ResourceHelper.getResourceUrl(icon).getFile());
+		final JButton button = new JButton(text, imageIcon);
 		button.setPreferredSize(BUTTON_DIMENSION);
+		button.setMnemonic(text.charAt(0));
 		return button;
 	}
 
