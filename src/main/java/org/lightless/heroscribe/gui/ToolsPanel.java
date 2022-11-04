@@ -1,19 +1,19 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-  
+
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
-  Copyright (C) 2011 Jason Allen 
-  
+  Copyright (C) 2011 Jason Allen
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -21,41 +21,14 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.TextArea;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Iterator;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ButtonGroup;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
-import javax.swing.border.EtchedBorder;
-
 import org.lightless.heroscribe.list.LObject;
 import org.lightless.heroscribe.quest.Quest;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Iterator;
 
 public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener {
 
@@ -330,14 +303,12 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 		} else if (e.getSource() == newNote) {
 			// HSE - listener for new note click
-			String response = JOptionPane.showInputDialog(null, "Enter the QuestMaster Note:", "Enter Note", JOptionPane.QUESTION_MESSAGE);
-			if (response != null) {
-				if (!response.isEmpty()) {
-					noteData.addElement(response);
-					quest.addNote(response);
-					quest.setModified(true);
-				}
-			}
+			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
+			modal.showDialog().ifPresent(text -> {
+				noteData.addElement(text);
+				quest.addNote(text);
+				quest.setModified(true);
+			});
 		} else if (e.getSource() == delNote) {
 			// HSE - listener for del note click
 			if (note.getSelectedValue() != null) {
