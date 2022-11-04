@@ -30,8 +30,7 @@ public class TextAreaModal {
 
 	private final String title;
 	private final String label;
-	private final int rows;
-	private final int columns;
+	private final JTextArea textArea;
 
 	public TextAreaModal(String title, String label) {
 		this(title, label, 10, 50);
@@ -40,13 +39,15 @@ public class TextAreaModal {
 	public TextAreaModal(String title, String label, int rows, int columns) {
 		this.title = title;
 		this.label = label;
-		this.rows = rows;
-		this.columns = columns;
+		this.textArea = new JTextArea(rows, columns);
+	}
+
+	public void setInitialText(String text) {
+		this.textArea.setText(text);
 	}
 
 	public Optional<String> showDialog() {
 		final JPanel panel = new JPanel();
-		final JTextArea textArea = new JTextArea(rows, columns);
 
 		textArea.addAncestorListener(new RequestFocusListener());
 
