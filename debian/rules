@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+DESTDIR=debian/heroscribe
+
+%:
+	dh $@
+
+override_dh_strip_nondeterminism:
+	true
+
+override_dh_install:
+	dh_install
+	sed -i 's|bash|sh|;s|"$$JAVA_HOME/bin/java"|/usr/bin/java|;s|heroscribe.jar|/usr/share/heroscribe/heroscribe.jar|' $(DESTDIR)/usr/share/heroscribe/heroscribe.sh
