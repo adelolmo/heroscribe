@@ -26,11 +26,13 @@ import org.lightless.heroscribe.quest.Quest;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Iterator;
 
-public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener {
+public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +52,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	JList<String> note;
 	DefaultListModel<String> noteData = new DefaultListModel<>();
 	JScrollPane scrollPane = new JScrollPane();
-	JButton newNote, delNote;
+	JButton newNote, editNote, delNote;
 
 	JPanel extraPanel;
 
@@ -68,6 +70,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 		// HSE - initialize the quest detail fields
 		newNote = new JButton("New");
+		editNote = new JButton("Edit");
 		delNote = new JButton("Delete");
 		lName = new JLabel("Quest Name:");
 		lSpeech = new JLabel("Quest Speech:");
@@ -96,7 +99,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		// HSE - add the quest detail fields to the layout and set up the layout
 		GridBagConstraints cSetting = new GridBagConstraints();
 		cSetting.gridx = 0;
-		cSetting.gridwidth = 2;
+		cSetting.gridwidth = 3;
 		cSetting.gridy = 0;
 		cSetting.fill = GridBagConstraints.HORIZONTAL;
 		cSetting.insets = new Insets(3, 0, 0, 3);
@@ -129,6 +132,9 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		cSetting.gridy = 10;
 		settingPanel.add(newNote, cSetting);
 		cSetting.gridx = 1;
+		editNote.setEnabled(false);
+		settingPanel.add(editNote, cSetting);
+		cSetting.gridx = 2;
 		settingPanel.add(delNote, cSetting);
 
 		// HSE - populate the combo box for the wandering monster list
@@ -185,8 +191,10 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		wandering.addActionListener(this);
 
 		newNote.addActionListener(this);
+		editNote.addActionListener(this);
 		delNote.addActionListener(this);
 
+		note.addListSelectionListener(this);
 	}
 
 	public void deselectAll() {
@@ -309,6 +317,15 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 				quest.addNote(text);
 				quest.setModified(true);
 			});
+		} else if (e.getSource() == editNote) {
+			// HSE - listener for edit note click
+			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
+			modal.setInitialText(note.getSelectedValue());
+			modal.showDialog().ifPresent(text -> {
+				noteData.setElementAt(text, note.getLeadSelectionIndex());
+				quest.setNote(text, note.getLeadSelectionIndex());
+				quest.setModified(true);
+			});
 		} else if (e.getSource() == delNote) {
 			// HSE - listener for del note click
 			if (note.getSelectedValue() != null) {
@@ -321,6 +338,12 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 					quest.setModified(true);
 				}
 			}
+		}
+	}
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getSource() == note) {
+			editNote.setEnabled(true);
 		}
 	}
 }
