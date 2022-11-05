@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,19 +18,12 @@
 
 package org.lightless.heroscribe;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.lightless.heroscribe.helper.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.lightless.heroscribe.helper.OS;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.*;
+import java.io.*;
 
 public class Preferences extends DefaultHandler {
 	public File ghostscriptExec;
@@ -48,9 +41,9 @@ public class Preferences extends DefaultHandler {
 			if (base.isDirectory()) {
 				File[] files = base.listFiles();
 
-				for (int i = 0; i < files.length; i++) {
-					if (files[i].isDirectory() && new File(files[i], "bin\\gswin32c.exe").isFile()) {
-						ghostscriptExec = new File(files[i], "bin\\gswin32c.exe");
+				for (File file : files) {
+					if (file.isDirectory() && new File(file, "bin\\gswin32c.exe").isFile()) {
+						ghostscriptExec = new File(file, "bin\\gswin32c.exe");
 
 						break;
 					}
@@ -80,14 +73,14 @@ public class Preferences extends DefaultHandler {
 	/* Read XML */
 
 	public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException {
-		if (qName == "ghostscript") {
+		if ("ghostscript".equals(qName)) {
 			File file = new File(attrs.getValue("path"));
 
 			if (file.isFile()) {
 				ghostscriptExec = file;
 			}
 		}
-		if (qName == "defaultDir") {
+		if ("defaultDir".equals(qName)) {
 			File file = new File(attrs.getValue("path"));
 			if (file.isDirectory()) {
 				defaultDir = file;

@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,29 +18,23 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.Kind;
-import org.lightless.heroscribe.list.LObject;
-
-import java.awt.CardLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.Iterator;
-import java.util.TreeMap;
+import org.lightless.heroscribe.list.*;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 public class ObjectSelector extends JPanel implements ItemListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Gui gui;
+	private final Gui gui;
 
-	private JPanel objectsPanel;
-	private CardLayout cardLayout;
-	private JComboBox<Kind> kindsComboBox;
-	private TreeMap<String, JList<LObject>> kindList;
+	private final JPanel objectsPanel;
+	private final CardLayout cardLayout;
+	private final TreeMap<String, JList<LObject>> kindList;
 
 	private String selectedObject;
 	private int objectRotation;
@@ -52,7 +46,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 		objectsPanel = new JPanel();
 		cardLayout = new CardLayout();
-		kindsComboBox = new JComboBox<>();
+		JComboBox<Kind> kindsComboBox = new JComboBox<>();
 		kindList = new TreeMap<>();
 
 		selectedObject = null;
@@ -111,8 +105,6 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 		gui.board.resetRotation();
 	}
 
-	/* -- */
-
 	@SuppressWarnings("unchecked")
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -123,7 +115,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 			cardLayout.show(objectsPanel, selected.id);
 			list = kindList.get(selected.id);
 
-			setSelectedObject((LObject) list.getSelectedValue());
+			setSelectedObject(list.getSelectedValue());
 
 			gui.updateHint();
 		}
@@ -132,7 +124,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 	@SuppressWarnings("unchecked")
 	public void valueChanged(ListSelectionEvent e) {
 		JList<LObject> list = (JList<LObject>) e.getSource();
-		setSelectedObject((LObject) list.getSelectedValue());
+		setSelectedObject(list.getSelectedValue());
 		gui.updateHint();
 	}
 }

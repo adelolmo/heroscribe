@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,24 +18,16 @@
 
 package org.lightless.heroscribe.list;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.helper.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.lightless.heroscribe.HeroScribeException;
-import org.lightless.heroscribe.helper.ResourceHelper;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.*;
+import java.io.*;
 
 public class Read extends DefaultHandler {
-	private List objects;
+	private final List objects;
 
 	private boolean onBoard;
 	private LObject piece;
@@ -63,7 +55,6 @@ public class Read extends DefaultHandler {
 		return objects;
 	}
 
-	/* --- */
 
 	public InputSource resolveEntity(String publicId, String systemId) {
 		if (publicId.equals("-//org.lightless//HeroScribe Object List 1.5//EN")) {
@@ -85,7 +76,7 @@ public class Read extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName, Attributes attrs) throws SAXException {
 		content = new StringBuffer();
 
-		if (qName == "objectList") {
+		if ("objectList".equals(qName)) {
 			objects.version = attrs.getValue("version");
 
 			if (!objects.version.equals(org.lightless.heroscribe.Constants.objectVersion))
@@ -99,9 +90,9 @@ public class Read extends DefaultHandler {
 
 			objects.samplePrefix = attrs.getValue("samplePrefix");
 			objects.sampleSuffix = attrs.getValue("sampleSuffix");
-		} else if (qName == "kind") {
+		} else if ("kind".equals(qName)) {
 			objects.kinds.add(new Kind(attrs.getValue("id"), attrs.getValue("name")));
-		} else if (qName == "board") {
+		} else if ("board".equals(qName)) {
 			board = new LBoard(Integer.parseInt(attrs.getValue("width")), Integer.parseInt(attrs.getValue("height")));
 
 			board.borderDoorsOffset = Float.parseFloat(attrs.getValue("borderDoorsOffset"));
@@ -109,7 +100,7 @@ public class Read extends DefaultHandler {
 			board.adjacentBoardsOffset = Float.parseFloat(attrs.getValue("adjacentBoardsOffset"));
 
 			onBoard = true;
-		} else if (qName == "object") {
+		} else if ("object".equals(qName)) {
 			piece = new LObject();
 
 			piece.id = attrs.getValue("id");
@@ -117,8 +108,8 @@ public class Read extends DefaultHandler {
 
 			piece.kind = attrs.getValue("kind");
 
-			piece.door = Boolean.valueOf(attrs.getValue("door")).booleanValue();
-			piece.trap = Boolean.valueOf(attrs.getValue("trap")).booleanValue();
+			piece.door = Boolean.parseBoolean(attrs.getValue("door"));
+			piece.trap = Boolean.parseBoolean(attrs.getValue("trap"));
 
 			piece.width = Integer.parseInt(attrs.getValue("width"));
 			piece.height = Integer.parseInt(attrs.getValue("height"));
@@ -126,20 +117,20 @@ public class Read extends DefaultHandler {
 			piece.zorder = Float.parseFloat(attrs.getValue("zorder"));
 
 			piece.note = null;
-		} else if (qName == "icon") {
+		} else if ("icon".equals(qName)) {
 			Icon icon = new Icon();
 
 			icon.path = attrs.getValue("path");
 			icon.xoffset = Float.parseFloat(attrs.getValue("xoffset"));
 			icon.yoffset = Float.parseFloat(attrs.getValue("yoffset"));
 
-			icon.original = Boolean.valueOf(attrs.getValue("original")).booleanValue();
+			icon.original = Boolean.parseBoolean(attrs.getValue("original"));
 
 			if (onBoard)
 				board.putIcon(icon, attrs.getValue("region"));
 			else
 				piece.putIcon(icon, attrs.getValue("region"));
-		} else if (qName == "corridor") {
+		} else if ("corridor".equals(qName)) {
 			if (onBoard) {
 				int width, height;
 				int left, top;
@@ -165,20 +156,20 @@ public class Read extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		if (qName == "board") {
+		if ("board".equals(qName)) {
 			if (!board.region.containsKey("Europe") || !board.region.containsKey("USA"))
 				throw new SAXException("There should be both icons for each board.");
 
 			objects.board = board;
 
 			onBoard = false;
-		} else if (qName == "object") {
+		} else if ("object".equals(qName)) {
 			if (!piece.region.containsKey("Europe") || !piece.region.containsKey("USA"))
 				throw new SAXException("There should be both icons for each object.");
 
 			objects.list.put(piece.id, piece);
 
-		} else if (qName == "note") {
+		} else if ("note".equals(qName)) {
 			piece.note = new String(content);
 		}
 	}

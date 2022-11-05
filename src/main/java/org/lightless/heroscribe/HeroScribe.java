@@ -31,7 +31,7 @@ public class HeroScribe {
 
 	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		log.info("Starting up HeroScribe {}", Constants.VERSION);
 
 		Preferences preferences;

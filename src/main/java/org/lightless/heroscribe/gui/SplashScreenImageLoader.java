@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,22 +18,16 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Iterator;
-
-import javax.swing.JWindow;
-
-import org.lightless.heroscribe.HeroScribeException;
-import org.lightless.heroscribe.helper.ResourceHelper;
-import org.lightless.heroscribe.list.LObject;
+import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.list.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.lightless.heroscribe.list.*;
+import org.slf4j.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
 public class SplashScreenImageLoader extends JWindow {
 
@@ -112,7 +106,7 @@ public class SplashScreenImageLoader extends JWindow {
 		mt.addImage(img, 10);
 
 		while (iterator.hasNext()) {
-			String id = ((LObject) iterator.next()).id;
+			String id = iterator.next().id;
 
 			/* Icons */
 			img = tk.createImage(objects.getRasterPath(id, "Europe"));
@@ -136,6 +130,6 @@ public class SplashScreenImageLoader extends JWindow {
 
 		end = System.currentTimeMillis();
 
-		log.info("PNGs loaded (" + String.valueOf(end - start) + "ms).");
+		log.info("PNGs loaded (" + (end - start) + "ms).");
 	}
 }

@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,25 +18,20 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.util.Iterator;
+import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.quest.*;
 
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.MouseInputListener;
-
-import org.lightless.heroscribe.list.LObject;
-import org.lightless.heroscribe.quest.QBoard;
-import org.lightless.heroscribe.quest.QObject;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 public class Board extends JPanel implements MouseInputListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private Gui gui;
+	private final Gui gui;
 
 	private int lastRow, lastColumn;
 	private int lastTop, lastLeft;
@@ -170,7 +165,7 @@ public class Board extends JPanel implements MouseInputListener {
 	}
 
 	private void displayStatus() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		boolean first = true;
 
 		int width, height;
@@ -297,9 +292,11 @@ public class Board extends JPanel implements MouseInputListener {
 		isPaintingDark = false;
 	}
 
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+	}
 
-	public void mouseEntered(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {
+	}
 
 	public boolean isWellPositioned(QObject piece) {
 		LObject obj = gui.getObjects().getObject(piece.id);

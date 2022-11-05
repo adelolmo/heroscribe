@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,26 +18,14 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Iterator;
-import java.util.TreeSet;
+import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.quest.*;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.lightless.heroscribe.list.LObject;
-import org.lightless.heroscribe.quest.QObject;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
 
 public class SquareDisplayer extends JPanel implements ListSelectionListener, ActionListener {
 
@@ -137,7 +125,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 
 		Iterator<QObject> iterator = selected.iterator();
 		DefaultListModel<QObject> listModel = (DefaultListModel<QObject>) list.getModel();
-		
+
 		while (iterator.hasNext()) {
 			QObject qobj = iterator.next();
 			listModel.add(0, qobj);
@@ -152,7 +140,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	public void valueChanged(ListSelectionEvent e) {
 		JList<QObject> list = (JList<QObject>) e.getSource();
 
-		QObject obj = (QObject) list.getSelectedValue();
+		QObject obj = list.getSelectedValue();
 
 		if (obj != null) {
 			zorder.setText(Float.toString(obj.zorder));
@@ -172,7 +160,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		QObject obj = (QObject) list.getSelectedValue();
+		QObject obj = list.getSelectedValue();
 		JButton button = (JButton) e.getSource();
 
 		if (obj != null) {

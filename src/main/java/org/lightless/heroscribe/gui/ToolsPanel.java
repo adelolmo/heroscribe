@@ -21,28 +21,26 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.LObject;
-import org.lightless.heroscribe.quest.Quest;
+import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.quest.*;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.border.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Iterator;
+import java.util.*;
 
 public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	Gui gui;
+	private final Gui gui;
 	private Quest quest;
 	ObjectSelector selectorPanel;
 	SquareDisplayer displayerPanel;
 
 	ButtonGroup commands;
-	ItemListener listener;
 	JToggleButton add, select, dark, none;
 	// HSE - new quest description fields
 	JTextField name;
@@ -249,7 +247,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		if (e.getSource() == name) {
 			JTextField textField = (JTextField) e.getSource();
 			String text = textField.getText();
-			if (text != quest.getName()) {
+			if (!text.equals(quest.getName())) {
 				quest.setName(text);
 			}
 		}
@@ -257,7 +255,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		else if (e.getSource() == speech) {
 			TextArea textArea = (TextArea) e.getSource();
 			String text = textArea.getText();
-			if (text != quest.getSpeech()) {
+			if (!text.equals(quest.getSpeech())) {
 				quest.setSpeech(text);
 			}
 
@@ -340,6 +338,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			}
 		}
 	}
+
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if (e.getSource() == note) {

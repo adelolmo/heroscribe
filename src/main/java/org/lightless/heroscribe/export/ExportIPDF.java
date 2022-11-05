@@ -1,16 +1,16 @@
 /*
-  HeroScribe Enhanced 
-  Copyright (C) 2011 Jason Allen   
-   
+  HeroScribe Enhanced
+  Copyright (C) 2011 Jason Allen
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,27 +18,19 @@
 
 package org.lightless.heroscribe.export;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import org.lightless.heroscribe.helper.*;
 
-import org.lightless.heroscribe.helper.BoardPainter;
-
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfWriter;
+import java.io.*;
 
 public class ExportIPDF {
 	public static void write(File file, BoardPainter boardPainter) throws Exception {
-		Document document = new Document(new Rectangle(0,0,950,1100),50,50,50,50);
-		
+		Document document = new Document(new Rectangle(0, 0, 950, 1100), 50, 50, 50, 50);
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-
 		document.open();
-				
 		boardPainter.paintPDF(null, 0, 0, writer, document);
-		
 		document.close();
-		
 	}
-	
+
 }

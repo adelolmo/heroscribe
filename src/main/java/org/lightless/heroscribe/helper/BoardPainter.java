@@ -1,19 +1,19 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-  
+
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
-  Copyright (C) 2011 Jason Allen  
-   
+  Copyright (C) 2011 Jason Allen
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -21,38 +21,29 @@
 
 package org.lightless.heroscribe.helper;
 
-import org.lightless.heroscribe.Constants;
-import org.lightless.heroscribe.gui.Gui;
-import org.lightless.heroscribe.list.LObject;
+import com.itextpdf.awt.*;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.gui.*;
+import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.DefaultFontMapper;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import java.util.Iterator;
-
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-
-import java.awt.geom.AffineTransform;
-import java.awt.image.ImageObserver;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
+import java.util.*;
 
 public class BoardPainter implements ImageObserver {
-	private Gui gui;
+	private final Gui gui;
 	public Dimension boardSize, boardPixelSize, framePixelSize;
 	public float boxEdge;
 	public int adjacentBoardsOffset;
 
 	public BoardPainter(Gui gui) {
 		this.gui = gui;
-
 		init();
 	}
 
@@ -280,33 +271,33 @@ public class BoardPainter implements ImageObserver {
 		yPos += (metrics.getHeight() * 2);
 
 		// HSE - break out speech by line
-		String linefeeds[] = gui.getQuest().getSpeech().split("\n");
-		String words[];
-		String output = new String("");
+		String[] linefeeds = gui.getQuest().getSpeech().split("\n");
+		String[] words;
+		StringBuilder output = new StringBuilder();
 
 		// HSE - loop for each line
-		for (int i = 0; i < linefeeds.length; i++) {
-			words = linefeeds[i].split(" ");
+		for (String linefeed : linefeeds) {
+			words = linefeed.split(" ");
 			// HSE - loop for each word in the line
 			for (int j = 0; j < words.length; j++) {
 				textWidth = metrics.stringWidth(words[j] + " ");
 				if (xPos + textWidth > (framePixelSize.width - (margin * 3))) {
 					// new line, print current output
-					g2d.drawString(output, margin, yPos);
-					output = "";
+					g2d.drawString(output.toString(), margin, yPos);
+					output = new StringBuilder();
 
 					xPos = margin;
 					yPos += metrics.getHeight();
 				}
 
 				// add to output buffer
-				output += words[j] + " ";
+				output.append(words[j]).append(" ");
 				xPos += textWidth;
 
 				// check for last word
 				if (j == words.length - 1) {
-					g2d.drawString(output, margin, yPos);
-					output = "";
+					g2d.drawString(output.toString(), margin, yPos);
+					output = new StringBuilder();
 				}
 			}
 
@@ -345,7 +336,7 @@ public class BoardPainter implements ImageObserver {
 	public void paintPDF(QObject floating, int column, int row, PdfWriter writer, Document document) {
 
 		PdfContentByte cb = writer.getDirectContent();
-		PdfTemplate tp[][] = new PdfTemplate[gui.getQuest().getWidth()][gui.getQuest().getHeight()];
+		PdfTemplate[][] tp = new PdfTemplate[gui.getQuest().getWidth()][gui.getQuest().getHeight()];
 		Graphics2D g2d;
 
 		// reset the frame size so we can print one page per board
@@ -432,33 +423,33 @@ public class BoardPainter implements ImageObserver {
 				yPos += (metrics.getHeight() * 2);
 
 				// HSE - break out speech by line
-				String linefeeds[] = gui.getQuest().getSpeech().split("\n");
-				String words[];
-				String output = new String("");
+				String[] linefeeds = gui.getQuest().getSpeech().split("\n");
+				String[] words;
+				StringBuilder output = new StringBuilder(new String(""));
 
 				// HSE - loop for each line
-				for (int i1 = 0; i1 < linefeeds.length; i1++) {
-					words = linefeeds[i1].split(" ");
+				for (String linefeed : linefeeds) {
+					words = linefeed.split(" ");
 					// HSE - loop for each word in the line
 					for (int j1 = 0; j1 < words.length; j1++) {
 						textWidth = metrics.stringWidth(words[j1] + " ");
 						if (xPos + textWidth > (framePixelSize.width - (margin * 3))) {
 							// new line, print current output
-							g2d.drawString(output, margin, yPos);
-							output = "";
+							g2d.drawString(output.toString(), margin, yPos);
+							output = new StringBuilder();
 
 							xPos = margin;
 							yPos += metrics.getHeight();
 						}
 
 						// add to output buffer
-						output += words[j1] + " ";
+						output.append(words[j1]).append(" ");
 						xPos += textWidth;
 
 						// check for last word
 						if (j1 == words.length - 1) {
-							g2d.drawString(output, margin, yPos);
-							output = "";
+							g2d.drawString(output.toString(), margin, yPos);
+							output = new StringBuilder();
 						}
 					}
 
@@ -496,7 +487,10 @@ public class BoardPainter implements ImageObserver {
 				g2d.drawString("Wandering Monster in this Quest: " + gui.getQuest().getWandering(), xPos, yPos);
 				Image icon = getObjectIconByName(gui.getQuest().getWandering());
 				if (icon != null) {
-					g2d.drawImage(icon, Math.round(xPos - icon.getWidth(null) - 5), Math.round(yPos - 3 - (icon.getHeight(null) / 2)), this);
+					g2d.drawImage(icon,
+							Math.round(xPos - icon.getWidth(null) - 5),
+							Math.round(yPos - 3 - (icon.getHeight(null) / 2)),
+							this);
 				}
 
 				cb.addTemplate(tp[i][j], 0, 0);

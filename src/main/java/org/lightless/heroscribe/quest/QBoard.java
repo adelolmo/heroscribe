@@ -1,16 +1,15 @@
 package org.lightless.heroscribe.quest;
 
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 public class QBoard {
-	private boolean[][] dark;
+	private final boolean[][] dark;
 
-	private TreeSet<QObject> objects;
+	private final TreeSet<QObject> objects;
 
-	private Quest quest;
+	private final Quest quest;
 
-	private int width, height;
+	private final int width, height;
 
 	public QBoard(int width, int height, Quest quest) {
 		this.quest = quest;

@@ -21,13 +21,10 @@
 
 package org.lightless.heroscribe.quest;
 
-import org.lightless.heroscribe.list.LBoard;
+import org.lightless.heroscribe.list.*;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
 public class Quest implements Serializable {
 
@@ -36,15 +33,15 @@ public class Quest implements Serializable {
 
 	private File file;
 
-	private int width, height;
+	private final int width, height;
 	private String name, region, speech;
-	private Vector<String> notes;
+	private final Vector<String> notes;
 	// HSE - string value of wandering monster
 	private String wandering;
 	private String wanderingID; // obj id
 
-	private QBoard[][] boards;
-	private boolean[][][] horizontalBridges, verticalBridges;
+	private final QBoard[][] boards;
+	private final boolean[][][] horizontalBridges, verticalBridges;
 
 	private boolean modified;
 
@@ -209,7 +206,7 @@ public class Quest implements Serializable {
 }
 
 class ObjectsIterator implements java.util.Iterator<QObject> {
-	private QBoard boards[][];
+	private final QBoard[][] boards;
 
 	private int i, j;
 	private boolean hasEnded;

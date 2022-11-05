@@ -1,19 +1,19 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-  
+
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
-  Copyright (C) 2011 Jason Allen   
-   
+  Copyright (C) 2011 Jason Allen
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -21,10 +21,8 @@
 
 package org.lightless.heroscribe.quest;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 public class Write {
 	private static String xmlEscape(String in) {
@@ -64,7 +62,7 @@ public class Write {
 
 				Iterator<QObject> iterator = board.iterator();
 				while (iterator.hasNext()) {
-					QObject obj = (QObject) iterator.next();
+					QObject obj = iterator.next();
 
 					out.print("<object id=\"" + obj.id + "\" ");
 					out.print("left=\"" + obj.left + "\" top=\"" + obj.top + "\" ");
@@ -113,7 +111,7 @@ public class Write {
 		Iterator<String> iterator = quest.notesIterator();
 
 		while (iterator.hasNext()) {
-			out.println("<note>" + xmlEscape((String) iterator.next()) + "</note>");
+			out.println("<note>" + xmlEscape(iterator.next()) + "</note>");
 		}
 		// HSE - output wandering monster as quest note
 		out.println("<note>Wandering Monster in this quest: " + xmlEscape(quest.getWandering()) + "</note>");

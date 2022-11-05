@@ -1,9 +1,7 @@
 package org.lightless.heroscribe.gui;
 
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.io.*;
 
 public class FileChooser extends JFileChooser {
 

@@ -1,18 +1,18 @@
 /*
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-  
+
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
   Copyright (C) 2011 Jason Allen
-     
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -20,64 +20,35 @@
 
 package org.lightless.heroscribe.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-import java.util.TreeMap;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileFilter;
-
-import org.lightless.heroscribe.Constants;
-import org.lightless.heroscribe.Preferences;
-import org.lightless.heroscribe.helper.BoardPainter;
-import org.lightless.heroscribe.helper.OS;
-import org.lightless.heroscribe.helper.ResourceHelper;
+import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.quest.Quest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.lightless.heroscribe.quest.*;
+import org.slf4j.*;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
-	private List objects;
+	private final List objects;
 	private Quest quest;
-	private Preferences prefs;
+	private final Preferences prefs;
 
 	ToolsPanel tools;
 	Board board;
 
 	BoardPainter boardPainter;
 
-	private JFileChooser fileChooser;
-	private JFileChooser ghostscriptChooser;
+	private final JFileChooser fileChooser;
+	private final JFileChooser ghostscriptChooser;
 
 	TreeMap<String, FileFilter> filters;
 
@@ -135,15 +106,15 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		Toolkit tk = Toolkit.getDefaultToolkit();
 
-		setLocation((tk.getScreenSize().width - this.getWidth()) / 2, (tk.getScreenSize().height - this.getHeight()) / 2);
+		setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
+				(tk.getScreenSize().height - this.getHeight()) / 2);
 
 		this.setVisible(true);
 	}
 
 	public void updateTitle() {
-		StringBuffer sb;
-
-		sb = new StringBuffer(Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
+		StringBuilder sb =
+				new StringBuilder(Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
 
 		if (quest.getFile() == null) {
 			sb.append("Untitled");
@@ -183,8 +154,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		newMenu.addSeparator();
 
-		for (int i = 0; i < newSpecialKeys.size(); i++) {
-			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) newSpecialKeys.get(i);
+		for (JMenuItem newSpecialKey : newSpecialKeys) {
+			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) newSpecialKey;
 
 			menuItem.addActionListener(this);
 			newMenu.add(menuItem);
@@ -392,7 +363,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		if (source == newKey) {
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to create a new one?",
-							"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				Quest newQuest;
 
@@ -418,7 +389,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to create a new one?",
-							"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					"New Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				Quest newQuest;
 
@@ -443,7 +414,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (source == openKey) {
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this, "The current quest has not been saved.\n" + "Do you really want to open a new one?",
-							"Open Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					"Open Quest", JOptionPane.WARNING_MESSAGE, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
 				fileChooser.resetChoosableFileFilters();
 
@@ -660,17 +631,23 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		}
 	}
 
-	public void windowActivated(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {
+	}
 
-	public void windowClosed(WindowEvent e) {}
+	public void windowClosed(WindowEvent e) {
+	}
 
-	public void windowDeactivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e) {
+	}
 
-	public void windowDeiconified(WindowEvent e) {}
+	public void windowDeiconified(WindowEvent e) {
+	}
 
-	public void windowIconified(WindowEvent e) {}
+	public void windowIconified(WindowEvent e) {
+	}
 
-	public void windowOpened(WindowEvent e) {}
+	public void windowOpened(WindowEvent e) {
+	}
 }
 
 class GhostScriptFileFilter extends FileFilter {
@@ -682,10 +659,10 @@ class GhostScriptFileFilter extends FileFilter {
 		if (f.isDirectory())
 			return true;
 
-		if (OS.isWindows() && (f.getName().toLowerCase().equals("gswin32c.exe") || f.getName().toLowerCase().equals("gswin64c.exe")))
+		if (OS.isWindows() && (f.getName().equalsIgnoreCase("gswin32c.exe") || f.getName().equalsIgnoreCase("gswin64c.exe")))
 			return true;
 
-		if (!OS.isWindows() && f.getName().toLowerCase().equals("gs"))
+		if (!OS.isWindows() && f.getName().equalsIgnoreCase("gs"))
 			return true;
 
 		return false;
@@ -719,7 +696,7 @@ class ActualFileFilter extends FileFilter {
 
 class SpecialQuestMenuItem extends JMenuItem {
 	private static final long serialVersionUID = 1L;
-	private int questWidth, questHeight;
+	private final int questWidth, questHeight;
 
 	public SpecialQuestMenuItem(int questWidth, int questHeight) {
 		super("Quest " + questWidth + "x" + questHeight);

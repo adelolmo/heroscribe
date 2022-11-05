@@ -1,16 +1,16 @@
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -18,27 +18,19 @@
 
 package org.lightless.heroscribe.export;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.TreeSet;
-import java.util.zip.GZIPInputStream;
-
 import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.quest.QBoard;
-import org.lightless.heroscribe.quest.QObject;
-import org.lightless.heroscribe.quest.Quest;
+import org.lightless.heroscribe.quest.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.zip.*;
 
 public class ExportEPS {
 
-	private static int linesPerBlock = 500;
+	private static final int linesPerBlock = 500;
 
-	private ExportEPS() {}
+	private ExportEPS() {
+	}
 
 	private static int[] appendPS(String inPath, PrintWriter out, boolean printComments, boolean divideInBlocks) throws Exception {
 
@@ -84,13 +76,13 @@ public class ExportEPS {
 
 	public static void write(File file, Quest quest, List objects) throws Exception {
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-		
+
 
 		float bBoxWidth, bBoxHeight;
 
-		// HSE - set the box height to accommodate quest text 
+		// HSE - set the box height to accommodate quest text
 		bBoxWidth = (quest.getWidth() * (quest.getBoard(0, 0).getWidth() + 2) + (quest.getWidth() - 1) * objects.getBoard().adjacentBoardsOffset)
-				* 19.2f; //612.0f 
+				* 19.2f; //612.0f
 
 		bBoxHeight = ((quest.getHeight() * (quest.getBoard(0, 0).getHeight() + 2) + (quest.getHeight() - 1) * objects.getBoard().adjacentBoardsOffset)
 				* 19.2f) + 400; //792.0f + (400*(quest.getHeight()-1))
@@ -306,9 +298,9 @@ public class ExportEPS {
 
 		// HSE - output the quest speech including line feeds
 		out.println("0 0 0 setrgbcolor");
-		String linefeeds[] = quest.getSpeech().split("\n");
-		for (int i = 0; i < linefeeds.length; i++)
-			out.println("(" + linefeeds[i].replace("(", "\\(").replace(")", "\\)") + " ) S L");
+		String[] linefeeds = quest.getSpeech().split("\n");
+		for (String linefeed : linefeeds)
+			out.println("(" + linefeed.replace("(", "\\(").replace(")", "\\)") + " ) S L");
 
 		// HSE - output the notes in regular black font, smaller line spacing
 		out.println("/LG { /lg exch def } def 10 LG");
@@ -344,7 +336,7 @@ public class ExportEPS {
 
 		float bBoxWidth, bBoxHeight;
 
-		// HSE - set the box height to accommodate quest text 
+		// HSE - set the box height to accommodate quest text
 		bBoxWidth = (quest.getBoard(0, 0).getWidth() + 2 + objects.getBoard().adjacentBoardsOffset) * 19.2f;
 
 		bBoxHeight = ((quest.getBoard(0, 0).getHeight() + 2 + objects.getBoard().adjacentBoardsOffset) * 19.2f) + 400;
@@ -397,10 +389,8 @@ public class ExportEPS {
 					set.add(boardIterator.next().id);
 			}
 
-		
-		Iterator<String> iterator = set.iterator();
-		while (iterator.hasNext()) {
-			String id = (String) iterator.next();
+
+		for (String id : set) {
 			int[] boundingBox;
 
 			out.println("/Icon" + id + " << /FormType 1 /PaintProc { pop");
@@ -552,17 +542,17 @@ public class ExportEPS {
 
 				// HSE - output the quest speech including line feeds
 				out.println("0 0 0 setrgbcolor");
-				String linefeeds[] = quest.getSpeech().split("\n");
-				for (int i = 0; i < linefeeds.length; i++)
-					out.println("(" + linefeeds[i].replace("(", "\\(").replace(")", "\\)") + " ) S L");
+				String[] linefeeds = quest.getSpeech().split("\n");
+				for (String linefeed : linefeeds)
+					out.println("(" + linefeed.replace("(", "\\(").replace(")", "\\)") + " ) S L");
 
 				// HSE - output the notes in regular black font, smaller line spacing
 				out.println("/LG { /lg exch def } def 10 LG");
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
-				iterator = quest.notesIterator();
+				Iterator<String> iterator = quest.notesIterator();
 				while (iterator.hasNext()) {
-					String note = (String) iterator.next();
+					String note = iterator.next();
 					out.println("newline newline (" + note.replace("(", "\\(").replace(")", "\\)") + " ) S");
 				}
 				// HSE - output board location if multi board quest
