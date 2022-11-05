@@ -1,0 +1,7 @@
+/src/main/assembly/heroscribe.sh /usr/share/heroscribe/
+/target/heroscribe.jar /usr/share/heroscribe
+/HeroScribe.ico /usr/share/heroscribe
+/Objects.xml /usr/share/heroscribe
+/Preferences.xml /usr/share/heroscribe
+/LICENSE /usr/share/heroscribe
+/Icons /usr/share/heroscribe/

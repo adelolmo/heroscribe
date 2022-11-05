@@ -4,3 +4,10 @@
 /.project
 /dependency-reduced-pom.xml
 .idea
+
+debian/files
+debian/heroscribe.debhelper.log
+debian/heroscribe.substvars
+debian/debhelper-build-stamp
+debian/heroscribe
+debian/.debhelper
