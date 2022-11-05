@@ -1,7 +1,0 @@
-./src/main/assembly/heroscribe.sh
-./target/heroscribe.jar
-./HeroScribe.ico
-./Objects.xml
-./Preferences.xml
-./LICENSE
-./Icons

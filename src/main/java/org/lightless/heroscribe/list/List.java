@@ -27,7 +27,6 @@ import java.util.*;
 
 public class List implements Serializable {
 
-	private static final long serialVersionUID = 1L;
 	private final Path basePath;
 
 	public LBoard board;
@@ -36,9 +35,9 @@ public class List implements Serializable {
 	public final TreeSet<Kind> kinds = new TreeSet<>();
 
 	public String version;
-	public String vectorPrefix, vectorSuffix;
-	public String rasterPrefix, rasterSuffix;
-	public String samplePrefix, sampleSuffix;
+	private String vectorPrefix, vectorSuffix;
+	private String rasterPrefix, rasterSuffix;
+	private String samplePrefix, sampleSuffix;
 
 	public List(Path basePath) {
 		this.basePath = basePath;
@@ -94,67 +93,64 @@ public class List implements Serializable {
 
 	public Path getVectorPath(String id, String region) {
 		return Path.of(
-				getVectorPrefix().toString(),
+				basePath.toString(),
+				vectorPrefix,
 				getObject(id).getIcon(region).path +
 						vectorSuffix);
 	}
 
 	public Path getRasterPath(String id, String region) {
 		return Path.of(
-				getRasterPrefix().toString(),
+				basePath.toString(),
+				rasterPrefix,
 				getObject(id).getIcon(region).path +
 						rasterSuffix);
 	}
 
 	public Path getSamplePath(String id, String region) {
 		return Path.of(
-				getSamplePrefix().toString(),
+				basePath.toString(),
+				samplePrefix,
 				getObject(id).getIcon(region).path +
 						sampleSuffix);
 	}
 
 	public Path getVectorPath(String region) {
 		return Path.of(
-				getVectorPrefix().toString(),
+				basePath.toString(),
+				vectorPrefix,
 				getBoard().getIcon(region).path +
 						vectorSuffix);
 	}
 
 	public Path getRasterPath(String region) {
 		return Path.of(
-				getRasterPrefix().toString(),
+				basePath.toString(),
+				rasterPrefix,
 				getBoard().getIcon(region).path +
 						rasterSuffix);
 	}
 
 	public Path getSamplePath(String region) {
 		return Path.of(
-				getSamplePrefix().toString(),
+				basePath.toString(),
+				samplePrefix,
 				getBoard().getIcon(region).path +
 						sampleSuffix);
 	}
 
-	public void setVectorPrefix(String vectorPrefix) {
-		this.vectorPrefix = vectorPrefix;
+	public void setVector(String prefix, String suffix) {
+		this.vectorPrefix = prefix;
+		this.vectorSuffix = suffix;
 	}
 
-	private Path getVectorPrefix() {
-		return Path.of(basePath.toString(), vectorPrefix);
+	public void setRaster(String prefix, String suffix) {
+		this.rasterPrefix = prefix;
+		this.rasterSuffix = suffix;
 	}
 
-	private Path getRasterPrefix() {
-		return Path.of(basePath.toString(), rasterPrefix);
-	}
-
-	private Path getSamplePrefix() {
-		return Path.of(basePath.toString(), samplePrefix);
-	}
-
-	public void setRasterPrefix(String rasterPrefix) {
-		this.rasterPrefix = rasterPrefix;
-	}
-
-	public void setSamplePrefix(String samplePrefix) {
-		this.samplePrefix = samplePrefix;
+	public void setSample(String prefix, String suffix) {
+		this.samplePrefix = prefix;
+		this.sampleSuffix = suffix;
 	}
 }

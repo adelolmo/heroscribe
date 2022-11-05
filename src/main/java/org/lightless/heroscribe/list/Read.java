@@ -83,14 +83,15 @@ public class Read extends DefaultHandler {
 			if (!objects.version.equals(org.lightless.heroscribe.Constants.objectVersion))
 				throw new SAXException("HeroScribe's objectVersion and Objects.xml's version numbers don't match.");
 
-			objects.setVectorPrefix(attrs.getValue("vectorPrefix"));
-			objects.vectorSuffix = attrs.getValue("vectorSuffix");
+			objects.setVector(attrs.getValue("vectorPrefix"),
+					attrs.getValue("vectorSuffix"));
 
-			objects.setRasterPrefix(attrs.getValue("rasterPrefix"));
-			objects.rasterSuffix = attrs.getValue("rasterSuffix");
+			objects.setRaster(attrs.getValue("rasterPrefix"),
+					attrs.getValue("rasterSuffix"));
 
-			objects.setSamplePrefix(attrs.getValue("samplePrefix"));
-			objects.sampleSuffix = attrs.getValue("sampleSuffix");
+			objects.setSample(attrs.getValue("samplePrefix"),
+					attrs.getValue("sampleSuffix"));
+
 		} else if ("kind".equals(qName)) {
 			objects.kinds.add(new Kind(attrs.getValue("id"), attrs.getValue("name")));
 		} else if ("board".equals(qName)) {
