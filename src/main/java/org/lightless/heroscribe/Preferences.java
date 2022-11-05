@@ -97,7 +97,7 @@ public class Preferences extends DefaultHandler {
 		out.println("<preferences>");
 
 		out.println("<ghostscript path=\"" + ghostscriptExec.getAbsoluteFile().toString().replaceAll("\"", "&quot;") + "\"/>");
-		out.println("<defaultDir path=\"" + defaultDir.getAbsolutePath().toString().replaceAll("\"", "&quot;") + "\"/>");
+		out.println("<defaultDir path=\"" + defaultDir.getAbsolutePath().replaceAll("\"", "&quot;") + "\"/>");
 		out.println("</preferences>");
 
 		out.close();

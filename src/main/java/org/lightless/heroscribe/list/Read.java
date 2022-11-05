@@ -25,6 +25,7 @@ import org.xml.sax.helpers.*;
 
 import javax.xml.parsers.*;
 import java.io.*;
+import java.nio.file.*;
 
 public class Read extends DefaultHandler {
 	private final List objects;
@@ -34,10 +35,10 @@ public class Read extends DefaultHandler {
 	private LBoard board;
 	private StringBuffer content;
 
-	public Read(File file) {
+	public Read(Path basePath, File file) {
 		super();
 
-		objects = new List();
+		objects = new List(basePath);
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
@@ -82,13 +83,13 @@ public class Read extends DefaultHandler {
 			if (!objects.version.equals(org.lightless.heroscribe.Constants.objectVersion))
 				throw new SAXException("HeroScribe's objectVersion and Objects.xml's version numbers don't match.");
 
-			objects.vectorPrefix = attrs.getValue("vectorPrefix");
+			objects.setVectorPrefix(attrs.getValue("vectorPrefix"));
 			objects.vectorSuffix = attrs.getValue("vectorSuffix");
 
-			objects.rasterPrefix = attrs.getValue("rasterPrefix");
+			objects.setRasterPrefix(attrs.getValue("rasterPrefix"));
 			objects.rasterSuffix = attrs.getValue("rasterSuffix");
 
-			objects.samplePrefix = attrs.getValue("samplePrefix");
+			objects.setSamplePrefix(attrs.getValue("samplePrefix"));
 			objects.sampleSuffix = attrs.getValue("sampleSuffix");
 		} else if ("kind".equals(qName)) {
 			objects.kinds.add(new Kind(attrs.getValue("id"), attrs.getValue("name")));
@@ -118,7 +119,7 @@ public class Read extends DefaultHandler {
 
 			piece.note = null;
 		} else if ("icon".equals(qName)) {
-			Icon icon = new Icon();
+			final Icon icon = new Icon();
 
 			icon.path = attrs.getValue("path");
 			icon.xoffset = Float.parseFloat(attrs.getValue("xoffset"));

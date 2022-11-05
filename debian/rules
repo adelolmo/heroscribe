@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-DESTDIR=debian/heroscribe
+DESTDIR=debian/hse
 
 %:
 	dh $@
@@ -10,4 +10,5 @@ override_dh_strip_nondeterminism:
 
 override_dh_install:
 	dh_install
-	sed -i 's|bash|sh|;s|"$$JAVA_HOME/bin/java"|/usr/bin/java|;s|heroscribe.jar|/usr/share/heroscribe/heroscribe.jar|' $(DESTDIR)/usr/share/heroscribe/heroscribe.sh
+	install -Dm755 src/main/assembly/heroscribe.sh $(DESTDIR)/usr/share/hse/heroscribe.sh
+	sed -i 's|bash|sh|;s|"$$JAVA_HOME/bin/java"|/usr/bin/java|;s|heroscribe-enhanced.jar|/usr/share/hse/heroscribe-enhanced.jar|' $(DESTDIR)/usr/share/hse/heroscribe.sh

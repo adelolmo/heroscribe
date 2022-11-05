@@ -22,6 +22,7 @@ import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.quest.*;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 
@@ -32,9 +33,12 @@ public class ExportEPS {
 	private ExportEPS() {
 	}
 
-	private static int[] appendPS(String inPath, PrintWriter out, boolean printComments, boolean divideInBlocks) throws Exception {
+	private static int[] appendPS(Path inPath, PrintWriter out, boolean printComments, boolean divideInBlocks) throws Exception {
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(inPath))));
+		final BufferedReader in = new BufferedReader(
+				new InputStreamReader(
+						new GZIPInputStream(
+								new FileInputStream(inPath.toFile()))));
 
 		int[] boundingBox = null;
 
@@ -121,7 +125,10 @@ public class ExportEPS {
 			/* the postscript is divided in "{ } exec" blocks to broaden
 			 * compatibility
 			 */
-			boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()), out, false, true);
+			boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()),
+					out,
+					false,
+					true);
 
 			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [" + boundingBox[0] + " " + boundingBox[1] + " " + boundingBox[2] + " " + boundingBox[3]
 					+ "] >> def");
@@ -398,7 +405,10 @@ public class ExportEPS {
 			/* the postscript is divided in "{ } exec" blocks to broaden
 			 * compatibility
 			 */
-			boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()), out, false, true);
+			boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()),
+					out,
+					false,
+					true);
 
 			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [" + boundingBox[0] + " " + boundingBox[1] + " " + boundingBox[2] + " " + boundingBox[3]
 					+ "] >> def");

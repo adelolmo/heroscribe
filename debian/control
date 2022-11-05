@@ -1,4 +1,4 @@
-Source: heroscribe
+Source: hse
 Section: java
 Priority: optional
 Maintainer: Andoni del olmo <andoni.delolmo@gmail.com>
@@ -6,11 +6,11 @@ Build-Depends: debhelper (>= 9), devscripts
 Standards-Version: 4.3.0
 Homepage: http://foo.example/
 
-Package: heroscribe
+Package: hse
 Architecture: all
 Priority: optional
 Section: java
-#Depends: ${misc:Depends}, default-jre-headless
+Depends: ${misc:Depends}, default-jre-headless
 Description: Makes producing typographic quality HeroQuest© maps an easy task
  See homepage for details.
  This package repackage original compiled

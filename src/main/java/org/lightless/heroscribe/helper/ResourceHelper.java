@@ -4,12 +4,17 @@ import org.slf4j.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.*;
 
 public class ResourceHelper {
 
 	private static final Logger log = LoggerFactory.getLogger(ResourceHelper.class);
 
 	private ResourceHelper() {
+	}
+
+	public static InputStream getResourceAsStream(Path path) {
+		return getResourceAsStream(path.toString());
 	}
 
 	public static InputStream getResourceAsStream(String name) {

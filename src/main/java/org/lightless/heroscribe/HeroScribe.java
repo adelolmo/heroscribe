@@ -19,13 +19,14 @@ package org.lightless.heroscribe;
 
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.helper.*;
+import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.list.Read;
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
 import org.slf4j.*;
 
 import javax.swing.*;
-import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 
 public class HeroScribe {
 
@@ -33,10 +34,6 @@ public class HeroScribe {
 
 	public static void main(String[] args) {
 		log.info("Starting up HeroScribe {}", Constants.VERSION);
-
-		Preferences preferences;
-		List objects;
-		Quest quest;
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -49,20 +46,28 @@ public class HeroScribe {
 			log.error("Error when defining look and feel", e);
 		}
 
-		preferences = new Preferences(Constants.preferencesFile);
+		final Preferences preferences = new Preferences(Constants.preferencesFile);
 
-		File objFile = new File("Objects.xml");
-		objects = new Read(objFile).getObjects();
+		final Path basePath = Path.of(Objects.toString(args[0],""));
+		final Path objectPath = getPath(basePath, "Objects.xml");
+		final List objects = new Read(basePath, objectPath.toFile()).getObjects();
 
 		log.info("Objects read.");
 
 		new SplashScreenImageLoader(objects);
 
-		quest = new Quest(1, 1, objects.getBoard(), null);
+		final Quest quest = new Quest(1, 1, objects.getBoard(), null);
 
 		new Gui(preferences, objects, quest);
 
 		log.info("GUI done.");
+	}
+
+	private static Path getPath(Path path, String filename) {
+		if (path != null) {
+			return Paths.get(path.toString(), filename);
+		}
+		return Path.of(filename);
 	}
 
 }

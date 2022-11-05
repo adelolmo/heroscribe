@@ -22,25 +22,26 @@
 package org.lightless.heroscribe.list;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 public class List implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private final Path basePath;
 
 	public LBoard board;
 
-	public TreeMap<String, LObject> list;
-	public TreeSet<Kind> kinds;
+	public final TreeMap<String, LObject> list = new TreeMap<>();
+	public final TreeSet<Kind> kinds = new TreeSet<>();
 
 	public String version;
 	public String vectorPrefix, vectorSuffix;
 	public String rasterPrefix, rasterSuffix;
 	public String samplePrefix, sampleSuffix;
 
-	public List() {
-		list = new TreeMap<>();
-		kinds = new TreeSet<>();
+	public List(Path basePath) {
+		this.basePath = basePath;
 	}
 
 	public Iterator<LObject> objectsIterator() {
@@ -91,28 +92,69 @@ public class List implements Serializable {
 		return found;
 	}
 
-	public String getVectorPath(String id, String region) {
-		return vectorPrefix + getObject(id).getIcon(region).path + vectorSuffix;
+	public Path getVectorPath(String id, String region) {
+		return Path.of(
+				getVectorPrefix().toString(),
+				getObject(id).getIcon(region).path +
+						vectorSuffix);
 	}
 
-	public String getRasterPath(String id, String region) {
-		return rasterPrefix + getObject(id).getIcon(region).path + rasterSuffix;
+	public Path getRasterPath(String id, String region) {
+		return Path.of(
+				getRasterPrefix().toString(),
+				getObject(id).getIcon(region).path +
+						rasterSuffix);
 	}
 
-	public String getSamplePath(String id, String region) {
-		return samplePrefix + getObject(id).getIcon(region).path + sampleSuffix;
+	public Path getSamplePath(String id, String region) {
+		return Path.of(
+				getSamplePrefix().toString(),
+				getObject(id).getIcon(region).path +
+						sampleSuffix);
 	}
 
-	public String getVectorPath(String region) {
-		return vectorPrefix + getBoard().getIcon(region).path + vectorSuffix;
+	public Path getVectorPath(String region) {
+		return Path.of(
+				getVectorPrefix().toString(),
+				getBoard().getIcon(region).path +
+						vectorSuffix);
 	}
 
-	public String getRasterPath(String region) {
-		return rasterPrefix + getBoard().getIcon(region).path + rasterSuffix;
+	public Path getRasterPath(String region) {
+		return Path.of(
+				getRasterPrefix().toString(),
+				getBoard().getIcon(region).path +
+						rasterSuffix);
 	}
 
-	public String getSamplePath(String region) {
-		return samplePrefix + getBoard().getIcon(region).path + sampleSuffix;
+	public Path getSamplePath(String region) {
+		return Path.of(
+				getSamplePrefix().toString(),
+				getBoard().getIcon(region).path +
+						sampleSuffix);
 	}
 
+	public void setVectorPrefix(String vectorPrefix) {
+		this.vectorPrefix = vectorPrefix;
+	}
+
+	private Path getVectorPrefix() {
+		return Path.of(basePath.toString(), vectorPrefix);
+	}
+
+	private Path getRasterPrefix() {
+		return Path.of(basePath.toString(), rasterPrefix);
+	}
+
+	private Path getSamplePrefix() {
+		return Path.of(basePath.toString(), samplePrefix);
+	}
+
+	public void setRasterPrefix(String rasterPrefix) {
+		this.rasterPrefix = rasterPrefix;
+	}
+
+	public void setSamplePrefix(String samplePrefix) {
+		this.samplePrefix = samplePrefix;
+	}
 }

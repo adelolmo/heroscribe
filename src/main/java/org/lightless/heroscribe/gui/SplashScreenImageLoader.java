@@ -47,7 +47,7 @@ public class SplashScreenImageLoader extends JWindow {
 		mt = new MediaTracker(this);
 		tk = Toolkit.getDefaultToolkit();
 
-		InputStream imageIs = ResourceHelper.getResourceAsStream("Splash.jpg");
+		final InputStream imageIs = ResourceHelper.getResourceAsStream("Splash.jpg");
 		byte[] image;
 		try {
 			image = imageIs.readAllBytes();
@@ -97,11 +97,11 @@ public class SplashScreenImageLoader extends JWindow {
 		iterator = objects.objectsIterator();
 
 		/* Board */
-		img = tk.createImage(objects.getRasterPath("Europe"));
+		img = tk.createImage(objects.getRasterPath("Europe").toString());
 		objects.getBoard().getIcon("Europe").image = img;
 		mt.addImage(img, 10);
 
-		img = tk.createImage(objects.getRasterPath("USA"));
+		img = tk.createImage(objects.getRasterPath("USA").toString());
 		objects.getBoard().getIcon("USA").image = img;
 		mt.addImage(img, 10);
 
@@ -109,11 +109,11 @@ public class SplashScreenImageLoader extends JWindow {
 			String id = iterator.next().id;
 
 			/* Icons */
-			img = tk.createImage(objects.getRasterPath(id, "Europe"));
+			img = tk.createImage(objects.getRasterPath(id, "Europe").toString());
 			objects.getObject(id).getIcon("Europe").image = img;
 			mt.addImage(img, 20);
 
-			img = tk.createImage(objects.getRasterPath(id, "USA"));
+			img = tk.createImage(objects.getRasterPath(id, "USA").toString());
 			objects.getObject(id).getIcon("USA").image = img;
 			mt.addImage(img, 20);
 		}

@@ -6,8 +6,8 @@
 .idea
 
 debian/files
-debian/heroscribe.debhelper.log
-debian/heroscribe.substvars
+debian/hse.debhelper.log
+debian/hse.substvars
 debian/debhelper-build-stamp
-debian/heroscribe
+debian/hse
 debian/.debhelper

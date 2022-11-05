@@ -24,10 +24,10 @@
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
-			<source>target/heroscribe.jar</source>
+			<source>target/heroscribe-enhanced.jar</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-		
+
 		<file>
 			<source>src/main/assembly/heroscribe.sh</source>
 			<outputDirectory>/</outputDirectory>
@@ -37,7 +37,7 @@
 			<source>src/main/assembly/HeroScribe.cmd</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
-		
+
 	</files>
 
 	<fileSets>
@@ -54,7 +54,7 @@
 		</fileSet>
 
 
-		<!-- 
+		<!--
 		<fileSet>
 			<directory>src/main/assembly/script</directory>
 			<outputDirectory>/</outputDirectory>
