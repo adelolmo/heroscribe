@@ -48,8 +48,8 @@ public class HeroScribe {
 
 		final Preferences preferences = new Preferences(Constants.preferencesFile);
 
-		final Path basePath = Path.of(Objects.toString(args[0],""));
-		final Path objectPath = getPath(basePath, "Objects.xml");
+		final Path basePath = getBasePath(args);
+		final Path objectPath = getFilePath(basePath, "Objects.xml");
 		final List objects = new Read(basePath, objectPath.toFile()).getObjects();
 
 		log.info("Objects read.");
@@ -63,11 +63,18 @@ public class HeroScribe {
 		log.info("GUI done.");
 	}
 
-	private static Path getPath(Path path, String filename) {
-		if (path != null) {
-			return Paths.get(path.toString(), filename);
+	private static Path getFilePath(Path basePath, String filename) {
+		if (basePath != null) {
+			return Paths.get(basePath.toString(), filename);
 		}
 		return Path.of(filename);
+	}
+
+	private static Path getBasePath(String[] args) {
+		if (args.length == 0) {
+			return Paths.get("");
+		}
+		return Paths.get(Objects.toString(args[0], ""));
 	}
 
 }
