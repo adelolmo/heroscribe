@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lightless.heroscribe</groupId>
     <artifactId>heroscribe-enhanced</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <name>HeroScribe Enhanced</name>
 
     <properties>
@@ -16,8 +16,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/OWNER/REPOSITORY</url>
+            <name>adelolmo</name>
+            <url>https://github.com/adelolmo/heroscribe</url>
         </repository>
     </distributionManagement>
 
@@ -51,7 +51,6 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.4</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

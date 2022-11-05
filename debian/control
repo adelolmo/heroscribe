@@ -4,15 +4,11 @@ Priority: optional
 Maintainer: Andoni del olmo <andoni.delolmo@gmail.com>
 Build-Depends: debhelper (>= 9), devscripts
 Standards-Version: 4.3.0
-Homepage: http://foo.example/
+Homepage: https://github.com/adelolmo/heroscribe
 
 Package: hse
 Architecture: all
 Priority: optional
 Section: java
-Depends: ${misc:Depends}, default-jre-headless
-Description: Makes producing typographic quality HeroQuest© maps an easy task
- See homepage for details.
- This package repackage original compiled
- java binaries for foo and provides
- additional symlinks to /usr/bin
+Depends: ${misc:Depends}, default-jre-headless, ghostscript
+Description: Easily produce typographic quality HeroQuest© maps
