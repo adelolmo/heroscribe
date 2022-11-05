@@ -21,10 +21,9 @@
 package org.lightless.heroscribe.gui;
 
 import javax.swing.*;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
+import javax.swing.event.*;
 import java.awt.*;
-import java.util.Optional;
+import java.util.*;
 
 public class TextAreaModal extends JPanel implements AncestorListener {
 
@@ -49,17 +48,22 @@ public class TextAreaModal extends JPanel implements AncestorListener {
 
 	public Optional<String> showDialog() {
 		textArea.setWrapStyleWord(true);
-		textArea.setMaximumSize(new Dimension(50, 10));
 		textArea.setAutoscrolls(false);
 		textArea.setLineWrap(true);
+		textArea.addAncestorListener(this);
 
-		setSize(200, 100);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		add(new Label(label));
 		add(new JScrollPane(textArea), BorderLayout.PAGE_START);
-		textArea.addAncestorListener(this);
 
-		final int option = JOptionPane.showOptionDialog(null, this, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+		final int option = JOptionPane.showOptionDialog(null,
+				this,
+				title,
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE,
+				null,
+				null,
+				null);
 		if (option == JOptionPane.YES_OPTION) {
 			return Optional.ofNullable(textArea.getText());
 		}
