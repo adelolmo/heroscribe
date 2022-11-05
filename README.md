@@ -37,7 +37,7 @@ Unzip the bundle and run
 
 - The original HeroScribe: <http://www.heroscribe.org/heroquest.html>
 
-- The original HeroScribe Enhanced (site down): <http://www.propvault.com/heroscribe/>
+- The original HeroScribe Enhanced (archived): <https://web.archive.org/web/20170209065300/http://www.propvault.com/heroscribe/>
 
 ## Legal
 
