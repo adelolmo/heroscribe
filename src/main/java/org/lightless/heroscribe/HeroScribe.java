@@ -2,32 +2,30 @@ package org.lightless.heroscribe;
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-   
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-import java.io.File;
+import org.lightless.heroscribe.gui.*;
+import org.lightless.heroscribe.helper.*;
+import org.lightless.heroscribe.list.Read;
+import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.quest.*;
+import org.slf4j.*;
 
-import javax.swing.UIManager;
-
-import org.lightless.heroscribe.gui.Gui;
-import org.lightless.heroscribe.gui.SplashScreenImageLoader;
-import org.lightless.heroscribe.helper.OS;
-import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.quest.Quest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.swing.*;
+import java.io.*;
 
 public class HeroScribe {
 
@@ -35,7 +33,7 @@ public class HeroScribe {
 
 	public static void main(String args[]) {
 		log.info("Starting up HeroScribe {}", Constants.VERSION);
-		
+
 		Preferences preferences;
 		List objects;
 		Quest quest;
@@ -54,7 +52,7 @@ public class HeroScribe {
 		preferences = new Preferences(Constants.preferencesFile);
 
 		File objFile = new File("Objects.xml");
-		objects = new org.lightless.heroscribe.list.Read(objFile).getObjects();
+		objects = new Read(objFile).getObjects();
 
 		log.info("Objects read.");
 

@@ -26,17 +26,18 @@ import javax.swing.event.AncestorListener;
 import java.awt.*;
 import java.util.Optional;
 
-public class TextAreaModal {
+public class TextAreaModal extends JPanel implements AncestorListener {
 
 	private final String title;
 	private final String label;
 	private final JTextArea textArea;
 
 	public TextAreaModal(String title, String label) {
-		this(title, label, 10, 50);
+		this(title, label, 8, 50);
 	}
 
 	public TextAreaModal(String title, String label, int rows, int columns) {
+		super();
 		this.title = title;
 		this.label = label;
 		this.textArea = new JTextArea(rows, columns);
@@ -47,16 +48,18 @@ public class TextAreaModal {
 	}
 
 	public Optional<String> showDialog() {
-		final JPanel panel = new JPanel();
+		textArea.setWrapStyleWord(true);
+		textArea.setMaximumSize(new Dimension(50, 10));
+		textArea.setAutoscrolls(false);
+		textArea.setLineWrap(true);
 
-		textArea.addAncestorListener(new RequestFocusListener());
+		setSize(200, 100);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		add(new Label(label));
+		add(new JScrollPane(textArea), BorderLayout.PAGE_START);
+		textArea.addAncestorListener(this);
 
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(new Label(label));
-		panel.add(textArea);
-
-		final int option = JOptionPane.showOptionDialog(null, panel, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null,
-				null);
+		final int option = JOptionPane.showOptionDialog(null, this, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 		if (option == JOptionPane.YES_OPTION) {
 			return Optional.ofNullable(textArea.getText());
 		}
@@ -64,22 +67,18 @@ public class TextAreaModal {
 		return Optional.empty();
 	}
 
-	private static class RequestFocusListener implements AncestorListener {
-
-		@Override
-		public void ancestorAdded(AncestorEvent event) {
-			SwingUtilities.invokeLater(event.getComponent()::requestFocusInWindow);
-		}
-
-		@Override
-		public void ancestorRemoved(AncestorEvent event) {
-			// noop
-		}
-
-		@Override
-		public void ancestorMoved(AncestorEvent event) {
-			// noop
-		}
+	@Override
+	public void ancestorAdded(AncestorEvent event) {
+		SwingUtilities.invokeLater(event.getComponent()::requestFocusInWindow);
 	}
 
+	@Override
+	public void ancestorRemoved(AncestorEvent event) {
+		// noop
+	}
+
+	@Override
+	public void ancestorMoved(AncestorEvent event) {
+		// noop
+	}
 }
