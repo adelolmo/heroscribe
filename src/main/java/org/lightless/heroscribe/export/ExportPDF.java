@@ -25,11 +25,12 @@ import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
 
 import java.io.*;
+import java.nio.file.*;
 
 public class ExportPDF {
 	public static void write(File ghostscript, File file, Quest quest, List objects, boolean isMultiPage) throws Exception {
-		File eps = File.createTempFile("hsb", ".ps");
-		File pdf = File.createTempFile("hsb", ".pdf");
+		final File eps = File.createTempFile("hsb", ".ps");
+		final File pdf = File.createTempFile("hsb", ".pdf");
 
 		int exitValue;
 
@@ -45,7 +46,7 @@ public class ExportPDF {
 					"-dFIXEDMEDIA",
 					"-sDEFAULTPAPERSIZE=letter",
 					"-sPAPERSIZE=letter",
-					"-sOutputFile=" + pdf.getAbsolutePath().toString(),
+					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
 			}).waitFor();
 		} else {
@@ -56,20 +57,18 @@ public class ExportPDF {
 					"-dBATCH",
 					"-dNOPAUSE",
 					"-sDEVICE=pdfwrite",
-					"-sOutputFile=" + pdf.getAbsolutePath().toString(),
+					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
 			}).waitFor();
 		}
 
-		eps.delete();
+		Files.delete(eps.toPath());
 
 		if (exitValue == 0) {
-			file.delete();
-
-			pdf.renameTo(file);
+			Files.delete(file.toPath());
+			Files.move(pdf.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} else {
-			pdf.delete();
-
+			Files.delete(pdf.toPath());
 			throw new Exception("Process returned " + exitValue + ".");
 		}
 	}
