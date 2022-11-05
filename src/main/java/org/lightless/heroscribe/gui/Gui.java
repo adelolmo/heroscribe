@@ -114,7 +114,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	public void updateTitle() {
 		StringBuilder sb =
-				new StringBuilder(Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
+				new StringBuilder(Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
 
 		if (quest.getFile() == null) {
 			sb.append("Untitled");
@@ -580,7 +580,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			org.lightless.heroscribe.helper.OS.openURL(new File("Readme.html"), null);
 		} else if (source == aboutKey) {
 			JOptionPane.showMessageDialog(this,
-					Constants.applicationName + "2 " + Constants.VERSION + Constants.applicationVersionSuffix + "\n" + Constants.applicationName
+					Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + "\n" + Constants.applicationName
 							+ " Enhanced modifications (C) 2011 Jason Allen.\n" + Constants.applicationName
 							+ " original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n" + Constants.applicationName
 							+ " is free software, distributed under the terms of the GNU GPL 2.\n"

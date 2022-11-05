@@ -23,7 +23,7 @@ import java.io.*;
 import java.util.*;
 
 public class Constants {
-	public static String applicationName = "HeroScribe";
+	public static String applicationName = "HeroScribe Enhanced";
 
 	public static String objectVersion = "1.0";
 	public static String questVersion = "1.0";

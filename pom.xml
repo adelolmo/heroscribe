@@ -6,7 +6,7 @@
     <groupId>org.lightless.heroscribe</groupId>
     <artifactId>heroscribe-enhanced</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <name>HeroScribe2</name>
+    <name>HeroScribe Enhanced</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
