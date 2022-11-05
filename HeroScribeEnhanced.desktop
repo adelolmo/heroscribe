@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=HeroScribe Enhanced
+GenericName=HeroScribe Enhanced
+Comment=HeroScribe's aim is to give new life to HeroQuest©, one of the most celebrated Board Games/RPG of the '90s.
+Exec=/user/share/hse/hse
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=/user/share/hse/HeroScribe.ico
+StartupWMClass=/user/share/hse
+StartupNotify=true
+Categories=Games;

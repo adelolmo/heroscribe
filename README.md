@@ -2,7 +2,7 @@
 
 Changes in HeroScribeEnhanced-1.0, by 2011 Jason Allen.
 
-Using OpenJDK 17 and maven.
+Using OpenJDK 11 and maven.
 
 Made for home use.
 
@@ -10,7 +10,7 @@ Made for home use.
 
 ### Maven & Java
 
-- OpenJDK 17.0.1 - https://jdk.java.net/archive/
+- OpenJDK 11 - https://jdk.java.net/archive/
 - Maven - https://maven.apache.org/
 - Postscript - for high quality PDF generation
 
