@@ -55,10 +55,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	TreeMap<String, FileFilter> filters = new TreeMap<>();
 
 	JRadioButtonMenuItem europeItem, usaItem;
-	JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey, quitKey, listKey, aboutKey, dirKey,
-			readMeKey, exportPdf2Key, exportThumbNail;
-
-	JScrollPane scrollPane;
+	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
+			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
 
 	Vector<JMenuItem> newSpecialKeys;
 
@@ -243,6 +241,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		file.add(exportMenu);
 		file.addSeparator();
+
+		propertiesKey = new JMenuItem("Properties...");
+		propertiesKey.addActionListener(this);
+		file.add(propertiesKey);
 
 		file.add(prefsMenu);
 		file.addSeparator();
@@ -624,6 +626,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		} else if (source == readMeKey) {
 			OS.openURL(new File("Readme.html"), null);
+
+		} else if (source == propertiesKey) {
+			final PropertiesModal modal = new PropertiesModal(this, quest);
+			modal.showDialog();
+
 		} else if (source == aboutKey) {
 			JOptionPane.showMessageDialog(this,
 					Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + "\n"

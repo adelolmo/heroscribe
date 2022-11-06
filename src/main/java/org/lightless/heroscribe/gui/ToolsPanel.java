@@ -21,7 +21,6 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
 
 import javax.swing.*;
@@ -43,10 +42,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	ButtonGroup commands;
 	JToggleButton add, select, dark, none;
 	// HSE - new quest description fields
-	JTextField name;
-	JComboBox<LObject> wandering;
-	JLabel lName, lSpeech, lWandering, lNotes;
-	TextArea speech;
+	JLabel lNotes;
 	JList<String> note;
 	DefaultListModel<String> noteData = new DefaultListModel<>();
 	JScrollPane scrollPane = new JScrollPane();
@@ -70,15 +66,8 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		newNote = new JButton("New");
 		editNote = new JButton("Edit");
 		delNote = new JButton("Delete");
-		lName = new JLabel("Quest Name:");
-		lSpeech = new JLabel("Quest Speech:");
-		lWandering = new JLabel("Wandering Monster:");
 		lNotes = new JLabel("QuestMaster Notes:");
-		name = new JTextField();
-		speech = new TextArea("", 4, 20, TextArea.SCROLLBARS_VERTICAL_ONLY);
 		note = new JList<>(noteData);
-		wandering = new JComboBox<>();
-		wandering.setLightWeightPopupEnabled(false);
 		scrollPane.getViewport().setView(note);
 		scrollPane.setPreferredSize(new Dimension(120, 120));
 
@@ -94,65 +83,33 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		commands.add(dark);
 		commands.add(none);
 
-		// HSE - add the quest detail fields to the layout and set up the layout
-		GridBagConstraints cSetting = new GridBagConstraints();
+		final GridBagConstraints cSetting = new GridBagConstraints();
 		cSetting.gridx = 0;
 		cSetting.gridwidth = 3;
 		cSetting.gridy = 0;
 		cSetting.fill = GridBagConstraints.HORIZONTAL;
 		cSetting.insets = new Insets(3, 0, 0, 3);
 		cSetting.ipadx = 20;
-		JPanel settingPanel = new JPanel();
+		final JPanel settingPanel = new JPanel();
 		settingPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		settingPanel.setLayout(new GridBagLayout());
-		JSeparator sepLine = new JSeparator(SwingConstants.HORIZONTAL);
+		final JSeparator sepLine = new JSeparator(SwingConstants.HORIZONTAL);
 		settingPanel.add(sepLine, cSetting);
 		cSetting.gridy = 1;
 		settingPanel.add(Box.createVerticalStrut(10), cSetting);
 		cSetting.gridy = 2;
-		settingPanel.add(lWandering, cSetting);
-		cSetting.gridy = 3;
-		settingPanel.add(wandering, cSetting);
-		cSetting.gridy = 4;
-		settingPanel.add(lName, cSetting);
-		cSetting.gridy = 5;
-		settingPanel.add(name, cSetting);
-		cSetting.gridy = 6;
-		settingPanel.add(lSpeech, cSetting);
-		cSetting.gridy = 7;
-		settingPanel.add(speech, cSetting);
-		cSetting.gridy = 8;
 		settingPanel.add(lNotes, cSetting);
-		cSetting.gridy = 9;
+		cSetting.gridy = 3;
 		settingPanel.add(scrollPane, cSetting);
 		cSetting.gridwidth = 1;
 		cSetting.fill = GridBagConstraints.NONE;
-		cSetting.gridy = 10;
+		cSetting.gridy = 4;
 		settingPanel.add(newNote, cSetting);
 		cSetting.gridx = 1;
 		editNote.setEnabled(false);
 		settingPanel.add(editNote, cSetting);
 		cSetting.gridx = 2;
 		settingPanel.add(delNote, cSetting);
-
-		// HSE - populate the combo box for the wandering monster list
-		Iterator<LObject> iterator;
-		LObject defObj = new LObject();
-
-		iterator = gui.getObjects().objectsIterator();
-		while (iterator.hasNext()) {
-			LObject obj = iterator.next();
-
-			if (obj.kind.contentEquals("monster")) {
-				wandering.addItem(obj);
-				//noteData.addElement(obj);
-				if (obj.name.contentEquals("Orc")) {
-					defObj = obj;
-				}
-			}
-		}
-		// HSE - set the default selected monster to Orc
-		wandering.setSelectedItem(defObj);
 
 		// set up the layout for the modePanel
 		JPanel modePanel = new JPanel();
@@ -184,10 +141,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		select.addItemListener(this);
 		dark.addItemListener(this);
 
-		name.addKeyListener(this);
-		speech.addKeyListener(this);
-		wandering.addActionListener(this);
-
 		newNote.addActionListener(this);
 		editNote.addActionListener(this);
 		delNote.addActionListener(this);
@@ -203,30 +156,12 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	public void clearQuestForm() {
 		// HSE - clears the quest data fields
-		name.setText("");
-		speech.setText("");
-		int count = wandering.getItemCount();
-		for (int i = 0; i < count; i++) {
-			if (wandering.getItemAt(i).toString().contentEquals("Orc")) {
-				wandering.setSelectedItem(wandering.getItemAt(i));
-			}
-		}
 		noteData.clear();
 	}
 
 	public void refreshQuestData(Quest openQuest) {
 		// HSE - refreshed quest data fields from current quest object
 		this.quest = openQuest;
-		name.setText(quest.getName());
-		speech.setText(quest.getSpeech());
-
-		int count = wandering.getItemCount();
-		for (int i = 0; i < count; i++) {
-			if (wandering.getItemAt(i).toString().contentEquals(quest.getWandering())) {
-				wandering.setSelectedItem(wandering.getItemAt(i));
-			}
-		}
-
 		noteData.clear();
 
 		Iterator<String> iterator = quest.notesIterator();
@@ -243,23 +178,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	// HSE - Add key listeners for text fields
 	public void keyReleased(KeyEvent e) {
-		// HSE - JTextField Listener, name field
-		if (e.getSource() == name) {
-			JTextField textField = (JTextField) e.getSource();
-			String text = textField.getText();
-			if (!text.equals(quest.getName())) {
-				quest.setName(text);
-			}
-		}
-		// HSE - TextArea listener, speech field
-		else if (e.getSource() == speech) {
-			TextArea textArea = (TextArea) e.getSource();
-			String text = textArea.getText();
-			if (!text.equals(quest.getSpeech())) {
-				quest.setSpeech(text);
-			}
 
-		}
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -300,14 +219,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == wandering) {
-			// HSE - listener for changes to the wandering monster dropdown
-			@SuppressWarnings("unchecked")
-			JComboBox<LObject> source = (JComboBox<LObject>) e.getSource();
-			LObject selectedItem = (LObject) source.getSelectedItem();
-			quest.setWandering(selectedItem.name, selectedItem.id);
-
-		} else if (e.getSource() == newNote) {
+		if (e.getSource() == newNote) {
 			// HSE - listener for new note click
 			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
 			modal.showDialog().ifPresent(text -> {
