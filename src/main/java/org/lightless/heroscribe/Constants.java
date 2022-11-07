@@ -46,11 +46,24 @@ public class Constants {
 		String appVersion = ResourceBundle.getBundle("version", Locale.ENGLISH).getString("app.version");
 		VERSION = "v" + ("${project.version}".equals(appVersion) ? "" : appVersion);
 
+		File prefDir = getConfigurationDirectory();
+		preferencesFile = new File(prefDir, "Preferences.xml");
+	}
+
+	public static File getConfigurationDirectory() {
 		String home = System.getProperty("user.home");
 		File prefDir = new File(home, ".heroscribe");
 		if (!prefDir.exists()) {
 			prefDir.mkdir();
 		}
-		preferencesFile = new File(prefDir, "Preferences.xml");
+		return prefDir;
+	}
+
+	public static File getBundleDirectory(){
+		final File bundleDir = new File(getConfigurationDirectory(), "bundles");
+		if (!bundleDir.exists()) {
+			bundleDir.mkdir();
+		}
+		return bundleDir;
 	}
 }

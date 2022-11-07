@@ -34,7 +34,7 @@ public class QObject implements Comparable<QObject> {
 		this.id = id;
 		this.objects = objects;
 
-		if (objects.list.containsKey(id))
+		if (objects.getList().containsKey(id))
 			order = getOrder();
 	}
 

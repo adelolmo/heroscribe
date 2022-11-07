@@ -35,11 +35,13 @@ public class Read extends DefaultHandler {
 	private LBoard board;
 	private StringBuffer content;
 
-	public Read(Path basePath, File file) {
+	public Read(Path basePath) {
 		super();
 
 		objects = new List(basePath);
+	}
 
+	public void read(File file){
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
 
@@ -169,7 +171,7 @@ public class Read extends DefaultHandler {
 			if (!piece.region.containsKey("Europe") || !piece.region.containsKey("USA"))
 				throw new SAXException("There should be both icons for each object.");
 
-			objects.list.put(piece.id, piece);
+			objects.getList().put(piece.id, piece);
 
 		} else if ("note".equals(qName)) {
 			piece.note = new String(content);

@@ -31,7 +31,7 @@ public class List implements Serializable {
 
 	public LBoard board;
 
-	public final TreeMap<String, LObject> list = new TreeMap<>();
+	private final TreeMap<String, LObject> list = new TreeMap<>();
 	public final TreeSet<Kind> kinds = new TreeSet<>();
 
 	public String version;
@@ -41,6 +41,10 @@ public class List implements Serializable {
 
 	public List(Path basePath) {
 		this.basePath = basePath;
+	}
+
+	public Map<String, LObject> getList() {
+		return list;
 	}
 
 	public Iterator<LObject> objectsIterator() {

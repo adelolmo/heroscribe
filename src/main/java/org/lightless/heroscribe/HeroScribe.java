@@ -22,6 +22,7 @@ import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.list.Read;
 import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.bundle.*;
 import org.slf4j.*;
 
 import javax.swing.*;
@@ -50,15 +51,23 @@ public class HeroScribe {
 
 		final Path basePath = getBasePath(args);
 		final Path objectPath = getFilePath(basePath, "Objects.xml");
-		final List objects = new Read(basePath, objectPath.toFile()).getObjects();
+
+		final ImageLoader imageLoader = new ImageLoader();
+		final Read read = new Read(basePath);
+		read.read(objectPath.toFile());
+		final List objects = read.getObjects();
 
 		log.info("Objects read.");
 
-		new SplashScreenImageLoader(objects);
+		new SplashScreenImageLoader(imageLoader);
+
+		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
+		mediaLoader.loadIcons(objects);
 
 		final Quest quest = new Quest(1, 1, objects.getBoard(), null);
 
-		new Gui(preferences, objects, quest);
+		final Bundle bundle = new Bundle(imageLoader);
+		new Gui(bundle, preferences, objects, quest);
 
 		log.info("GUI done.");
 	}

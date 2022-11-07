@@ -27,12 +27,14 @@ import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.quest.Read;
 import org.lightless.heroscribe.quest.*;
 import org.slf4j.*;
+import org.lightless.heroscribe.bundle.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
@@ -40,6 +42,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
+	private final Bundle bundle;
 	private final List objects;
 	private Quest quest;
 	private final Preferences prefs;
@@ -57,13 +60,15 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
 			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
+	private JMenuItem objectsImport;
 
 	Vector<JMenuItem> newSpecialKeys;
 
 	JLabel hint, status;
 
-	public Gui(Preferences preferences, List objects, Quest quest) {
+	public Gui(Bundle bundle, Preferences preferences, List objects, Quest quest) {
 		super();
+		this.bundle = bundle;
 		// HSE - set app icon
 		setIconImage(Toolkit.getDefaultToolkit().getImage("HeroScribe.png"));
 		this.prefs = preferences;
@@ -129,6 +134,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		Container content;
 		final JMenuBar menu = new JMenuBar();
 		final JMenu file = new JMenu("File");
+		final JMenu objects = new JMenu("Objects");
 		final JMenu region = new JMenu("Region");
 		final JMenu help = new JMenu("Help");
 
@@ -255,6 +261,12 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		menu.add(file);
 
+		/* Objects menu */
+		objectsImport = new JMenuItem("Import...");
+		objectsImport.addActionListener(this);
+		objects.add(objectsImport);
+		menu.add(objects);
+
 		/* Region menu */
 		europeItem = new JRadioButtonMenuItem("Europe layout");
 		europeItem.addItemListener(this);
@@ -374,7 +386,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	public void actionPerformed(ActionEvent e) {
 		JMenuItem source = (JMenuItem) e.getSource();
 
-		if (source == newKey) {
+		if (newKey == source) {
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to create a new one?",
@@ -430,7 +442,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				board.repaint();
 			}
 
-		} else if (source == openKey) {
+		} else if (openKey == source) {
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to open a new one?",
@@ -475,7 +487,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					}
 				}
 			}
-		} else if (source == saveKey) {
+		} else if (saveKey == source) {
 			File file = null;
 			if (quest.getFile() != null || (file = askPath("xml")) != null) {
 				try {
@@ -493,7 +505,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == saveAsKey) {
+		} else if (saveAsKey == source) {
 			File file;
 
 			if ((file = askPath("xml")) != null) {
@@ -509,7 +521,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == exportPdfKey) {
+		} else if (exportPdfKey == source) {
 			File file;
 			if ((file = askPath("pdf")) != null) {
 				try {
@@ -526,7 +538,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file. Check your ghostscript path", ex);
 				}
 			}
-		} else if (source == exportPdf2Key) {
+		} else if (exportPdf2Key == source) {
 			// HSE - export to PDF without using Ghostscript or EPS
 			File file;
 			if ((file = askPath("pdf")) != null) {
@@ -540,7 +552,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == exportThumbNail) {
+		} else if (exportThumbNail == source) {
 			// HSE - export to PDF all boards on one letter sized sheet
 			File file;
 			if ((file = askPath("pdf")) != null) {
@@ -558,7 +570,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == exportEpsKey) {
+		} else if (exportEpsKey == source) {
 			File file;
 			if ((file = askPath("eps")) != null) {
 				try {
@@ -571,7 +583,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == exportPngKey) {
+		} else if (exportPngKey == source) {
 			File file;
 			if ((file = askPath("png")) != null) {
 				try {
@@ -584,7 +596,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Can't save file.", ex);
 				}
 			}
-		} else if (source == ghostscriptKey) {
+		} else if (ghostscriptKey == source) {
 			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
 
 			if (ghostscriptChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -596,7 +608,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			}
-		} else if (source == dirKey) {
+		} else if (dirKey == source) {
 			// HSE - get default directory
 			final JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(new File("."));
@@ -613,7 +625,43 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			}
-		} else if (source == quitKey) {
+
+		} else if (objectsImport == source) {
+			final JFileChooser chooser = new JFileChooser();
+			chooser.setCurrentDirectory(prefs.defaultDir);
+			chooser.setDialogTitle("Import bundle");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setFileFilter(new ZipFileFilter());
+			chooser.setAcceptAllFileFilterUsed(false);
+
+			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+				final File bundleFile = chooser.getSelectedFile();
+				final File importedBundle = new File(Constants.getBundleDirectory(), bundleFile.getName());
+				try {
+					Files.copy(chooser.getSelectedFile().toPath(),
+							importedBundle.toPath());
+					bundle.importBundle(importedBundle, objects);
+				} catch (FileAlreadyExistsException ex) {
+					if (JOptionPane.showConfirmDialog(this,
+							"The bundle already exists.\nDo you want to replace it?",
+							"Import bundle",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+						try {
+							Files.copy(chooser.getSelectedFile().toPath(),
+									importedBundle.toPath(),
+									StandardCopyOption.REPLACE_EXISTING);
+							bundle.importBundle(importedBundle, objects);
+
+						} catch (IOException exc) {
+							throw new RuntimeException(exc);
+						}
+					}
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		} else if (quitKey == source) {
 			windowClosing(null);
 		} else if (source == listKey) {
 			String object = tools.selectorPanel.getSelectedObject();
@@ -624,14 +672,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				OS.openURL(new File("Objects.html"), null);
 			}
 
-		} else if (source == readMeKey) {
+		} else if (readMeKey == source) {
 			OS.openURL(new File("Readme.html"), null);
 
-		} else if (source == propertiesKey) {
+		} else if (propertiesKey == source) {
 			final PropertiesModal modal = new PropertiesModal(this, quest);
 			modal.showDialog();
 
-		} else if (source == aboutKey) {
+		} else if (aboutKey == source) {
 			JOptionPane.showMessageDialog(this,
 					Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + "\n"
 							+ "HeroScribe Enhanced modifications (C) 2011 Jason Allen.\n"
@@ -745,6 +793,24 @@ class ActualFileFilter extends FileFilter {
 
 	public String getDescription() {
 		return description;
+	}
+}
+
+class ZipFileFilter extends FileFilter {
+	@Override
+	public boolean accept(File f) {
+		if (f.isDirectory()) {
+			return true;
+		}
+		if (f.getName().endsWith(".zip")) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public String getDescription() {
+		return null;
 	}
 }
 
