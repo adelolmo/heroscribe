@@ -26,6 +26,7 @@ import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.quest.Read;
 import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 import org.lightless.heroscribe.bundle.*;
 
@@ -43,6 +44,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
 	private final Bundle bundle;
+	private final ObjectList objectList;
 	private final List objects;
 	private Quest quest;
 	private final Preferences prefs;
@@ -60,15 +62,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
 			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
-	private JMenuItem objectsImport;
+	private JMenuItem bundleImport;
 
 	Vector<JMenuItem> newSpecialKeys;
 
 	JLabel hint, status;
 
-	public Gui(Bundle bundle, Preferences preferences, List objects, Quest quest) {
+	public Gui(Bundle bundle,
+			   Preferences preferences,
+			   List objects,
+			   Quest quest,
+			   ObjectList objectList) {
 		super();
 		this.bundle = bundle;
+		this.objectList = objectList;
 		// HSE - set app icon
 		setIconImage(Toolkit.getDefaultToolkit().getImage("HeroScribe.png"));
 		this.prefs = preferences;
@@ -262,9 +269,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		menu.add(file);
 
 		/* Objects menu */
-		objectsImport = new JMenuItem("Import...");
-		objectsImport.addActionListener(this);
-		objects.add(objectsImport);
+		bundleImport = new JMenuItem("Import...");
+		bundleImport.addActionListener(this);
+		objects.add(bundleImport);
 		menu.add(objects);
 
 		/* Region menu */
@@ -343,6 +350,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	public List getObjects() {
 		return objects;
+	}
+
+	public ObjectList getObjectList() {
+		return objectList;
 	}
 
 	public Quest getQuest() {
@@ -462,7 +473,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 				if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 					try {
-						final Quest newQuest = new Read(fileChooser.getSelectedFile(), objects).getQuest();
+						final Quest newQuest = new Read(fileChooser.getSelectedFile(), objects, objectList).getQuest();
 
 						tools.none.doClick();
 						quest = newQuest;
@@ -626,7 +637,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				}
 			}
 
-		} else if (objectsImport == source) {
+		} else if (bundleImport == source) {
 			final JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(prefs.defaultDir);
 			chooser.setDialogTitle("Import bundle");
@@ -640,7 +651,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
 							importedBundle.toPath());
-					bundle.importBundle(importedBundle, objects);
+					bundle.importBundle(importedBundle);
+					tools.refreshData();
+
 				} catch (FileAlreadyExistsException ex) {
 					if (JOptionPane.showConfirmDialog(this,
 							"The bundle already exists.\nDo you want to replace it?",
@@ -651,7 +664,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							Files.copy(chooser.getSelectedFile().toPath(),
 									importedBundle.toPath(),
 									StandardCopyOption.REPLACE_EXISTING);
-							bundle.importBundle(importedBundle, objects);
+							bundle.importBundle(importedBundle);
+							tools.refreshData();
 
 						} catch (IOException exc) {
 							throw new RuntimeException(exc);
@@ -663,7 +677,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			}
 		} else if (quitKey == source) {
 			windowClosing(null);
-		} else if (source == listKey) {
+
+		} else if (listKey == source) {
 			String object = tools.selectorPanel.getSelectedObject();
 
 			if ("add".equals(tools.getCommand()) && object != null) {

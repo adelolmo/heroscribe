@@ -3,41 +3,73 @@ package org.lightless.heroscribe.bundle;
 import org.apache.commons.compress.archivers.*;
 import org.apache.commons.io.*;
 import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
-import javax.xml.bind.*;
+import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
+import java.util.List;
+import java.util.stream.*;
 
 public class Bundle {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Bundle.class);
+	private static final Logger log = LoggerFactory.getLogger(Bundle.class);
 
 	private final ImageLoader imageLoader;
+	private final ObjectList systemObjectList;
 
-	public Bundle(ImageLoader imageLoader) {
+	public Bundle(ImageLoader imageLoader, ObjectList systemObjectList) {
 		this.imageLoader = imageLoader;
+		this.systemObjectList = systemObjectList;
 	}
 
-	public void importBundle(File bundle, List objects) throws IOException {
-		final Path tempBundleFile = Files.createTempDirectory("hse");
-		extract(bundle, tempBundleFile);
+	public void importBundle(final File bundle) throws IOException {
+		log.info("Importing bundle {}...", bundle.getName());
+		final Path tempBundleDirectory = Files.createTempDirectory("hse");
+		extract(bundle, tempBundleDirectory);
 
 		final ObjectsParser parser = new ObjectsParser();
+		final ObjectList bundleObjectList = parser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
 
-		try {
-			final ObjectList objectList = parser.parse(new File(tempBundleFile.toString(), "Objects.xml"));
-			System.out.println(objectList);
+		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKind().stream()
+				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId())
+				).collect(Collectors.toList());
+
+		bundleKinds.forEach(kind -> log.info("Importing kind {}...", kind.getId()));
+
+		bundleObjectList.getObject()
+				.stream()
+				.filter(object1 -> !systemObjectList.getKindIds().contains(object1.getKind()))
+				.forEach(object -> {
+					System.out.println(object.getId());
+
+					// add icons
+					loadObjectIcons(object, "Europe", tempBundleDirectory);
+					loadObjectIcons(object, "USA", tempBundleDirectory);
+
+					// update system objects
+					systemObjectList.getObject().add(object);
+				});
+
+		systemObjectList.getKind().addAll(bundleKinds);
+
+		imageLoader.flush();
 
 
-		} catch (JAXBException e) {
-			throw new IOException(e);
-		}
 	}
 
-	private void extract(File zipFile, Path targetDir) throws IOException {
+	private void loadObjectIcons(ObjectList.Object object, String region, Path bundleDirectory) {
+		final String iconPath = object.getIconPath(region);
+		final Path path = Paths.get(bundleDirectory.toString(),
+				systemObjectList.getRasterPrefix(),
+				iconPath + systemObjectList.getRasterSuffix());
+
+		final Image image = imageLoader.addImage(path.toString(), 20);
+		object.getIcon(region).setImage(image);
+	}
+
+	private void extract(final File zipFile, final Path targetDir) throws IOException {
 		final Path zipFilePath = zipFile.toPath();
 		final ArchiveStreamFactory archiveStreamFactory = new ArchiveStreamFactory();
 

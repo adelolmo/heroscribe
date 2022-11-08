@@ -185,16 +185,16 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		JToggleButton source = (JToggleButton) e.getSource();
 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			if (source == add) {
+			if (add == source) {
 				selected = "add";
 				((CardLayout) extraPanel.getLayout()).show(extraPanel, selected);
-			} else if (source == select) {
+			} else if (select == source) {
 				selected = "select";
 				displayerPanel.clearList();
 				((CardLayout) extraPanel.getLayout()).show(extraPanel, selected);
-			} else if (source == dark) {
+			} else if (dark == source) {
 				selected = "darken";
-			} else if (source == none) {
+			} else if (none == source) {
 				selected = null;
 			}
 
@@ -256,5 +256,9 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		if (e.getSource() == note) {
 			editNote.setEnabled(true);
 		}
+	}
+
+	public void refreshData() {
+selectorPanel.refresh();
 	}
 }

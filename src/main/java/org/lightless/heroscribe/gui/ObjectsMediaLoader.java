@@ -20,8 +20,10 @@ package org.lightless.heroscribe.gui;
 
 import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
+import java.awt.*;
 import java.util.*;
 
 public class ObjectsMediaLoader {
@@ -33,25 +35,31 @@ public class ObjectsMediaLoader {
 		this.imageLoader = imageLoader;
 	}
 
-	public void loadIcons(List objects) {
+	public void loadIcons(List objects, ObjectList objectList) {
 		long start, end;
 		start = System.currentTimeMillis();
 
 		/* Board */
-		objects.getBoard().getIcon("Europe").image =
-				imageLoader.addImage(objects.getRasterPath("Europe").toString(), 10);
-		objects.getBoard().getIcon("USA").image =
-				imageLoader.addImage(objects.getRasterPath("USA").toString(), 10);
+		final Image europe = imageLoader.addImage(objects.getRasterPath("Europe").toString(), 10);
+		objects.getBoard().getIcon("Europe").image = europe;
+		objectList.getBoard().getIcon("Europe").setImage(europe);
+
+		final Image usa = imageLoader.addImage(objects.getRasterPath("USA").toString(), 10);
+		objects.getBoard().getIcon("USA").image = usa;
+		objectList.getBoard().getIcon("USA").setImage(usa);
 
 		final Iterator<LObject> iterator = objects.objectsIterator();
 		while (iterator.hasNext()) {
 			final String id = iterator.next().id;
 
 			/* Icons */
-			objects.getObject(id).getIcon("Europe").image =
-					imageLoader.addImage(objects.getRasterPath(id, "Europe").toString(), 20);
-			objects.getObject(id).getIcon("USA").image =
-					imageLoader.addImage(objects.getRasterPath(id, "USA").toString(), 20);
+			final Image eu = imageLoader.addImage(objects.getRasterPath(id, "Europe").toString(), 20);
+			objects.getObject(id).getIcon("Europe").image = eu;
+			objectList.getObject(id).getIcon("Europe").setImage(eu);
+
+			final Image usa1 = imageLoader.addImage(objects.getRasterPath(id, "USA").toString(), 20);
+			objects.getObject(id).getIcon("USA").image =usa1;
+			objectList.getObject(id).getIcon("USA").setImage(usa1);
 		}
 
 		imageLoader.flush();

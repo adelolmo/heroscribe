@@ -18,7 +18,7 @@
 
 package org.lightless.heroscribe.quest;
 
-import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.xml.*;
 
 public class QObject implements Comparable<QObject> {
 	public String id;
@@ -28,19 +28,19 @@ public class QObject implements Comparable<QObject> {
 	private int order;
 	private static int count = 0;
 
-	private final List objects;
+	private final ObjectList objectList;
 
-	public QObject(String id, List objects) {
+	public QObject(String id, ObjectList objectList) {
 		this.id = id;
-		this.objects = objects;
+		this.objectList = objectList;
 
-		if (objects.getList().containsKey(id))
+		if (objectList.containsObjectById(id))
 			order = getOrder();
 	}
 
-	public QObject(String id, List objects, int order) {
+	public QObject(String id, ObjectList objectList, int order) {
 		this.id = id;
-		this.objects = objects;
+		this.objectList = objectList;
 
 		this.order = order;
 	}
@@ -64,6 +64,6 @@ public class QObject implements Comparable<QObject> {
 	}
 
 	public String toString() {
-		return objects.getObject(id).toString() + " ( " + zorder + " )";
+		return objectList.getObject(id).toString() + " ( " + zorder + " )";
 	}
 }

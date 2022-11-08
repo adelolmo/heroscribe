@@ -18,8 +18,8 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -78,14 +78,24 @@ public class Board extends JPanel implements MouseInputListener {
 		QObject newObject;
 
 		if (floating) {
-			newObject = new QObject(gui.tools.selectorPanel.getSelectedObject(), gui.getObjects(), 0);
+			newObject = new QObject(gui.tools.selectorPanel.getSelectedObject(),
+					 gui.getObjectList(),
+					0);
 
 			newObject.zorder = Integer.MAX_VALUE;
 		} else {
 			String id = gui.tools.selectorPanel.getSelectedObject();
-			newObject = new QObject(id, gui.getObjects());
+			newObject = new QObject(id, gui.getObjectList());
 
-			newObject.zorder = gui.getObjects().getObject(id).zorder;
+//			final List objects = gui.getObjects();
+			final ObjectList.Object obj = gui.getObjectList().getObject().stream()
+					.filter(object -> {
+						return object.getId().equals(id);
+					}).findFirst()
+					.orElseThrow(IllegalStateException::new);
+
+
+			newObject.zorder = obj.getZorder();
 		}
 
 		newObject.rotation = rotation;
@@ -112,13 +122,13 @@ public class Board extends JPanel implements MouseInputListener {
 
 		height = gui.boardPainter.boardPixelSize.height + gui.getObjects().getBoard().adjacentBoardsOffset * gui.boardPainter.boxEdge;
 
-		x = e.getX() + (gui.getObjects().getBoard().adjacentBoardsOffset * gui.boardPainter.boxEdge) / 2.0f;
+		x = e.getX() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset() * gui.boardPainter.boxEdge) / 2.0f;
 		if (x < 0.0f)
 			x = 0.0f;
 		else if (x > width * gui.getQuest().getWidth())
 			x = width * gui.getQuest().getWidth() - 1;
 
-		y = e.getY() + (gui.getObjects().getBoard().adjacentBoardsOffset * gui.boardPainter.boxEdge) / 2.0f;
+		y = e.getY() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset() * gui.boardPainter.boxEdge) / 2.0f;
 		if (y < 0.0f)
 			y = 0.0f;
 		else if (y > height * gui.getQuest().getHeight())
@@ -130,14 +140,14 @@ public class Board extends JPanel implements MouseInputListener {
 		top = (int) ((y % height) / gui.boardPainter.boxEdge - gui.getObjects().getBoard().adjacentBoardsOffset / 2.0f);
 		if (top < 0)
 			top = 0;
-		else if (top > gui.getObjects().getBoard().height + 1)
+		else if (top > gui.getObjectList().getBoard().getHeight() + 1)
 			top = gui.getObjects().getBoard().height + 1;
 
 		left = (int) ((x % width) / gui.boardPainter.boxEdge - gui.getObjects().getBoard().adjacentBoardsOffset / 2.0f);
 		if (left < 0)
 			left = 0;
-		else if (left > gui.getObjects().getBoard().width + 1)
-			left = gui.getObjects().getBoard().width + 1;
+		else if (left > gui.getObjectList().getBoard().getWidth() + 1)
+			left = gui.getObjectList().getBoard().getWidth() + 1;
 
 		//TODO
 		//System.err.println("row: " + row + "   column: " + column + "   top: " + top + "   left: " + left);
@@ -178,15 +188,15 @@ public class Board extends JPanel implements MouseInputListener {
 
 		Iterator<QObject> iterator = gui.getQuest().getBoard(lastColumn, lastRow).iterator();
 		while (iterator.hasNext()) {
-			QObject qobj = (QObject) iterator.next();
-			LObject lobj = gui.getObjects().getObject(qobj.id);
+			QObject qobj = iterator.next();
+			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.id);
 
 			if (qobj.rotation % 2 == 0) {
-				width = lobj.width;
-				height = lobj.height;
+				width = lobj.getWidth();
+				height = lobj.getHeight();
 			} else {
-				width = lobj.height;
-				height = lobj.width;
+				width = lobj.getHeight();
+				height = lobj.getWidth();
 			}
 
 			if (qobj.left <= lastLeft && lastLeft < qobj.left + width && qobj.top <= lastTop && lastTop < qobj.top + height) {
@@ -196,7 +206,7 @@ public class Board extends JPanel implements MouseInputListener {
 				else
 					sb.insert(0, ", ");
 
-				sb.insert(0, lobj.name);
+				sb.insert(0, lobj.getName());
 			}
 		}
 
@@ -299,19 +309,19 @@ public class Board extends JPanel implements MouseInputListener {
 	}
 
 	public boolean isWellPositioned(QObject piece) {
-		LObject obj = gui.getObjects().getObject(piece.id);
+		final ObjectList.Object obj = gui.getObjectList().getObject(piece.id);
 
 		int width, height;
 
 		if (piece.rotation % 2 == 0) {
-			width = obj.width;
-			height = obj.height;
+			width = obj.getWidth();
+			height = obj.getHeight();
 		} else {
-			width = obj.height;
-			height = obj.width;
+			width = obj.getHeight();
+			height = obj.getWidth();
 		}
 
-		if (obj.door) {
+		if (obj.isDoor()) {
 			if (piece.left < 0 || piece.top < 0 || piece.left + width - 1 > gui.boardPainter.boardSize.width + 1
 					|| piece.top + height - 1 > gui.boardPainter.boardSize.height + 1
 					|| (piece.rotation % 2 == 0 && (piece.left == 0 || piece.left == gui.boardPainter.boardSize.width + 1))

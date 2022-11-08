@@ -18,7 +18,7 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -34,10 +34,12 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 	private final JPanel objectsPanel;
 	private final CardLayout cardLayout;
-	private final TreeMap<String, JList<LObject>> kindList;
+	private final TreeMap<String, JList<ObjectList.Object>> kindList;
 
 	private String selectedObject;
 	private int objectRotation;
+
+	private final JComboBox<ObjectList.Kind> kindsComboBox;
 
 	public ObjectSelector(Gui gui) {
 		super();
@@ -46,7 +48,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 		objectsPanel = new JPanel();
 		cardLayout = new CardLayout();
-		JComboBox<Kind> kindsComboBox = new JComboBox<>();
+		kindsComboBox = new JComboBox<>();
 		kindList = new TreeMap<>();
 
 		selectedObject = null;
@@ -57,7 +59,39 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 		add(kindsComboBox);
 		add(objectsPanel);
 
-		Iterator<Kind> kindIterator = gui.getObjects().kindsIterator();
+
+		refresh();
+/*		Iterator<LObject> objIterator = gui.getObjects().objectsIterator();
+		while (objIterator.hasNext()) {
+			LObject obj = objIterator.next();
+
+			JList<LObject> list = kindList.get(obj.kind);
+			DefaultListModel<LObject> listModel = (DefaultListModel<LObject>) list.getModel();
+
+			listModel.addElement(obj);
+		}*/
+
+		kindsComboBox.addItemListener(this);
+	}
+
+	public void refresh() {
+		final ObjectList objectList = gui.getObjectList();
+		objectList.getKind().forEach(
+				kind -> {
+					JList<ObjectList.Object> list = new JList<>(new DefaultListModel<>());
+
+					list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+					kindList.put(kind.getId(), list);
+
+					kindsComboBox.addItem(kind);
+
+					objectsPanel.add(new JScrollPane(list), kind.getId());
+
+					list.addListSelectionListener(this);
+				}
+		);
+	/*	Iterator<Kind> kindIterator = gui.getObjects().kindsIterator();
 		while (kindIterator.hasNext()) {
 			Kind kind = kindIterator.next();
 
@@ -72,19 +106,16 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 			objectsPanel.add(new JScrollPane(list), kind.id);
 
 			list.addListSelectionListener(this);
-		}
+		}*/
 
-		Iterator<LObject> objIterator = gui.getObjects().objectsIterator();
-		while (objIterator.hasNext()) {
-			LObject obj = objIterator.next();
+		objectList.getObject().forEach(object -> {
+//			LObject obj = objIterator.next();
 
-			JList<LObject> list = kindList.get(obj.kind);
-			DefaultListModel<LObject> listModel = (DefaultListModel<LObject>) list.getModel();
+			JList<ObjectList.Object> list = kindList.get(object.getKind());
+			DefaultListModel<ObjectList.Object> listModel = (DefaultListModel<ObjectList.Object>) list.getModel();
 
-			listModel.addElement(obj);
-		}
-
-		kindsComboBox.addItemListener(this);
+			listModel.addElement(object);
+		});
 	}
 
 	public String getSelectedObject() {
@@ -95,9 +126,9 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 		return objectRotation;
 	}
 
-	private void setSelectedObject(LObject obj) {
+	private void setSelectedObject(ObjectList.Object obj) {
 		if (obj != null) {
-			selectedObject = obj.id;
+			selectedObject = obj.getId();
 		} else {
 			selectedObject = null;
 		}
@@ -108,12 +139,12 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 	@SuppressWarnings("unchecked")
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			Kind selected;
-			JList<LObject> list;
+			ObjectList.Kind selected;
+			JList<ObjectList.Object> list;
 
-			selected = (Kind) ((JComboBox<Kind>) e.getSource()).getSelectedItem();
-			cardLayout.show(objectsPanel, selected.id);
-			list = kindList.get(selected.id);
+			selected = (ObjectList.Kind) ((JComboBox<ObjectList.Kind>) e.getSource()).getSelectedItem();
+			cardLayout.show(objectsPanel, selected.getId());
+			list = kindList.get(selected.getId());
 
 			setSelectedObject(list.getSelectedValue());
 
@@ -123,7 +154,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 	@SuppressWarnings("unchecked")
 	public void valueChanged(ListSelectionEvent e) {
-		JList<LObject> list = (JList<LObject>) e.getSource();
+		JList<ObjectList.Object> list = (JList<ObjectList.Object>) e.getSource();
 		setSelectedObject(list.getSelectedValue());
 		gui.updateHint();
 	}

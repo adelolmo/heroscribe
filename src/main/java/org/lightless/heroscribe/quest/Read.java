@@ -23,6 +23,7 @@ package org.lightless.heroscribe.quest;
 
 import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.list.*;
+import org.lightless.heroscribe.xml.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
@@ -32,6 +33,7 @@ import java.io.*;
 public class Read extends DefaultHandler {
 	private Quest quest;
 	private final List objects;
+	private final ObjectList objectList;
 
 	private StringBuffer content;
 
@@ -39,11 +41,12 @@ public class Read extends DefaultHandler {
 	private QBoard board;
 	private int width, height, boardCount;
 
-	public Read(File file, List objects) throws ParserConfigurationException, SAXException, IOException {
+	public Read(File file, List objects, ObjectList objectList) throws ParserConfigurationException, SAXException, IOException {
 		super();
 
 		this.file = file;
 		this.objects = objects;
+		this.objectList = objectList;
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
@@ -163,7 +166,7 @@ public class Read extends DefaultHandler {
 
 				break;
 			case "object":
-				QObject obj = new QObject(attrs.getValue("id"), objects);
+				QObject obj = new QObject(attrs.getValue("id"), objectList);
 
 				if (objects.getObject(obj.id) == null)
 					throw new SAXException("Can't find icon " + obj.id);

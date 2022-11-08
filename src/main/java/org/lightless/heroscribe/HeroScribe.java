@@ -23,9 +23,11 @@ import org.lightless.heroscribe.list.List;
 import org.lightless.heroscribe.list.Read;
 import org.lightless.heroscribe.quest.*;
 import org.lightless.heroscribe.bundle.*;
+import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
 import javax.swing.*;
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
@@ -33,7 +35,7 @@ public class HeroScribe {
 
 	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		log.info("Starting up HeroScribe Enhanced {}", Constants.VERSION);
 
 		try {
@@ -56,18 +58,20 @@ public class HeroScribe {
 		final Read read = new Read(basePath);
 		read.read(objectPath.toFile());
 		final List objects = read.getObjects();
+		final ObjectsParser objectsParser = new ObjectsParser();
+		final ObjectList objectList = objectsParser.parse(objectPath.toFile());
 
 		log.info("Objects read.");
 
 		new SplashScreenImageLoader(imageLoader);
 
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
-		mediaLoader.loadIcons(objects);
+		mediaLoader.loadIcons(objects, objectList);
 
 		final Quest quest = new Quest(1, 1, objects.getBoard(), null);
 
-		final Bundle bundle = new Bundle(imageLoader);
-		new Gui(bundle, preferences, objects, quest);
+		final Bundle bundle = new Bundle(imageLoader, objectList);
+		new Gui(bundle, preferences, objects, quest, objectList);
 
 		log.info("GUI done.");
 	}

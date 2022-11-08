@@ -1,5 +1,6 @@
 package org.lightless.heroscribe.xml;
 
+import com.fasterxml.jackson.dataformat.xml.*;
 import org.slf4j.*;
 
 import java.io.*;
@@ -12,7 +13,8 @@ public class ObjectsParser {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ObjectsParser.class);
 
-	public ObjectList parse(File file) {
-		return null;
+	public ObjectList parse(File file) throws IOException {
+		XmlMapper xmlMapper = new XmlMapper();
+		return xmlMapper.readValue(file, ObjectList.class);
 	}
 }

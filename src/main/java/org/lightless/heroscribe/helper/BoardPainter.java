@@ -26,8 +26,8 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.*;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -506,20 +506,24 @@ public class BoardPainter implements ImageObserver {
 		AffineTransform original = null;
 		float x, y, xoffset, yoffset;
 		int width, height;
-		LObject obj = gui.getObjects().getObject(piece.id);
+//		LObject obj = gui.getObjects().getObject(piece.id);
+		final ObjectList.Object obj = gui.getObjectList().getObject().stream()
+				.filter(object -> object.getId().equals(piece.id))
+				.findFirst()
+				.orElseThrow(IllegalStateException::new);
 
 		if (!isWellPositioned(piece))
 			return;
 
 		if (piece.rotation % 2 == 0) {
-			width = obj.width;
-			height = obj.height;
+			width = obj.getWidth();
+			height = obj.getHeight();
 		} else {
-			width = obj.height;
-			height = obj.width;
+			width = obj.getHeight();
+			height = obj.getWidth();
 		}
 
-		if (obj.trap) {
+		if (obj.isTrap()) {
 			if (getRegion().equals("Europe"))
 				g2d.setColor(Constants.europeTrapColor);
 			else if (getRegion().equals("USA"))
@@ -531,7 +535,7 @@ public class BoardPainter implements ImageObserver {
 		x = piece.left + width / 2.0f;
 		y = piece.top + height / 2.0f;
 
-		if (obj.door) {
+		if (obj.isDoor()) {
 			if (piece.rotation % 2 == 0) {
 				if (piece.top == 0)
 					y -= gui.getObjects().getBoard().borderDoorsOffset;
@@ -545,8 +549,8 @@ public class BoardPainter implements ImageObserver {
 			}
 		}
 
-		xoffset = obj.getIcon(getRegion()).xoffset;
-		yoffset = obj.getIcon(getRegion()).yoffset;
+		xoffset = obj.getIcon(getRegion()).getXoffset();
+		yoffset = obj.getIcon(getRegion()).getYoffset();
 
 		switch (piece.rotation) {
 			case 0:
@@ -584,17 +588,18 @@ public class BoardPainter implements ImageObserver {
 			g2d.setTransform(rotated);
 		}
 
-		x -= getObjectIcon(obj.id).getWidth(this) / 2.0f;
-		y -= getObjectIcon(obj.id).getHeight(this) / 2.0f;
+		x -= getObjectIcon(obj.getId()).getWidth(this) / 2.0f;
+		y -= getObjectIcon(obj.getId()).getHeight(this) / 2.0f;
 
-		g2d.drawImage(getObjectIcon(obj.id), Math.round(x), Math.round(y), this);
+		g2d.drawImage(getObjectIcon(obj.getId()), Math.round(x), Math.round(y), this);
 
 		if (piece.rotation != 0)
 			g2d.setTransform(original);
 	}
 
 	private Image getObjectIcon(String id) {
-		return gui.getObjects().getObject(id).getIcon(getRegion()).image;
+//		return gui.getObjects().getObject(id).getIcon(getRegion()).image;
+		return gui.getObjectList().getObject(id).getIcon(getRegion()).getImage();
 	}
 
 	// HSE - get an object by its name
@@ -611,19 +616,23 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	public boolean isWellPositioned(QObject piece) {
-		LObject obj = gui.getObjects().getObject(piece.id);
+//		LObject obj = gui.getObjects().getObject(piece.id);
+		final ObjectList.Object obj = gui.getObjectList().getObject().stream()
+				.filter(object -> object.getId().equals(piece.id))
+				.findFirst()
+				.orElseThrow(IllegalStateException::new);
 
 		int width, height;
 
 		if (piece.rotation % 2 == 0) {
-			width = obj.width;
-			height = obj.height;
+			width = obj.getWidth();
+			height = obj.getHeight();
 		} else {
-			width = obj.height;
-			height = obj.width;
+			width = obj.getHeight();
+			height = obj.getWidth();
 		}
 
-		if (obj.door) {
+		if (obj.isDoor()) {
 			if (piece.left < 0 || piece.top < 0 || piece.left + width - 1 > boardSize.width + 1 || piece.top + height - 1 > boardSize.height + 1
 					|| (piece.rotation % 2 == 0 && (piece.left == 0 || piece.left == boardSize.width + 1))
 					|| (piece.rotation % 2 == 1 && (piece.top == 0 || piece.top == boardSize.height + 1)))
