@@ -23,22 +23,22 @@ import java.io.*;
 import java.util.*;
 
 public class Constants {
-	public static String applicationName = "HeroScribe Enhanced";
+	public static final String applicationName = "HeroScribe Enhanced";
 
-	public static String objectVersion = "1.0";
-	public static String questVersion = "1.0";
+	public static final String objectVersion = "1.0";
+	public static final String questVersion = "1.0";
 	public static final String VERSION;
 
-	public static String applicationVersionSuffix = "";
+	public static final String applicationVersionSuffix = "";
 
-	public static Color europeCorridorColor = new Color(255, 255, 255, 255);
-	public static Color usaCorridorColor = new Color(246, 246, 246, 255);
+	public static final Color europeCorridorColor = new Color(255, 255, 255, 255);
+	public static final Color usaCorridorColor = new Color(246, 246, 246, 255);
 
-	public static Color europeDarkColor = new Color(204, 204, 204, 255);
-	public static Color usaDarkColor = new Color(178, 178, 178, 255);
+	public static final Color europeDarkColor = new Color(204, 204, 204, 255);
+	public static final Color usaDarkColor = new Color(178, 178, 178, 255);
 
-	public static Color europeTrapColor = new Color(0, 0, 0, 0);
-	public static Color usaTrapColor = new Color(250, 125, 51, 255);
+	public static final Color europeTrapColor = new Color(0, 0, 0, 0);
+	public static final Color usaTrapColor = new Color(250, 125, 51, 255);
 
 	public static final File preferencesFile;
 

@@ -1,20 +1,41 @@
+/*
+  HeroScribe
+  Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2 (not
+  later versions) as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.dataformat.xml.*;
-import org.slf4j.*;
+import com.fasterxml.jackson.databind.*;
 
 import java.io.*;
+import java.nio.file.*;
 
-/**
- * @author Andoni del Olmo
- * @since 07/11/2022
- */
 public class ObjectsParser {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ObjectsParser.class);
+	private final ObjectMapper objectMapper;
+	private final Path basePath;
+
+	public ObjectsParser(ObjectMapper objectMapper, Path basePath) {
+		this.objectMapper = objectMapper;
+		this.basePath = basePath;
+	}
 
 	public ObjectList parse(File file) throws IOException {
-		XmlMapper xmlMapper = new XmlMapper();
-		return xmlMapper.readValue(file, ObjectList.class);
+		final ObjectList objectList = objectMapper.readValue(file, ObjectList.class);
+		objectList.setBasePath(basePath);
+		return objectList;
 	}
 }

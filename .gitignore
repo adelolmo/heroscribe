@@ -4,6 +4,7 @@
 /.project
 /dependency-reduced-pom.xml
 .idea
+.run
 
 debian/files
 debian/hse.debhelper.log

@@ -21,21 +21,19 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.*;
-import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import java.awt.*;
-import java.util.*;
 
 public class PropertiesModal extends JPanel implements AncestorListener {
 
 	private final Quest quest;
 	private final JTextField name = new JTextField();
 	private final JTextArea speech = new JTextArea(8, 50);
-	private final JComboBox<LObject> wandering = new JComboBox<>();
+	private final JComboBox<ObjectList.Object> wandering = new JComboBox<>();
 
 	public PropertiesModal(Gui gui, Quest quest) {
 		super();
@@ -81,9 +79,9 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 		add(panel, BorderLayout.NORTH);
 
 		// HSE - populate the combo box for the wandering monster list
-		LObject defObj = new LObject();
+		final ObjectList.Object defObj = gui.getObjectList().getObject("Orc");
 
-		final Iterator<LObject> iterator = gui.getObjects().objectsIterator();
+		/*final Iterator<LObject> iterator = gui.getObjects().objectsIterator();
 		while (iterator.hasNext()) {
 			LObject obj = iterator.next();
 
@@ -94,7 +92,10 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 					defObj = obj;
 				}
 			}
-		}
+		}*/
+		gui.getObjectList().getObject().stream()
+				.filter(object -> "monster".equals(object.getKind()))
+				.forEach(wandering::addItem);
 		// HSE - set the default selected monster to Orc
 		wandering.setSelectedItem(defObj);
 
@@ -115,9 +116,9 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 				quest.setName(name.getText());
 			}
 
-			final LObject selectedItem = (LObject) wandering.getSelectedItem();
-			if (!selectedItem.id.equals(quest.getWanderingID())) {
-				quest.setWandering(selectedItem.name, selectedItem.id);
+			final ObjectList.Object selectedItem = (ObjectList.Object) wandering.getSelectedItem();
+			if (!selectedItem.getId().equals(quest.getWanderingId())) {
+				quest.setWandering(selectedItem.getName(), selectedItem.getId());
 			}
 
 			if (!speech.getText().equals(quest.getSpeech())) {
@@ -131,7 +132,7 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 		speech.setText(quest.getSpeech());
 
 		for (int i = 0; i < wandering.getItemCount(); i++) {
-			if (wandering.getItemAt(i).toString().contentEquals(quest.getWandering())) {
+			if (wandering.getItemAt(i).toString().contentEquals(quest.getWanderingId())) {
 				wandering.setSelectedItem(wandering.getItemAt(i));
 			}
 		}

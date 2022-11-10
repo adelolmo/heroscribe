@@ -7,11 +7,11 @@ public class QBoard {
 
 	private final TreeSet<QObject> objects;
 
-	private final Quest quest;
+	private final org.lightless.heroscribe.xml.Quest quest;
 
 	private final int width, height;
 
-	public QBoard(int width, int height, Quest quest) {
+	public QBoard(int width, int height, org.lightless.heroscribe.xml.Quest quest) {
 		this.quest = quest;
 		this.width = width;
 		this.height = height;
@@ -75,4 +75,7 @@ public class QBoard {
 		return objects.iterator();
 	}
 
+	public Set<QObject> getObjects() {
+		return objects;
+	}
 }

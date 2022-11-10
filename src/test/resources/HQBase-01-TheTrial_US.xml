@@ -3,7 +3,7 @@
     "-//org.lightless//HeroScribe Quest 1.4//EN"
     "http://lightless.org/files/xml/quest-1.4.dtd">
 
-<quest name="The Trial" region="USA" version="1.0" width="1" height="1">
+<quest name="The Trial" region="USA" version="1.0" width="1" height="2">
     <board>
         <dark left="1" top="1" width="1" height="1"/>
         <dark left="2" top="1" width="1" height="1"/>
@@ -283,6 +283,10 @@
         <object id="Door" left="4.0" top="18.0" rotation="upward" zorder="0.0"/>
         <object id="Door" left="8.0" top="18.0" rotation="upward" zorder="0.0"/>
         <object id="Bookcase" left="16.0" top="18.0" rotation="downward" zorder="0.0"/>
+        <object id="SingleBlockedSquare" left="15.0" top="19.0" rotation="leftward" zorder="0.0"/>
+        <object id="Orc" left="9.0" top="16.0" rotation="downward" zorder="1.0"/>
+    </board>
+    <board>
         <object id="SingleBlockedSquare" left="15.0" top="19.0" rotation="leftward" zorder="0.0"/>
         <object id="Orc" left="9.0" top="16.0" rotation="downward" zorder="1.0"/>
     </board>

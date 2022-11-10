@@ -17,12 +17,11 @@ package org.lightless.heroscribe;
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.dataformat.xml.*;
+import org.lightless.heroscribe.iconpack.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.list.Read;
-import org.lightless.heroscribe.quest.*;
-import org.lightless.heroscribe.bundle.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
@@ -55,23 +54,32 @@ public class HeroScribe {
 		final Path objectPath = getFilePath(basePath, "Objects.xml");
 
 		final ImageLoader imageLoader = new ImageLoader();
-		final Read read = new Read(basePath);
-		read.read(objectPath.toFile());
-		final List objects = read.getObjects();
-		final ObjectsParser objectsParser = new ObjectsParser();
+//		final Read read = new Read(basePath);
+//		read.read(objectPath.toFile());
+//		final List objects = read.getObjects();
+
+		final ObjectMapper xmlMapper = new XmlMapper();
+		final ObjectsParser objectsParser = new ObjectsParser(xmlMapper, basePath);
+		final QuestParser questParser = new QuestParser(xmlMapper);
+
 		final ObjectList objectList = objectsParser.parse(objectPath.toFile());
+		final Quest quest = new Quest(objectList.getBoard());
 
 		log.info("Objects read.");
 
 		new SplashScreenImageLoader(imageLoader);
 
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
-		mediaLoader.loadIcons(objects, objectList);
+		mediaLoader.loadIcons(objectList);
 
-		final Quest quest = new Quest(1, 1, objects.getBoard(), null);
-
-		final Bundle bundle = new Bundle(imageLoader, objectList);
-		new Gui(bundle, preferences, objects, quest, objectList);
+		final IconPack iconPack = new IconPack(imageLoader,
+				objectList,
+				objectsParser);
+		new Gui(iconPack,
+				preferences,
+				objectList,
+				questParser,
+				quest);
 
 		log.info("GUI done.");
 	}

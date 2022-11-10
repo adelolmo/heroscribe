@@ -21,21 +21,17 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.quest.*;
-
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener, ListSelectionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	private final Gui gui;
-	private Quest quest;
 	ObjectSelector selectorPanel;
 	SquareDisplayer displayerPanel;
 
@@ -51,10 +47,11 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	JPanel extraPanel;
 
 	String selected;
+	private org.lightless.heroscribe.xml.Quest xmlQuest;
 
-	public ToolsPanel(Gui gui, Quest quest) {
+	public ToolsPanel(Gui gui, org.lightless.heroscribe.xml.Quest xmlQuest) {
 		this.gui = gui;
-		this.quest = quest;
+		this.xmlQuest = xmlQuest;
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
@@ -127,9 +124,9 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		displayerPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
 		// HSE - added new quest settings panel as a SOUTHern element in the layout
-		this.add(modePanel, BorderLayout.NORTH);
-		this.add(settingPanel, BorderLayout.SOUTH);
-		this.add(extraPanel);
+		add(modePanel, BorderLayout.NORTH);
+		add(settingPanel, BorderLayout.SOUTH);
+		add(extraPanel);
 
 		extraPanel.setLayout(new CardLayout());
 
@@ -159,16 +156,13 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		noteData.clear();
 	}
 
-	public void refreshQuestData(Quest openQuest) {
+	public void refreshQuestData(org.lightless.heroscribe.xml.Quest xmlQuest) {
 		// HSE - refreshed quest data fields from current quest object
-		this.quest = openQuest;
+//		this.quest = openQuest;
+		this.xmlQuest = xmlQuest;
 		noteData.clear();
 
-		Iterator<String> iterator = quest.notesIterator();
-		while (iterator.hasNext()) {
-			String obj = iterator.next();
-			noteData.addElement(obj);
-		}
+		xmlQuest.getNote().forEach(note -> noteData.addElement(note));
 
 	}
 
@@ -224,8 +218,10 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
 			modal.showDialog().ifPresent(text -> {
 				noteData.addElement(text);
-				quest.addNote(text);
-				quest.setModified(true);
+//				quest.addNote(text);
+//				quest.setModified(true);
+				xmlQuest.getNote().add(text);
+				xmlQuest.setModified(true);
 			});
 		} else if (editNote == e.getSource()) {
 			// HSE - listener for edit note click
@@ -233,8 +229,10 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			modal.setInitialText(note.getSelectedValue());
 			modal.showDialog().ifPresent(text -> {
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
-				quest.setNote(text, note.getLeadSelectionIndex());
-				quest.setModified(true);
+//				quest.setNote(text, note.getLeadSelectionIndex());
+//				quest.setModified(true);
+				xmlQuest.getNote().set(note.getLeadSelectionIndex(), text);
+				xmlQuest.setModified(true);
 			});
 		} else if (delNote == e.getSource()) {
 			// HSE - listener for del note click
@@ -242,10 +240,12 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this note?", "Confirm Delete",
 						JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
-					quest.removeNote(note.getSelectedValue().toString());
+//					quest.removeNote(note.getSelectedValue());
+					xmlQuest.getNote().remove(note.getSelectedValue());
 					noteData.removeElement(note.getSelectedValue());
 
-					quest.setModified(true);
+//					quest.setModified(true);
+					xmlQuest.setModified(true);
 				}
 			}
 		}
@@ -259,6 +259,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	}
 
 	public void refreshData() {
-selectorPanel.refresh();
+		selectorPanel.refresh();
 	}
 }

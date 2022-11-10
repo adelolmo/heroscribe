@@ -18,13 +18,10 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
 import java.awt.*;
-import java.util.*;
 
 public class ObjectsMediaLoader {
 	private static final Logger log = LoggerFactory.getLogger(ObjectsMediaLoader.class);
@@ -35,32 +32,29 @@ public class ObjectsMediaLoader {
 		this.imageLoader = imageLoader;
 	}
 
-	public void loadIcons(List objects, ObjectList objectList) {
+	public void loadIcons(ObjectList objectList) {
 		long start, end;
 		start = System.currentTimeMillis();
 
 		/* Board */
-		final Image europe = imageLoader.addImage(objects.getRasterPath("Europe").toString(), 10);
-		objects.getBoard().getIcon("Europe").image = europe;
+		final Image europe = imageLoader.addImage(objectList.getRasterPath("Europe").toString(), 10);
+//		objects.getBoard().getIcon("Europe").image = europe;
 		objectList.getBoard().getIcon("Europe").setImage(europe);
 
-		final Image usa = imageLoader.addImage(objects.getRasterPath("USA").toString(), 10);
-		objects.getBoard().getIcon("USA").image = usa;
+		final Image usa = imageLoader.addImage(objectList.getRasterPath("USA").toString(), 10);
+//		objects.getBoard().getIcon("USA").image = usa;
 		objectList.getBoard().getIcon("USA").setImage(usa);
 
-		final Iterator<LObject> iterator = objects.objectsIterator();
-		while (iterator.hasNext()) {
-			final String id = iterator.next().id;
-
+		objectList.getObject().forEach(object -> {
 			/* Icons */
-			final Image eu = imageLoader.addImage(objects.getRasterPath(id, "Europe").toString(), 20);
-			objects.getObject(id).getIcon("Europe").image = eu;
-			objectList.getObject(id).getIcon("Europe").setImage(eu);
+			final Image eu = imageLoader.addImage(objectList.getRasterPath(object.getId(), "Europe").toString(), 20);
+			objectList.getObject(object.getId()).getIcon("Europe").setImage(eu);
 
-			final Image usa1 = imageLoader.addImage(objects.getRasterPath(id, "USA").toString(), 20);
-			objects.getObject(id).getIcon("USA").image =usa1;
-			objectList.getObject(id).getIcon("USA").setImage(usa1);
-		}
+			final Image usa1 = imageLoader.addImage(objectList.getRasterPath(object.getId(), "USA").toString(), 20);
+
+			objectList.getObject(object.getId()).getIcon("USA").setImage(usa1);
+		});
+
 
 		imageLoader.flush();
 

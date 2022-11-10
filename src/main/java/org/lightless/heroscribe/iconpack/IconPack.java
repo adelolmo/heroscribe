@@ -1,4 +1,4 @@
-package org.lightless.heroscribe.bundle;
+package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.compress.archivers.*;
 import org.apache.commons.io.*;
@@ -12,25 +12,28 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.stream.*;
 
-public class Bundle {
+public class IconPack {
 
-	private static final Logger log = LoggerFactory.getLogger(Bundle.class);
+	private static final Logger log = LoggerFactory.getLogger(IconPack.class);
 
 	private final ImageLoader imageLoader;
 	private final ObjectList systemObjectList;
+	private final ObjectsParser objectsParser;
 
-	public Bundle(ImageLoader imageLoader, ObjectList systemObjectList) {
+	public IconPack(ImageLoader imageLoader,
+					ObjectList systemObjectList,
+					ObjectsParser objectsParser) {
 		this.imageLoader = imageLoader;
 		this.systemObjectList = systemObjectList;
+		this.objectsParser = objectsParser;
 	}
 
 	public void importBundle(final File bundle) throws IOException {
-		log.info("Importing bundle {}...", bundle.getName());
+		log.info("Importing icon pack {}...", bundle.getName());
 		final Path tempBundleDirectory = Files.createTempDirectory("hse");
 		extract(bundle, tempBundleDirectory);
 
-		final ObjectsParser parser = new ObjectsParser();
-		final ObjectList bundleObjectList = parser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
+		final ObjectList bundleObjectList = objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
 
 		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKind().stream()
 				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId())
@@ -42,7 +45,7 @@ public class Bundle {
 				.stream()
 				.filter(object1 -> !systemObjectList.getKindIds().contains(object1.getKind()))
 				.forEach(object -> {
-					System.out.println(object.getId());
+					log.info("Importing object {}...", object.getId());
 
 					// add icons
 					loadObjectIcons(object, "Europe", tempBundleDirectory);

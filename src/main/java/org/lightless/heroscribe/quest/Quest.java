@@ -28,9 +28,6 @@ import java.util.*;
 
 public class Quest implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private static final String DEFAULT_REGION = "USA";
-
 	private File file;
 
 	private final int width, height;
@@ -51,16 +48,16 @@ public class Quest implements Serializable {
 
 		boards = new QBoard[width][height];
 
-		for (int i = 0; i < width; i++)
-			for (int j = 0; j < height; j++)
-				boards[i][j] = new QBoard(board.width, board.height, this);
+//		for (int i = 0; i < width; i++)
+//			for (int j = 0; j < height; j++)
+//				boards[i][j] = new QBoard(board.width, board.height, this);
 
 		horizontalBridges = new boolean[width - 1][height][board.height];
 		verticalBridges = new boolean[width][height - 1][board.width];
 
 		notes = new Vector<>();
 
-		region = DEFAULT_REGION;
+		region = "Europe";
 
 		name = "";
 		speech = "";
@@ -198,11 +195,11 @@ public class Quest implements Serializable {
 		}
 	}
 
-	public void save() throws Exception {
+	/*public void save() throws Exception {
 		Write.write(this);
 
 		modified = false;
-	}
+	}*/
 }
 
 class ObjectsIterator implements java.util.Iterator<QObject> {

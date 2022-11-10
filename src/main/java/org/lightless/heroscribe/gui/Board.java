@@ -18,14 +18,12 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.quest.*;
 import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class Board extends JPanel implements MouseInputListener {
 
@@ -74,33 +72,32 @@ public class Board extends JPanel implements MouseInputListener {
 			gui.boardPainter.paint(null, lastColumn, lastRow, (Graphics2D) g);
 	}
 
-	private QObject getNewObject(boolean floating) {
-		QObject newObject;
+	private Quest.Board.Object getNewObject(boolean floating) {
+		Quest.Board.Object newObject;
+		final String id = gui.tools.selectorPanel.getSelectedObject();
 
 		if (floating) {
-			newObject = new QObject(gui.tools.selectorPanel.getSelectedObject(),
-					 gui.getObjectList(),
-					0);
+//			newObject = new QObject(gui.tools.selectorPanel.getSelectedObject(),
+//					gui.getObjectList(),
+//					0);
 
-			newObject.zorder = Integer.MAX_VALUE;
+			newObject = new Quest.Board.Object();
+			newObject.setId(id);
+			newObject.setZorder(Integer.MAX_VALUE);
 		} else {
-			String id = gui.tools.selectorPanel.getSelectedObject();
-			newObject = new QObject(id, gui.getObjectList());
+//			newObject = new QObject(id, gui.getObjectList());
+			newObject = new Quest.Board.Object();
+			newObject.setId(gui.tools.selectorPanel.getSelectedObject());
 
 //			final List objects = gui.getObjects();
-			final ObjectList.Object obj = gui.getObjectList().getObject().stream()
-					.filter(object -> {
-						return object.getId().equals(id);
-					}).findFirst()
-					.orElseThrow(IllegalStateException::new);
+			final ObjectList.Object obj = gui.getObjectList().getObject(id);
 
-
-			newObject.zorder = obj.getZorder();
+			newObject.setZorder(obj.getZorder());
 		}
 
-		newObject.rotation = rotation;
-		newObject.left = lastLeft;
-		newObject.top = lastTop;
+		newObject.setRotation(Rotation.fromNumber(rotation));
+		newObject.setLeft(lastLeft);
+		newObject.setTop(lastTop);
 
 		return newObject;
 	}
@@ -118,32 +115,40 @@ public class Board extends JPanel implements MouseInputListener {
 		float width, height;
 		float x, y;
 
-		width = gui.boardPainter.boardPixelSize.width + gui.getObjects().getBoard().adjacentBoardsOffset * gui.boardPainter.boxEdge;
+		width = gui.boardPainter.boardPixelSize.width
+				+ gui.getObjectList().getBoard().getAdjacentBoardsOffset()
+				* gui.boardPainter.boxEdge;
 
-		height = gui.boardPainter.boardPixelSize.height + gui.getObjects().getBoard().adjacentBoardsOffset * gui.boardPainter.boxEdge;
+		height = gui.boardPainter.boardPixelSize.height
+				+ gui.getObjectList().getBoard().getAdjacentBoardsOffset()
+				* gui.boardPainter.boxEdge;
 
-		x = e.getX() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset() * gui.boardPainter.boxEdge) / 2.0f;
+		x = e.getX() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset()
+				* gui.boardPainter.boxEdge)
+				/ 2.0f;
 		if (x < 0.0f)
 			x = 0.0f;
-		else if (x > width * gui.getQuest().getWidth())
-			x = width * gui.getQuest().getWidth() - 1;
+		else if (x > width * gui.getXmlQuest().getWidth())
+			x = width * gui.getXmlQuest().getWidth() - 1;
 
-		y = e.getY() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset() * gui.boardPainter.boxEdge) / 2.0f;
+		y = e.getY() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset()
+				* gui.boardPainter.boxEdge)
+				/ 2.0f;
 		if (y < 0.0f)
 			y = 0.0f;
-		else if (y > height * gui.getQuest().getHeight())
-			y = height * gui.getQuest().getHeight() - 1;
+		else if (y > height * gui.getXmlQuest().getHeight())
+			y = height * gui.getXmlQuest().getHeight() - 1;
 
 		row = (int) (y / height);
 		column = (int) (x / width);
 
-		top = (int) ((y % height) / gui.boardPainter.boxEdge - gui.getObjects().getBoard().adjacentBoardsOffset / 2.0f);
+		top = (int) ((y % height) / gui.boardPainter.boxEdge - gui.getObjectList().getBoard().getAdjacentBoardsOffset() / 2.0f);
 		if (top < 0)
 			top = 0;
 		else if (top > gui.getObjectList().getBoard().getHeight() + 1)
-			top = gui.getObjects().getBoard().height + 1;
+			top = gui.getObjectList().getBoard().getHeight() + 1;
 
-		left = (int) ((x % width) / gui.boardPainter.boxEdge - gui.getObjects().getBoard().adjacentBoardsOffset / 2.0f);
+		left = (int) ((x % width) / gui.boardPainter.boxEdge - gui.getObjectList().getBoard().getAdjacentBoardsOffset() / 2.0f);
 		if (left < 0)
 			left = 0;
 		else if (left > gui.getObjectList().getBoard().getWidth() + 1)
@@ -160,8 +165,12 @@ public class Board extends JPanel implements MouseInputListener {
 			lastTop = top;
 			lastLeft = left;
 
-			if (isPaintingDark && gui.getQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop) != isDark)
-				gui.getQuest().getBoard(lastColumn, lastRow).toggleDark(lastLeft, lastTop);
+			if (isPaintingDark && gui.getXmlQuest()
+					.getBoard(lastColumn, lastRow)
+					.isDark(lastLeft, lastTop) != isDark)
+				gui.getXmlQuest()
+						.getBoard(lastColumn, lastRow)
+						.toggleDark(lastLeft, lastTop);
 
 			repaint();
 
@@ -180,18 +189,21 @@ public class Board extends JPanel implements MouseInputListener {
 
 		int width, height;
 
-		if (gui.getQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop)) {
+		if (gui.getXmlQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop)) {
 			sb.insert(0, "Dark");
 
 			first = false;
 		}
 
-		Iterator<QObject> iterator = gui.getQuest().getBoard(lastColumn, lastRow).iterator();
-		while (iterator.hasNext()) {
-			QObject qobj = iterator.next();
-			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.id);
+//		Iterator<QObject> iterator =
+//				gui.getXmlQuest().getBoard(lastColumn, lastRow).iterator();
+//		while (iterator.hasNext()) {
+		for (Quest.Board.Object qobj : gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject()) {
 
-			if (qobj.rotation % 2 == 0) {
+//					QObject qobj = iterator.next();
+			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
+
+			if (qobj.getRotation().getNumber() % 2 == 0) {
 				width = lobj.getWidth();
 				height = lobj.getHeight();
 			} else {
@@ -199,7 +211,10 @@ public class Board extends JPanel implements MouseInputListener {
 				height = lobj.getWidth();
 			}
 
-			if (qobj.left <= lastLeft && lastLeft < qobj.left + width && qobj.top <= lastTop && lastTop < qobj.top + height) {
+			if (qobj.getLeft() <= lastLeft
+					&& lastLeft < qobj.getLeft() + width
+					&& qobj.getTop() <= lastTop
+					&& lastTop < qobj.getTop() + height) {
 
 				if (first)
 					first = false;
@@ -237,18 +252,21 @@ public class Board extends JPanel implements MouseInputListener {
 				rotation = (rotation + 1) % 4;
 			} else {
 				/* left click */
-				QObject obj = getNewObject(false);
+				Quest.Board.Object obj = getNewObject(false);
 
 				if (isWellPositioned(obj))
-					if (gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj))
+					if (gui.getXmlQuest().getBoard(lastColumn, lastRow).addObject(obj))
 						hasAdded = true;
 			}
 		} else if ("select".equals(gui.tools.getCommand())) {
 			gui.tools.displayerPanel.createList(lastColumn, lastRow, lastLeft, lastTop);
-		} else if ("darken".equals(gui.tools.getCommand())) {
-			QBoard board = gui.getQuest().getBoard(lastColumn, lastRow);
 
-			if (1 <= lastLeft && lastLeft <= board.getWidth() && 1 <= lastTop && lastTop <= board.getHeight()) {
+		} else if ("darken".equals(gui.tools.getCommand())) {
+//			QBoard board = gui.getQuest().getBoard(lastColumn, lastRow);
+			final Quest.Board board = gui.getXmlQuest().getBoard(lastColumn, lastRow);
+
+			if (1 <= lastLeft && lastLeft <= board.getWidth()
+					&& 1 <= lastTop && lastTop <= board.getHeight()) {
 				/* Darken/Clear */
 
 				if (SwingUtilities.isRightMouseButton(e) || e.isControlDown()) {
@@ -259,11 +277,15 @@ public class Board extends JPanel implements MouseInputListener {
 					isDark = true;
 				}
 
-				if (gui.getQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop) != isDark)
-					gui.getQuest().getBoard(lastColumn, lastRow).toggleDark(lastLeft, lastTop);
+				if (gui.getXmlQuest().getBoard(lastColumn, lastRow)
+						.isDark(lastLeft, lastTop)
+						!= isDark)
+					gui.getXmlQuest().getBoard(lastColumn, lastRow)
+							.toggleDark(lastLeft, lastTop);
 
 				isPaintingDark = true;
-			} else if ((1 <= lastLeft && lastLeft <= board.getWidth()) || (1 <= lastTop && lastTop <= board.getHeight())) {
+			} else if ((1 <= lastLeft && lastLeft <= board.getWidth())
+					|| (1 <= lastTop && lastTop <= board.getHeight())) {
 				/* Bridge */
 
 				boolean value;
@@ -285,9 +307,9 @@ public class Board extends JPanel implements MouseInputListener {
 				}
 
 				if (lastLeft < 1 || lastLeft > board.getWidth()) {
-					gui.getQuest().setHorizontalBridge(value, column, row, lastTop);
+					gui.getXmlQuest().setHorizontalBridge(value, column, row, lastTop);
 				} else {
-					gui.getQuest().setVerticalBridge(value, column, row, lastLeft);
+					gui.getXmlQuest().setVerticalBridge(value, column, row, lastLeft);
 				}
 			}
 		}
@@ -308,12 +330,12 @@ public class Board extends JPanel implements MouseInputListener {
 	public void mouseEntered(MouseEvent e) {
 	}
 
-	public boolean isWellPositioned(QObject piece) {
-		final ObjectList.Object obj = gui.getObjectList().getObject(piece.id);
+	public boolean isWellPositioned(Quest.Board.Object piece) {
+		final ObjectList.Object obj = gui.getObjectList().getObject(piece.getId());
 
 		int width, height;
 
-		if (piece.rotation % 2 == 0) {
+		if (piece.getRotation().getNumber() % 2 == 0) {
 			width = obj.getWidth();
 			height = obj.getHeight();
 		} else {
@@ -322,14 +344,14 @@ public class Board extends JPanel implements MouseInputListener {
 		}
 
 		if (obj.isDoor()) {
-			if (piece.left < 0 || piece.top < 0 || piece.left + width - 1 > gui.boardPainter.boardSize.width + 1
-					|| piece.top + height - 1 > gui.boardPainter.boardSize.height + 1
-					|| (piece.rotation % 2 == 0 && (piece.left == 0 || piece.left == gui.boardPainter.boardSize.width + 1))
-					|| (piece.rotation % 2 == 1 && (piece.top == 0 || piece.top == gui.boardPainter.boardSize.height + 1)))
+			if (piece.getLeft() < 0 || piece.getTop() < 0 || piece.getLeft() + width - 1 > gui.boardPainter.boardSize.width + 1
+					|| piece.getTop() + height - 1 > gui.boardPainter.boardSize.height + 1
+					|| (piece.getRotation().getNumber() % 2 == 0 && (piece.getLeft() == 0 || piece.getLeft() == gui.boardPainter.boardSize.width + 1))
+					|| (piece.getRotation().getNumber() % 2 == 1 && (piece.getTop() == 0 || piece.getTop() == gui.boardPainter.boardSize.height + 1)))
 				return false;
 		} else {
-			if (piece.left < 1 || piece.top < 1 || piece.left + width - 1 > gui.boardPainter.boardSize.width
-					|| piece.top + height - 1 > gui.boardPainter.boardSize.height)
+			if (piece.getLeft() < 1 || piece.getTop() < 1 || piece.getLeft() + width - 1 > gui.boardPainter.boardSize.width
+					|| piece.getTop() + height - 1 > gui.boardPainter.boardSize.height)
 				return false;
 		}
 

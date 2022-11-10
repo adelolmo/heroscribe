@@ -1,11 +1,12 @@
 package org.lightless.heroscribe.xml;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.*;
-import org.lightless.heroscribe.bundle.*;
+import org.lightless.heroscribe.iconpack.*;
 
 import java.awt.*;
-import java.util.*;
+import java.nio.file.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.*;
 
 public class ObjectList {
@@ -32,6 +33,7 @@ public class ObjectList {
 	private Board board;
 	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<Object> object;
+	private Path basePath;
 
 	public List<String> getKindIds() {
 		return kind.stream()
@@ -134,6 +136,31 @@ public class ObjectList {
 				.findFirst();
 	}
 
+	public Object getObjectByName(String name) {
+		return object.stream()
+				.filter(object1 -> object1.getName().equals(name))
+				.findFirst()
+				.orElseThrow(IllegalStateException::new);
+	}
+	public Path getRasterPath(String id, String region) {
+		return Path.of(
+				basePath.toString(),
+				rasterPrefix,
+				getObject(id).getIcon(region).path +
+						rasterSuffix);
+	}
+	public Path getRasterPath(String region) {
+		return Path.of(
+				basePath.toString(),
+				rasterPrefix,
+				getBoard().getIcon(region).path +
+						rasterSuffix);
+	}
+
+	public void setBasePath(Path basePath) {
+		this.basePath = basePath;
+	}
+
 	public static class Kind {
 		@JacksonXmlProperty(isAttribute = true)
 		private String id;
@@ -163,12 +190,13 @@ public class ObjectList {
 	}
 
 	public static class Board {
+		private boolean[][] corridors;
 		@JacksonXmlProperty(isAttribute = true)
 		private int width;
 		@JacksonXmlProperty(isAttribute = true)
 		private int height;
 		@JacksonXmlProperty(isAttribute = true)
-		private double borderDoorsOffset;
+		private float borderDoorsOffset;
 		@JacksonXmlProperty(isAttribute = true)
 		private float adjacentBoardsOffset;
 
@@ -194,11 +222,11 @@ public class ObjectList {
 			this.height = height;
 		}
 
-		public double getBorderDoorsOffset() {
+		public float getBorderDoorsOffset() {
 			return borderDoorsOffset;
 		}
 
-		public void setBorderDoorsOffset(double borderDoorsOffset) {
+		public void setBorderDoorsOffset(float borderDoorsOffset) {
 			this.borderDoorsOffset = borderDoorsOffset;
 		}
 
@@ -228,9 +256,15 @@ public class ObjectList {
 
 		public Icon getIcon(String region) {
 			return icon.stream()
-					.filter(icon1 -> {return icon1.getRegion().equals(region);})
+					.filter(icon1 -> {
+						return icon1.getRegion().equals(region);
+					})
 					.findFirst()
 					.orElseThrow(IllegalStateException::new);
+		}
+
+		public boolean[][] getCorridors() {
+			return new boolean[width + 2][height + 2];
 		}
 
 		public static class Corridor {
@@ -389,16 +423,18 @@ public class ObjectList {
 					.findFirst()
 					.orElseThrow(IllegalStateException::new)
 					.getPath();
-			return  iconPath ;
+			return iconPath;
 		}
 
-		public String toString(){
+		public String toString() {
 			return name;
 		}
 
 		public ObjectList.Icon getIcon(String region) {
 			return icon.stream()
-					.filter(icon1 -> { return icon1.getRegion().equals(region);})
+					.filter(icon1 -> {
+						return icon1.getRegion().equals(region);
+					})
 					.findFirst()
 					.orElseThrow(IllegalStateException::new);
 		}
@@ -415,6 +451,7 @@ public class ObjectList {
 		}
 		throw new IllegalStateException("Unsupported icon type: " + iconType.getName());
 	}
+
 	private String getSuffix(IconType iconType) {
 		switch (iconType) {
 			case VECTOR:

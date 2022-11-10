@@ -124,7 +124,7 @@ public class Read extends DefaultHandler {
 				if (boardCount >= width * height)
 					throw new SAXException("Too many boards in the quest.");
 
-				board = new QBoard(objects.getBoard().width, objects.getBoard().height, quest);
+//				board = new QBoard(objects.getBoard().width, objects.getBoard().height, quest);
 
 				quest.setBoard(board, boardCount % width, boardCount / width);
 

@@ -1,4 +1,4 @@
-package org.lightless.heroscribe.bundle;
+package org.lightless.heroscribe.iconpack;
 
 public enum IconType {
 	VECTOR("Vector"),

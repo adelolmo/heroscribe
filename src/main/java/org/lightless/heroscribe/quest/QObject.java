@@ -22,27 +22,31 @@ import org.lightless.heroscribe.xml.*;
 
 public class QObject implements Comparable<QObject> {
 	public String id;
+
 	public int rotation;
 	public float top, left, zorder;
-
 	private int order;
-	private static int count = 0;
 
+	private static int count = 0;
 	private final ObjectList objectList;
 
 	public QObject(String id, ObjectList objectList) {
 		this.id = id;
 		this.objectList = objectList;
 
-		if (objectList.containsObjectById(id))
+		if (objectList.containsObjectById(id)) {
 			order = getOrder();
+		}
 	}
 
 	public QObject(String id, ObjectList objectList, int order) {
 		this.id = id;
 		this.objectList = objectList;
-
 		this.order = order;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	synchronized private static int getOrder() {

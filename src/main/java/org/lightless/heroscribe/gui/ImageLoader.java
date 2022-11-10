@@ -12,8 +12,8 @@ import java.awt.*;
  */
 public class ImageLoader extends JWindow {
 
-	private MediaTracker mt;
-	private Toolkit tk;
+	private final MediaTracker mt;
+	private final Toolkit tk;
 
 	public ImageLoader() {
 		super();

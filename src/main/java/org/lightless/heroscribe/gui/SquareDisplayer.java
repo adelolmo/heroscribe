@@ -18,31 +18,31 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.list.*;
 import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.Quest;
+import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 import java.util.*;
 
 public class SquareDisplayer extends JPanel implements ListSelectionListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	Gui gui;
+	private final Gui gui;
 
-	JTextField zorder;
-	JButton set, remove, rotate;
+	private final JTextField zorder;
+	private final JButton set, remove, rotate;
 
-	TreeSet<QObject> selected;
+	private final TreeSet<org.lightless.heroscribe.xml.Quest.Board.Object> selected;
 
-	JList<QObject> list;
-	JPanel panel;
+	private final JList<Quest.Board.Object> list;
 
-	int lastColumn, lastRow;
-	int lastLeft, lastTop;
+	private int lastColumn, lastRow;
 
 	public SquareDisplayer(Gui gui) {
 		super();
@@ -57,7 +57,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
 
-		panel = new JPanel();
+		final JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(2, 2));
 		panel.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
@@ -85,7 +85,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	}
 
 	public void clearList() {
-		((DefaultListModel<QObject>) list.getModel()).clear();
+		((DefaultListModel<Quest.Board.Object>) list.getModel()).clear();
 	}
 
 	public void createList(int column, int row, int left, int top) {
@@ -93,28 +93,30 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 
 		lastColumn = column;
 		lastRow = row;
-		lastLeft = left;
-		lastTop = top;
 
 		selected.clear();
 
-		Iterator<QObject> iterator = gui.getQuest().getBoard(column, row).iterator();
+		final List<Quest.Board.Object> objectList = gui.getXmlQuest()
+				.getBoard(column, row)
+				.getObject();
+		for (Quest.Board.Object qobj : objectList) {
+			ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
 
-		while (iterator.hasNext()) {
-			QObject qobj = iterator.next();
-			LObject lobj = gui.getObjects().getObject(qobj.id);
-
-			if (qobj.rotation % 2 == 0) {
-				width = lobj.width;
-				height = lobj.height;
+			if (qobj.getRotation().getNumber() % 2 == 0) {
+				width = lobj.getWidth();
+				height = lobj.getHeight();
 			} else {
-				width = lobj.height;
-				height = lobj.width;
+				width = lobj.getHeight();
+				height = lobj.getWidth();
 			}
 
-			if (qobj.left <= left && left < qobj.left + width && qobj.top <= top && top < qobj.top + height) {
+			if (qobj.getLeft() <= left
+					&& left < qobj.getLeft() + width
+					&& qobj.getTop() <= top
+					&& top < qobj.getTop() + height) {
 				selected.add(qobj);
 			}
+
 		}
 
 		updateList();
@@ -123,11 +125,12 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	public void updateList() {
 		clearList();
 
-		Iterator<QObject> iterator = selected.iterator();
-		DefaultListModel<QObject> listModel = (DefaultListModel<QObject>) list.getModel();
+		Iterator<org.lightless.heroscribe.xml.Quest.Board.Object> iterator = selected.iterator();
+		DefaultListModel<Quest.Board.Object> listModel =
+				(DefaultListModel<Quest.Board.Object>) list.getModel();
 
 		while (iterator.hasNext()) {
-			QObject qobj = iterator.next();
+			Quest.Board.Object qobj = iterator.next();
 			listModel.add(0, qobj);
 		}
 
@@ -160,25 +163,26 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		QObject obj = list.getSelectedValue();
+		Quest.Board.Object obj = list.getSelectedValue();
 		JButton button = (JButton) e.getSource();
 
 		if (obj != null) {
-			gui.getQuest().getBoard(lastColumn, lastRow).removeObject(obj);
+			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject().remove(obj);
 			selected.remove(obj);
 		}
 
 		if (button == set) {
-			obj.zorder = Float.parseFloat(zorder.getText());
-			zorder.setText(Float.toString(obj.zorder));
+			obj.setZorder(Float.parseFloat(zorder.getText()));
+			zorder.setText(Float.toString(obj.getZorder()));
 		} else if (button == remove) {
 			obj = null;
 		} else if (button == rotate) {
-			obj.rotation = (obj.rotation + 1) % 4;
+			final int rotation = (obj.getRotation().getNumber() + 1) % 4;
+			obj.setRotation(Rotation.fromNumber(rotation));
 		}
 
 		if (obj != null) {
-			gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj);
+			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject().add(obj);
 			selected.add(obj);
 		}
 

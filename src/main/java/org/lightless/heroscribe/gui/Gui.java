@@ -23,12 +23,9 @@ package org.lightless.heroscribe.gui;
 import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.export.*;
 import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.list.List;
-import org.lightless.heroscribe.quest.Read;
-import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.iconpack.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
-import org.lightless.heroscribe.bundle.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -43,10 +40,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
-	private final Bundle bundle;
+	private final IconPack iconPack;
 	private final ObjectList objectList;
-	private final List objects;
-	private Quest quest;
+	private final QuestParser questParser;
+
+	private Quest xmlQuest;
 	private final Preferences prefs;
 
 	ToolsPanel tools;
@@ -57,30 +55,30 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private final JFileChooser fileChooser = new FileChooser();
 	private final JFileChooser ghostscriptChooser = new JFileChooser();
 
-	TreeMap<String, FileFilter> filters = new TreeMap<>();
+	private final TreeMap<String, FileFilter> filters = new TreeMap<>();
 
-	JRadioButtonMenuItem europeItem, usaItem;
+	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
 			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
-	private JMenuItem bundleImport;
+	private JMenuItem iconPackImport, iconPackDownload;
 
-	Vector<JMenuItem> newSpecialKeys;
+	private final Vector<JMenuItem> newSpecialKeys;
 
 	JLabel hint, status;
 
-	public Gui(Bundle bundle,
+	public Gui(IconPack iconPack,
 			   Preferences preferences,
-			   List objects,
-			   Quest quest,
-			   ObjectList objectList) {
+			   ObjectList objectList,
+			   QuestParser questParser,
+			   Quest xmlQuest) {
 		super();
-		this.bundle = bundle;
+		this.iconPack = iconPack;
 		this.objectList = objectList;
+		this.questParser = questParser;
 		// HSE - set app icon
 		setIconImage(Toolkit.getDefaultToolkit().getImage("HeroScribe.png"));
 		this.prefs = preferences;
-		this.objects = objects;
-		this.quest = quest;
+		this.xmlQuest = xmlQuest;
 
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 
@@ -92,7 +90,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		boardPainter = new BoardPainter(this);
 
-		tools = new ToolsPanel(this, quest);
+		tools = new ToolsPanel(this, this.xmlQuest);
 		board = new Board(this);
 
 		newSpecialKeys = new Vector<>();
@@ -123,14 +121,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	public void updateTitle() {
 		final StringBuilder sb =
 				new StringBuilder(Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
-
-		if (quest.getFile() == null) {
+		if (xmlQuest.getFile() == null) {
 			sb.append("Untitled");
 		} else {
-			sb.append(quest.getFile().getName());
+			sb.append(xmlQuest.getFile().getName());
 		}
 
-		if (quest.isModified()) {
+		if (xmlQuest.isModified()) {
 			sb.append("*");
 		}
 
@@ -141,7 +138,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		Container content;
 		final JMenuBar menu = new JMenuBar();
 		final JMenu file = new JMenu("File");
-		final JMenu objects = new JMenu("Objects");
+		final JMenu objects = new JMenu("Icon Packs");
 		final JMenu region = new JMenu("Region");
 		final JMenu help = new JMenu("Help");
 
@@ -268,10 +265,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		menu.add(file);
 
-		/* Objects menu */
-		bundleImport = new JMenuItem("Import...");
-		bundleImport.addActionListener(this);
-		objects.add(bundleImport);
+		/* Icon Packs menu */
+		iconPackDownload = new JMenuItem("Download...");
+		iconPackDownload.addActionListener(this);
+		objects.add(iconPackDownload);
+
+		iconPackImport = new JMenuItem("Import...");
+		iconPackImport.addActionListener(this);
+		objects.add(iconPackImport);
 		menu.add(objects);
 
 		/* Region menu */
@@ -341,23 +342,19 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	}
 
 	private void setMenuRegion() {
-		if (quest.getRegion().equals("Europe")) {
+		if (xmlQuest.getRegion().equals("Europe")) {
 			europeItem.setSelected(true);
-		} else if (quest.getRegion().equals("USA")) {
+		} else if (xmlQuest.getRegion().equals("USA")) {
 			usaItem.setSelected(true);
 		}
-	}
-
-	public List getObjects() {
-		return objects;
 	}
 
 	public ObjectList getObjectList() {
 		return objectList;
 	}
 
-	public Quest getQuest() {
-		return quest;
+	public Quest getXmlQuest() {
+		return xmlQuest;
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -365,9 +362,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			if (source == europeItem) {
-				quest.setRegion("Europe");
+				xmlQuest.setRegion("Europe");
 			} else if (source == usaItem) {
-				quest.setRegion("USA");
+				xmlQuest.setRegion("USA");
 			}
 
 			updateTitle();
@@ -398,20 +395,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		JMenuItem source = (JMenuItem) e.getSource();
 
 		if (newKey == source) {
-			if (!quest.isModified()
+			if (!xmlQuest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to create a new one?",
 					"New Quest",
 					JOptionPane.WARNING_MESSAGE,
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-				final Quest newQuest = new Quest(1, 1, objects.getBoard(), null);
+				final Quest xmlNewQuest = new Quest(objectList.getBoard());
 
 				tools.none.doClick();
 				tools.clearQuestForm();
-				quest = newQuest;
+				this.xmlQuest = xmlNewQuest;
 				// HSE - assign the quest in the tools class to the new quest instance
-				tools.refreshQuestData(quest);
+				tools.refreshQuestData(xmlQuest);
 				setMenuRegion();
 
 				updateHint();
@@ -425,23 +422,23 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (newSpecialKeys.contains(source)) {
 			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) source;
 
-			if (!quest.isModified()
+			if (!xmlQuest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to create a new one?",
 					"New Quest",
 					JOptionPane.WARNING_MESSAGE,
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 
-				final Quest newQuest = new Quest(menuItem.getQuestWidth(),
+				final Quest newXmlQuest = new Quest(menuItem.getQuestWidth(),
 						menuItem.getQuestHeight(),
-						objects.getBoard(),
-						null);
+						objectList.getBoard().getWidth(),
+						objectList.getBoard().getHeight());
 
 				tools.none.doClick();
 				tools.clearQuestForm();
-				quest = newQuest;
+				xmlQuest = newXmlQuest;
 				// HSE - assign the quest in the tools class to the new quest instance
-				tools.refreshQuestData(quest);
+				tools.refreshQuestData(xmlQuest);
 				setMenuRegion();
 
 				updateHint();
@@ -454,7 +451,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			}
 
 		} else if (openKey == source) {
-			if (!quest.isModified()
+			if (!xmlQuest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to open a new one?",
 					"Open Quest",
@@ -473,17 +470,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 				if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 					try {
-						final Quest newQuest = new Read(fileChooser.getSelectedFile(), objects, objectList).getQuest();
+						final Quest newXmlQuest =
+								questParser.parse(fileChooser.getSelectedFile(),
+										objectList.getBoard().getWidth(),
+										objectList.getBoard().getHeight());
 
 						tools.none.doClick();
-						quest = newQuest;
+						xmlQuest = newXmlQuest;
 						setMenuRegion();
 
 						updateHint();
 						updateTitle();
 
-						tools.refreshQuestData(quest);
-						quest.setModified(false);
+						tools.refreshQuestData(xmlQuest);
+						xmlQuest.setModified(false);
 
 						boardPainter.init();
 
@@ -500,13 +500,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			}
 		} else if (saveKey == source) {
 			File file = null;
-			if (quest.getFile() != null || (file = askPath("xml")) != null) {
+			if (xmlQuest.getFile() != null || (file = askPath("xml")) != null) {
 				try {
 					if (file != null) {
-						quest.setFile(file);
+						xmlQuest.setFile(file);
 					}
 
-					quest.save();
+					questParser.saveToDisk(xmlQuest, file);
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -521,8 +521,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 			if ((file = askPath("xml")) != null) {
 				try {
-					quest.setFile(file);
-					quest.save();
+					xmlQuest.setFile(file);
+					questParser.saveToDisk(xmlQuest, file);
+
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -538,8 +539,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					ExportPDF.write(prefs.ghostscriptExec,
 							file,
-							quest,
-							objects,
+							null, // TODO pass xml Quest
+							null, // TODO pass xml ObjectList
 							true);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -570,8 +571,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					ExportPDF.write(prefs.ghostscriptExec,
 							file,
-							quest,
-							objects,
+							null, // TODO pass xml Quest
+							null, // TODO pass xml ObjectList
 							false);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -585,7 +586,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			File file;
 			if ((file = askPath("eps")) != null) {
 				try {
-					ExportEPS.writeMultiPage(file, quest, objects);
+					ExportEPS.writeMultiPage(file,
+							null, // TODO pass xml Quest
+							null // TODO pass xml ObjectList
+					);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
 							"Can't save file.  Detailed Error: " + ex.getMessage(),
@@ -637,7 +641,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				}
 			}
 
-		} else if (bundleImport == source) {
+		} else if (iconPackImport == source) {
 			final JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(prefs.defaultDir);
 			chooser.setDialogTitle("Import bundle");
@@ -651,7 +655,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
 							importedBundle.toPath());
-					bundle.importBundle(importedBundle);
+					iconPack.importBundle(importedBundle);
 					tools.refreshData();
 
 				} catch (FileAlreadyExistsException ex) {
@@ -664,7 +668,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							Files.copy(chooser.getSelectedFile().toPath(),
 									importedBundle.toPath(),
 									StandardCopyOption.REPLACE_EXISTING);
-							bundle.importBundle(importedBundle);
+							iconPack.importBundle(importedBundle);
 							tools.refreshData();
 
 						} catch (IOException exc) {
@@ -691,7 +695,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			OS.openURL(new File("Readme.html"), null);
 
 		} else if (propertiesKey == source) {
-			final PropertiesModal modal = new PropertiesModal(this, quest);
+			final PropertiesModal modal = new PropertiesModal(this, xmlQuest);
 			modal.showDialog();
 
 		} else if (aboutKey == source) {
@@ -731,7 +735,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	}
 
 	public void windowClosing(WindowEvent e) {
-		if (!quest.isModified() || JOptionPane.showConfirmDialog(this,
+		if (!xmlQuest.isModified() || JOptionPane.showConfirmDialog(this,
 				"The current quest has not been saved.\nDo you really want to quit?",
 				"Quit",
 				JOptionPane.WARNING_MESSAGE,
