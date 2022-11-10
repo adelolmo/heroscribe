@@ -1,11 +1,13 @@
 package org.lightless.heroscribe.xml;
 
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
+@JsonRootName("quest")
 public class Quest {
 
 	private static final String WANDERING_MONSTER_NOTE_MESSAGE =
@@ -29,9 +31,11 @@ public class Quest {
 	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<String> note = new ArrayList<>();
 
+	@JsonIgnore
 	private File file;
+	@JsonIgnore
 	private boolean modified;
-	private Quest.Board[][] boards;
+	@JsonIgnore
 	private boolean[][][] horizontalBridges, verticalBridges;
 
 	public Quest() {
@@ -210,6 +214,7 @@ public class Quest {
 //		return boards[column][row];
 	}
 
+	@JsonIgnore
 	public String getWanderingId() {
 		return findWanderingMonsterNote()
 				.orElseThrow(IllegalStateException::new)
@@ -243,7 +248,9 @@ public class Quest {
 		private List<Dark> dark = new ArrayList<>();
 		@JacksonXmlElementWrapper(useWrapping = false)
 		private List<Object> object = new ArrayList<>();
+		@JsonIgnore
 		private int width;
+		@JsonIgnore
 		private int height;
 
 		public List<Dark> getDark() {

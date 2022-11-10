@@ -60,7 +60,7 @@ public class Constants {
 	}
 
 	public static File getBundleDirectory(){
-		final File bundleDir = new File(getConfigurationDirectory(), "bundles");
+		final File bundleDir = new File(getConfigurationDirectory(), "iconPacks");
 		if (!bundleDir.exists()) {
 			bundleDir.mkdir();
 		}

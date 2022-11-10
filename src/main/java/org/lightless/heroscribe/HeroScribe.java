@@ -19,9 +19,9 @@ package org.lightless.heroscribe;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.*;
-import org.lightless.heroscribe.iconpack.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.helper.*;
+import org.lightless.heroscribe.iconpack.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
@@ -58,7 +58,8 @@ public class HeroScribe {
 //		read.read(objectPath.toFile());
 //		final List objects = read.getObjects();
 
-		final ObjectMapper xmlMapper = new XmlMapper();
+		final ObjectMapper xmlMapper = new XmlMapper()
+				.enable(SerializationFeature.INDENT_OUTPUT);
 		final ObjectsParser objectsParser = new ObjectsParser(xmlMapper, basePath);
 		final QuestParser questParser = new QuestParser(xmlMapper);
 
@@ -67,7 +68,8 @@ public class HeroScribe {
 
 		log.info("Objects read.");
 
-		new SplashScreenImageLoader(imageLoader);
+		final SplashScreenImageLoader loader = new SplashScreenImageLoader(imageLoader);
+		loader.visible();
 
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
 		mediaLoader.loadIcons(objectList);
@@ -75,6 +77,10 @@ public class HeroScribe {
 		final IconPack iconPack = new IconPack(imageLoader,
 				objectList,
 				objectsParser);
+		loadInstalledIconPacks(iconPack);
+
+		loader.invisible();
+
 		new Gui(iconPack,
 				preferences,
 				objectList,
@@ -96,6 +102,17 @@ public class HeroScribe {
 			return Paths.get("");
 		}
 		return Paths.get(Objects.toString(args[0], ""));
+	}
+
+	private static void loadInstalledIconPacks(IconPack iconPack) throws IOException {
+		final String[] iconPackFilenames = Constants.getBundleDirectory()
+				.list((dir, name) -> name.endsWith(".zip"));
+		if (iconPackFilenames == null) {
+			return;
+		}
+		for (String iconPackFilename : iconPackFilenames) {
+			iconPack.importBundle(new File(Constants.getBundleDirectory(), iconPackFilename));
+		}
 	}
 
 }

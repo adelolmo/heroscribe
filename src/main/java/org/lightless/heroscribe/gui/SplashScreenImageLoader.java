@@ -38,15 +38,18 @@ public class SplashScreenImageLoader extends JWindow {
 
 		setLocation((imageLoader.getScreenSize().width - this.getWidth()) / 2,
 				(imageLoader.getScreenSize().height - this.getHeight()) / 2);
+	}
 
+	public void visible() {
 		setVisible(true);
+	}
 
+	public void invisible() {
 		try {
 			Thread.sleep(Duration.ofSeconds(2));
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
-
 		setVisible(false);
 	}
 
