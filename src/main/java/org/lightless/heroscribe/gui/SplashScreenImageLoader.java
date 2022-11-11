@@ -21,6 +21,7 @@ package org.lightless.heroscribe.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.time.*;
+import java.util.concurrent.*;
 
 public class SplashScreenImageLoader extends JWindow {
 
@@ -40,16 +41,12 @@ public class SplashScreenImageLoader extends JWindow {
 				(imageLoader.getScreenSize().height - this.getHeight()) / 2);
 	}
 
-	public void visible() {
+	public void run(Callable<Void> callable) throws Exception {
 		setVisible(true);
-	}
 
-	public void invisible() {
-		try {
-			Thread.sleep(Duration.ofSeconds(2));
-		} catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+		callable.call();
+
+		pauseExecution(Duration.ofSeconds(2));
 		setVisible(false);
 	}
 
@@ -58,4 +55,13 @@ public class SplashScreenImageLoader extends JWindow {
 			g.drawImage(splash, 0, 0, this);
 		}
 	}
+
+	private static void pauseExecution(Duration duration) {
+		try {
+			Thread.sleep(duration);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }

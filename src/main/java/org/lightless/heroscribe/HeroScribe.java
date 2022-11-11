@@ -27,7 +27,6 @@ import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
 import javax.swing.*;
-import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
@@ -35,7 +34,7 @@ public class HeroScribe {
 
 	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		log.info("Starting up HeroScribe Enhanced {}", Constants.VERSION);
 
 		try {
@@ -55,10 +54,6 @@ public class HeroScribe {
 		final Path objectPath = getFilePath(basePath, "Objects.xml");
 
 		final ImageLoader imageLoader = new ImageLoader();
-//		final Read read = new Read(basePath);
-//		read.read(objectPath.toFile());
-//		final List objects = read.getObjects();
-
 		final ObjectMapper xmlMapper = new XmlMapper()
 				.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
 				.enable(SerializationFeature.INDENT_OUTPUT);
@@ -67,21 +62,19 @@ public class HeroScribe {
 
 		final ObjectList objectList = objectsParser.parse(objectPath.toFile());
 		final Quest quest = new Quest(objectList.getBoard());
+		final IconPack iconPack = new IconPack(imageLoader,
+				objectList,
+				objectsParser);
+		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
 
 		log.info("Objects read.");
 
 		final SplashScreenImageLoader loader = new SplashScreenImageLoader(imageLoader);
-		loader.visible();
-
-		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
-		mediaLoader.loadIcons(objectList);
-
-		final IconPack iconPack = new IconPack(imageLoader,
-				objectList,
-				objectsParser);
-		iconPack.loadImportedIconPacks();
-
-		loader.invisible();
+		loader.run(() -> {
+			mediaLoader.loadIcons(objectList);
+			iconPack.loadImportedIconPacks();
+			return null;
+		});
 
 		new Gui(iconPack,
 				preferences,

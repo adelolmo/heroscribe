@@ -21,8 +21,6 @@ package org.lightless.heroscribe.gui;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
-import java.awt.*;
-
 public class ObjectsMediaLoader {
 	private static final Logger log = LoggerFactory.getLogger(ObjectsMediaLoader.class);
 
@@ -37,22 +35,27 @@ public class ObjectsMediaLoader {
 		start = System.currentTimeMillis();
 
 		/* Board */
-		final Image europe = imageLoader.addImage(objectList.getRasterPath("Europe").toString(), 10);
-//		objects.getBoard().getIcon("Europe").image = europe;
-		objectList.getBoard().getIcon("Europe").setImage(europe);
+		objectList.getBoard()
+				.getIcon("Europe")
+				.setImage(imageLoader
+						.addImage(objectList.getRasterPath("Europe").toString(), 10));
 
-		final Image usa = imageLoader.addImage(objectList.getRasterPath("USA").toString(), 10);
-//		objects.getBoard().getIcon("USA").image = usa;
-		objectList.getBoard().getIcon("USA").setImage(usa);
+		objectList.getBoard()
+				.getIcon("USA")
+				.setImage(imageLoader
+						.addImage(objectList.getRasterPath("USA").toString(), 10));
 
 		objectList.getObjects().forEach(object -> {
 			/* Icons */
-			final Image eu = imageLoader.addImage(objectList.getRasterPath(object.getId(), "Europe").toString(), 20);
-			objectList.getObject(object.getId()).getIcon("Europe").setImage(eu);
+			objectList.getObject(object.getId())
+					.getIcon("Europe")
+					.setImage(imageLoader
+							.addImage(objectList.getRasterPath(object.getId(), "Europe").toString(), 20));
 
-			final Image usa1 = imageLoader.addImage(objectList.getRasterPath(object.getId(), "USA").toString(), 20);
-
-			objectList.getObject(object.getId()).getIcon("USA").setImage(usa1);
+			objectList.getObject(object.getId())
+					.getIcon("USA")
+					.setImage(imageLoader
+							.addImage(objectList.getRasterPath(object.getId(), "USA").toString(), 20));
 		});
 
 
