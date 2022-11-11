@@ -325,12 +325,6 @@ public class BoardPainter implements ImageObserver {
 		xPos = margin;
 		yPos += (metrics.getHeight() * 3);
 
-	/*	Iterator<String> iterator = gui.getQuest().notesIterator();
-		while (iterator.hasNext()) {
-			String note = iterator.next();
-			g2d.drawString(note, margin, yPos);
-			yPos += (metrics.getHeight() * 1.5);
-		}*/
 		for (String note : gui.getXmlQuest().getNotesForUI()) {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
@@ -487,12 +481,6 @@ public class BoardPainter implements ImageObserver {
 				xPos = margin;
 				yPos += (metrics.getHeight() * 3);
 
-				/*Iterator<String> notesIterator = gui.getQuest().notesIterator();
-				while (iterator.hasNext()) {
-					String note = notesIterator.next();
-					g2d.drawString(note, margin, yPos);
-					yPos += (metrics.getHeight() * 1.5);
-				}*/
 				for (String note : gui.getXmlQuest().getNotesForUI()) {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);

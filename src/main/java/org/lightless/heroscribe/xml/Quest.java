@@ -51,13 +51,16 @@ public class Quest {
 	public Quest(int width, int height, int boardWidth, int boardHeight) {
 		setWidth(width);
 		setHeight(height);
+		for (int i = 0; i < width * height; i++) {
+			boards.add(new Board());
+		}
 		updateDimensions(boardWidth, boardHeight);
 	}
 
 	public void updateDimensions(int boardWidth, int boardHeight) {
 		horizontalBridges = new boolean[width - 1][height][boardHeight];
 		verticalBridges = new boolean[width][height - 1][boardWidth];
-		boards.add(new Board());
+//		boards.add(new Board());
 		for (Board b : boards) {
 			b.setWidth(boardWidth);
 			b.setHeight(boardHeight);
@@ -173,6 +176,7 @@ public class Quest {
 		return this.modified;
 	}
 
+	@JsonIgnore
 	public Quest.Board getBoard(int column, int row) {
 		int rowIndex = 0;
 		for (int i = 0; i < boards.size(); i++) {
@@ -210,6 +214,9 @@ public class Quest {
 		}
 	}
 
+	public boolean hasWanderingMonster(){
+		return findWanderingMonsterNote().isPresent();
+	}
 	private Optional<String> findWanderingMonsterNote() {
 		return notes.stream()
 				.filter(n -> n.startsWith(WANDERING_MONSTER_NOTE_MESSAGE))

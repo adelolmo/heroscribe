@@ -200,14 +200,12 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		// noop
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		// noop
 	}
 
 	@Override

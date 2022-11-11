@@ -105,12 +105,18 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 			}
 
 			final ObjectList.Object selectedItem = (ObjectList.Object) wandering.getSelectedItem();
+			if (!quest.hasWanderingMonster()) {
+				quest.setWandering(selectedItem.getName(), selectedItem.getId());
+				quest.setModified(true);
+			}
 			if (!selectedItem.getId().equals(quest.getWanderingId())) {
 				quest.setWandering(selectedItem.getName(), selectedItem.getId());
+				quest.setModified(true);
 			}
 
 			if (!speech.getText().equals(quest.getSpeech())) {
 				quest.setSpeech(speech.getText());
+				quest.setModified(true);
 			}
 		}
 	}
@@ -119,6 +125,9 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 		name.setText(quest.getName());
 		speech.setText(quest.getSpeech());
 
+		if (!quest.hasWanderingMonster()) {
+			return;
+		}
 		for (int i = 0; i < wandering.getItemCount(); i++) {
 			if (wandering.getItemAt(i).getId().contentEquals(quest.getWanderingId())) {
 				wandering.setSelectedItem(wandering.getItemAt(i));
