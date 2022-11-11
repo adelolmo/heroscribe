@@ -28,7 +28,7 @@ public class QuestParserTest {
 		final Quest quest = parser.parse(
 				getResourceAsFile("HQBase-01-TheTrial_US.xml"), 26, 19);
 
-		assertThat(quest.getBoard())
+		assertThat(quest.getBoards())
 				.hasSize(2);
 	}
 

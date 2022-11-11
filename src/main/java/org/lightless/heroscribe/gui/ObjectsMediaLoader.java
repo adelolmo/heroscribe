@@ -45,7 +45,7 @@ public class ObjectsMediaLoader {
 //		objects.getBoard().getIcon("USA").image = usa;
 		objectList.getBoard().getIcon("USA").setImage(usa);
 
-		objectList.getObject().forEach(object -> {
+		objectList.getObjects().forEach(object -> {
 			/* Icons */
 			final Image eu = imageLoader.addImage(objectList.getRasterPath(object.getId(), "Europe").toString(), 20);
 			objectList.getObject(object.getId()).getIcon("Europe").setImage(eu);

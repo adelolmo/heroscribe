@@ -198,7 +198,7 @@ public class Board extends JPanel implements MouseInputListener {
 //		Iterator<QObject> iterator =
 //				gui.getXmlQuest().getBoard(lastColumn, lastRow).iterator();
 //		while (iterator.hasNext()) {
-		for (Quest.Board.Object qobj : gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject()) {
+		for (Quest.Board.Object qobj : gui.getXmlQuest().getBoard(lastColumn, lastRow).getObjects()) {
 
 //					QObject qobj = iterator.next();
 			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());

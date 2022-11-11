@@ -93,7 +93,7 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 				}
 			}
 		}*/
-		gui.getObjectList().getObject().stream()
+		gui.getObjectList().getObjects().stream()
 				.filter(object -> "monster".equals(object.getKind()))
 				.forEach(wandering::addItem);
 		// HSE - set the default selected monster to Orc

@@ -162,7 +162,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		this.xmlQuest = xmlQuest;
 		noteData.clear();
 
-		xmlQuest.getNote().forEach(note -> noteData.addElement(note));
+		xmlQuest.getNotes().forEach(note -> noteData.addElement(note));
 
 	}
 
@@ -220,7 +220,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 				noteData.addElement(text);
 //				quest.addNote(text);
 //				quest.setModified(true);
-				xmlQuest.getNote().add(text);
+				xmlQuest.getNotes().add(text);
 				xmlQuest.setModified(true);
 			});
 		} else if (editNote == e.getSource()) {
@@ -231,7 +231,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
 //				quest.setNote(text, note.getLeadSelectionIndex());
 //				quest.setModified(true);
-				xmlQuest.getNote().set(note.getLeadSelectionIndex(), text);
+				xmlQuest.getNotes().set(note.getLeadSelectionIndex(), text);
 				xmlQuest.setModified(true);
 			});
 		} else if (delNote == e.getSource()) {
@@ -241,7 +241,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 						JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
 //					quest.removeNote(note.getSelectedValue());
-					xmlQuest.getNote().remove(note.getSelectedValue());
+					xmlQuest.getNotes().remove(note.getSelectedValue());
 					noteData.removeElement(note.getSelectedValue());
 
 //					quest.setModified(true);

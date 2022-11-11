@@ -96,7 +96,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 
 		final List<Quest.Board.Object> objectList = gui.getXmlQuest()
 				.getBoard(column, row)
-				.getObject();
+				.getObjects();
 		for (Quest.Board.Object qobj : objectList) {
 			ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
 
@@ -165,7 +165,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 		JButton button = (JButton) e.getSource();
 
 		if (obj != null) {
-			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject().remove(obj);
+			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObjects().remove(obj);
 			selected.remove(obj);
 		}
 
@@ -180,7 +180,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 		}
 
 		if (obj != null) {
-			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObject().add(obj);
+			gui.getXmlQuest().getBoard(lastColumn, lastRow).getObjects().add(obj);
 			selected.add(obj);
 		}
 

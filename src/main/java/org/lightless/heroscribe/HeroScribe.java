@@ -19,6 +19,7 @@ package org.lightless.heroscribe;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.*;
+import com.fasterxml.jackson.dataformat.xml.ser.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.iconpack.*;
@@ -59,6 +60,7 @@ public class HeroScribe {
 //		final List objects = read.getObjects();
 
 		final ObjectMapper xmlMapper = new XmlMapper()
+				.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
 				.enable(SerializationFeature.INDENT_OUTPUT);
 		final ObjectsParser objectsParser = new ObjectsParser(xmlMapper, basePath);
 		final QuestParser questParser = new QuestParser(xmlMapper);

@@ -76,7 +76,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 	public void refresh() {
 		final ObjectList objectList = gui.getObjectList();
-		objectList.getKind().forEach(
+		objectList.getKinds().forEach(
 				kind -> {
 					JList<ObjectList.Object> list = new JList<>(new DefaultListModel<>());
 
@@ -108,7 +108,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 			list.addListSelectionListener(this);
 		}*/
 
-		objectList.getObject().forEach(object -> {
+		objectList.getObjects().forEach(object -> {
 //			LObject obj = objIterator.next();
 
 			JList<ObjectList.Object> list = kindList.get(object.getKind());

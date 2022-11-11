@@ -178,7 +178,7 @@ public class BoardPainter implements ImageObserver {
 
 					drawIcon(obj, i, j, g2d);
 				}*/
-				for (Quest.Board.Object obj : board.getObject()) {
+				for (Quest.Board.Object obj : board.getObjects()) {
 					drawIcon(obj, i, j, g2d);
 				}
 			}
@@ -251,7 +251,7 @@ public class BoardPainter implements ImageObserver {
 					drawIcon(obj, i, j, g2d);
 				}*/
 
-				for (Quest.Board.Object obj : board.getObject()) {
+				for (Quest.Board.Object obj : board.getObjects()) {
 					drawIcon(obj, i, j, g2d);
 				}
 			}
@@ -331,7 +331,7 @@ public class BoardPainter implements ImageObserver {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
 		}*/
-		for (String note : gui.getXmlQuest().getNote()) {
+		for (String note : gui.getXmlQuest().getNotes()) {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
 		}
@@ -415,7 +415,7 @@ public class BoardPainter implements ImageObserver {
 					drawIcon(obj, 0, 0, g2d);
 				}*/
 
-				for (Quest.Board.Object object : board.getObject()) {
+				for (Quest.Board.Object object : board.getObjects()) {
 					drawIcon(object, 0, 0, g2d);
 				}
 
@@ -491,7 +491,7 @@ public class BoardPainter implements ImageObserver {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
 				}*/
-				for (String note : gui.getXmlQuest().getNote()) {
+				for (String note : gui.getXmlQuest().getNotes()) {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
 				}

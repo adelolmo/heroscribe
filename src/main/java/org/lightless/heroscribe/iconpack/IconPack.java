@@ -48,13 +48,13 @@ public class IconPack {
 		final ObjectList bundleObjectList =
 				objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
 
-		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKind().stream()
+		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKinds().stream()
 				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId())
 				).collect(Collectors.toList());
 
 		bundleKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
-		bundleObjectList.getObject()
+		bundleObjectList.getObjects()
 				.stream()
 				.filter(object1 -> !systemObjectList.getKindIds().contains(object1.getKind()))
 				.forEach(object -> {
@@ -66,10 +66,10 @@ public class IconPack {
 					loadObjectIcons(object, "USA", tempBundleDirectory);
 
 					// update system objects
-					systemObjectList.getObject().add(object);
+					systemObjectList.getObjects().add(object);
 				});
 
-		systemObjectList.getKind().addAll(bundleKinds);
+		systemObjectList.getKinds().addAll(bundleKinds);
 
 		imageLoader.flush();
 

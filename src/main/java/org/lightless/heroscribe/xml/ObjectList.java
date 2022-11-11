@@ -1,5 +1,6 @@
 package org.lightless.heroscribe.xml;
 
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.dataformat.xml.annotation.*;
 import org.lightless.heroscribe.iconpack.*;
 
@@ -26,17 +27,21 @@ public class ObjectList {
 	@JacksonXmlProperty(isAttribute = true)
 	private String sampleSuffix;
 
+	@JsonProperty("kind")
 	@JacksonXmlElementWrapper(useWrapping = false)
-	private List<Kind> kind;
+	private List<Kind> kinds;
 
 	@JacksonXmlElementWrapper(useWrapping = false)
 	private Board board;
+	@JsonProperty("object")
 	@JacksonXmlElementWrapper(useWrapping = false)
-	private List<Object> object;
+	private List<Object> objects;
+
+	@JsonIgnore
 	private Path basePath;
 
 	public List<String> getKindIds() {
-		return kind.stream()
+		return kinds.stream()
 				.map(Kind::getId)
 				.collect(Collectors.toList());
 	}
@@ -97,12 +102,12 @@ public class ObjectList {
 		this.sampleSuffix = sampleSuffix;
 	}
 
-	public List<Kind> getKind() {
-		return kind;
+	public List<Kind> getKinds() {
+		return kinds;
 	}
 
-	public void setKind(List<Kind> kind) {
-		this.kind = kind;
+	public void setKinds(List<Kind> kinds) {
+		this.kinds = kinds;
 	}
 
 	public Board getBoard() {
@@ -113,12 +118,12 @@ public class ObjectList {
 		this.board = board;
 	}
 
-	public List<Object> getObject() {
-		return object;
+	public List<Object> getObjects() {
+		return objects;
 	}
 
-	public void setObject(List<Object> object) {
-		this.object = object;
+	public void setObjects(List<Object> objects) {
+		this.objects = objects;
 	}
 
 	public ObjectList.Object getObject(String id) {
@@ -131,17 +136,18 @@ public class ObjectList {
 	}
 
 	private Optional<Object> getOptionalObject(String id) {
-		return object.stream()
+		return objects.stream()
 				.filter(object1 -> object1.getId().equals(id))
 				.findFirst();
 	}
 
 	public Object getObjectByName(String name) {
-		return object.stream()
+		return objects.stream()
 				.filter(object1 -> object1.getName().equals(name))
 				.findFirst()
 				.orElseThrow(IllegalStateException::new);
 	}
+
 	public Path getRasterPath(String id, String region) {
 		return Path.of(
 				basePath.toString(),
@@ -149,6 +155,7 @@ public class ObjectList {
 				getObject(id).getIcon(region).path +
 						rasterSuffix);
 	}
+
 	public Path getRasterPath(String region) {
 		return Path.of(
 				basePath.toString(),
@@ -190,7 +197,7 @@ public class ObjectList {
 	}
 
 	public static class Board {
-		private boolean[][] corridors;
+//		private boolean[][] corridors;
 		@JacksonXmlProperty(isAttribute = true)
 		private int width;
 		@JacksonXmlProperty(isAttribute = true)
@@ -200,11 +207,13 @@ public class ObjectList {
 		@JacksonXmlProperty(isAttribute = true)
 		private float adjacentBoardsOffset;
 
+		@JsonProperty("icon")
 		@JacksonXmlElementWrapper(useWrapping = false)
-		private List<Icon> icon;
+		private List<Icon> icons;
 
+		@JsonProperty("corridor")
 		@JacksonXmlElementWrapper(useWrapping = false)
-		private List<Corridor> corridor;
+		private List<Corridor> corridors;
 
 		public int getWidth() {
 			return width;
@@ -238,24 +247,17 @@ public class ObjectList {
 			this.adjacentBoardsOffset = adjacentBoardsOffset;
 		}
 
-		public List<Icon> getIcon() {
-			return icon;
+		public List<Icon> getIcons() {
+			return icons;
 		}
 
-		public void setIcon(List<Icon> icon) {
-			this.icon = icon;
+		public void setIcons(List<Icon> icons) {
+			this.icons = icons;
 		}
 
-		public List<Corridor> getCorridor() {
-			return corridor;
-		}
-
-		public void setCorridor(List<Corridor> corridor) {
-			this.corridor = corridor;
-		}
 
 		public Icon getIcon(String region) {
-			return icon.stream()
+			return icons.stream()
 					.filter(icon1 -> {
 						return icon1.getRegion().equals(region);
 					})
