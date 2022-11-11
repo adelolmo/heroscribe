@@ -77,7 +77,7 @@ public class HeroScribe {
 		final IconPack iconPack = new IconPack(imageLoader,
 				objectList,
 				objectsParser);
-		loadInstalledIconPacks(iconPack);
+		iconPack.loadImportedIconPacks();
 
 		loader.invisible();
 
@@ -102,17 +102,6 @@ public class HeroScribe {
 			return Paths.get("");
 		}
 		return Paths.get(Objects.toString(args[0], ""));
-	}
-
-	private static void loadInstalledIconPacks(IconPack iconPack) throws IOException {
-		final String[] iconPackFilenames = Constants.getBundleDirectory()
-				.list((dir, name) -> name.endsWith(".zip"));
-		if (iconPackFilenames == null) {
-			return;
-		}
-		for (String iconPackFilename : iconPackFilenames) {
-			iconPack.importBundle(new File(Constants.getBundleDirectory(), iconPackFilename));
-		}
 	}
 
 }

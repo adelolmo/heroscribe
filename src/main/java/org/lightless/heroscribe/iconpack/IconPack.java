@@ -2,6 +2,7 @@ package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.compress.archivers.*;
 import org.apache.commons.io.*;
+import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
@@ -28,24 +29,37 @@ public class IconPack {
 		this.objectsParser = objectsParser;
 	}
 
-	public void importBundle(final File bundle) throws IOException {
-		log.info("Importing icon pack {}...", bundle.getName());
-		final Path tempBundleDirectory = Files.createTempDirectory("hse");
-		extract(bundle, tempBundleDirectory);
+	public void loadImportedIconPacks() throws IOException {
+		final String[] iconPackFilenames = Constants.getBundleDirectory()
+				.list((dir, name) -> name.endsWith(".zip"));
+		if (iconPackFilenames == null) {
+			return;
+		}
+		for (String iconPackFilename : iconPackFilenames) {
+			importIconPack(new File(Constants.getBundleDirectory(), iconPackFilename));
+		}
+	}
 
-		final ObjectList bundleObjectList = objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
+	public void importIconPack(final File iconPackFile) throws IOException {
+		log.info("Importing icon pack {}...", iconPackFile.getName());
+		final Path tempBundleDirectory = Files.createTempDirectory("hse");
+		extract(iconPackFile, tempBundleDirectory);
+
+		final ObjectList bundleObjectList =
+				objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
 
 		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKind().stream()
 				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId())
 				).collect(Collectors.toList());
 
-		bundleKinds.forEach(kind -> log.info("Importing kind {}...", kind.getId()));
+		bundleKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
 		bundleObjectList.getObject()
 				.stream()
 				.filter(object1 -> !systemObjectList.getKindIds().contains(object1.getKind()))
 				.forEach(object -> {
-					log.info("Importing object {}...", object.getId());
+					log.info("<{}> <{}> Importing object '{}'...",
+							iconPackFile.getName(), object.getKind(), object.getId());
 
 					// add icons
 					loadObjectIcons(object, "Europe", tempBundleDirectory);

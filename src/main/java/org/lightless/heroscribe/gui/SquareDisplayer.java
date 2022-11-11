@@ -18,8 +18,6 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.quest.*;
-import org.lightless.heroscribe.xml.Quest;
 import org.lightless.heroscribe.xml.*;
 
 import javax.swing.*;
@@ -38,7 +36,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 	private final JTextField zorder;
 	private final JButton set, remove, rotate;
 
-	private final TreeSet<org.lightless.heroscribe.xml.Quest.Board.Object> selected;
+	private final TreeSet<Quest.Board.Object> selected;
 
 	private final JList<Quest.Board.Object> list;
 
@@ -141,12 +139,12 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 
 	@SuppressWarnings("unchecked")
 	public void valueChanged(ListSelectionEvent e) {
-		JList<QObject> list = (JList<QObject>) e.getSource();
+		JList<Quest.Board.Object> list = (JList<Quest.Board.Object>) e.getSource();
 
-		QObject obj = list.getSelectedValue();
+		Quest.Board.Object obj = list.getSelectedValue();
 
 		if (obj != null) {
-			zorder.setText(Float.toString(obj.zorder));
+			zorder.setText(Float.toString(obj.getZorder()));
 
 			zorder.setEnabled(true);
 			set.setEnabled(true);

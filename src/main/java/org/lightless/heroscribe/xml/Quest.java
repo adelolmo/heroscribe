@@ -393,7 +393,7 @@ public class Quest {
 			}
 		}
 
-		public static class Object {
+		public static class Object implements Comparable<Object> {
 
 			@JacksonXmlProperty(isAttribute = true)
 			private String id;
@@ -409,6 +409,19 @@ public class Quest {
 
 			@JacksonXmlProperty(isAttribute = true)
 			private float zorder;
+
+			@JsonIgnore
+			private int order;
+			@JsonIgnore
+			private static int count = 0;
+
+			public Object() {
+				order = getOrder();
+			}
+
+			synchronized private static int getOrder() {
+				return ++count;
+			}
 
 			public String getId() {
 				return id;
@@ -449,9 +462,26 @@ public class Quest {
 			public void setZorder(float zorder) {
 				this.zorder = zorder;
 			}
+
+			@Override
+			public int compareTo(Object o) {
+				if (this.zorder < o.zorder)
+					return -1;
+				else if (this.zorder > o.zorder)
+					return 1;
+				else if (this.order < o.order)
+					return -1;
+				else if (this.order > o.order)
+					return 1;
+
+				return 0;
+			}
+
+			@Override
+			public String toString() {
+				return id;
+			}
 		}
 	}
 
-	private class Note {
-	}
 }

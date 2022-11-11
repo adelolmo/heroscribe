@@ -506,7 +506,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 						xmlQuest.setFile(file);
 					}
 
-					questParser.saveToDisk(xmlQuest, file);
+					questParser.saveToDisk(xmlQuest, xmlQuest.getFile());
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -655,7 +655,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
 							importedBundle.toPath());
-					iconPack.importBundle(importedBundle);
+					iconPack.importIconPack(importedBundle);
 					tools.refreshData();
 
 				} catch (FileAlreadyExistsException ex) {
@@ -668,7 +668,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							Files.copy(chooser.getSelectedFile().toPath(),
 									importedBundle.toPath(),
 									StandardCopyOption.REPLACE_EXISTING);
-							iconPack.importBundle(importedBundle);
+							iconPack.importIconPack(importedBundle);
 							tools.refreshData();
 
 						} catch (IOException exc) {
