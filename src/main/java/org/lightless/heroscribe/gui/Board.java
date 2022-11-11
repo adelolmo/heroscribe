@@ -128,16 +128,16 @@ public class Board extends JPanel implements MouseInputListener {
 				/ 2.0f;
 		if (x < 0.0f)
 			x = 0.0f;
-		else if (x > width * gui.getXmlQuest().getWidth())
-			x = width * gui.getXmlQuest().getWidth() - 1;
+		else if (x > width * gui.getQuest().getWidth())
+			x = width * gui.getQuest().getWidth() - 1;
 
 		y = e.getY() + (gui.getObjectList().getBoard().getAdjacentBoardsOffset()
 				* gui.boardPainter.boxEdge)
 				/ 2.0f;
 		if (y < 0.0f)
 			y = 0.0f;
-		else if (y > height * gui.getXmlQuest().getHeight())
-			y = height * gui.getXmlQuest().getHeight() - 1;
+		else if (y > height * gui.getQuest().getHeight())
+			y = height * gui.getQuest().getHeight() - 1;
 
 		row = (int) (y / height);
 		column = (int) (x / width);
@@ -165,10 +165,10 @@ public class Board extends JPanel implements MouseInputListener {
 			lastTop = top;
 			lastLeft = left;
 
-			if (isPaintingDark && gui.getXmlQuest()
+			if (isPaintingDark && gui.getQuest()
 					.getBoard(lastColumn, lastRow)
 					.isDark(lastLeft, lastTop) != isDark)
-				gui.getXmlQuest()
+				gui.getQuest()
 						.getBoard(lastColumn, lastRow)
 						.toggleDark(lastLeft, lastTop);
 
@@ -189,7 +189,7 @@ public class Board extends JPanel implements MouseInputListener {
 
 		int width, height;
 
-		if (gui.getXmlQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop)) {
+		if (gui.getQuest().getBoard(lastColumn, lastRow).isDark(lastLeft, lastTop)) {
 			sb.insert(0, "Dark");
 
 			first = false;
@@ -198,7 +198,7 @@ public class Board extends JPanel implements MouseInputListener {
 //		Iterator<QObject> iterator =
 //				gui.getXmlQuest().getBoard(lastColumn, lastRow).iterator();
 //		while (iterator.hasNext()) {
-		for (Quest.Board.Object qobj : gui.getXmlQuest().getBoard(lastColumn, lastRow).getObjects()) {
+		for (Quest.Board.Object qobj : gui.getQuest().getBoard(lastColumn, lastRow).getObjects()) {
 
 //					QObject qobj = iterator.next();
 			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
@@ -255,7 +255,7 @@ public class Board extends JPanel implements MouseInputListener {
 				Quest.Board.Object obj = getNewObject(false);
 
 				if (isWellPositioned(obj))
-					if (gui.getXmlQuest().getBoard(lastColumn, lastRow).addObject(obj))
+					if (gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj))
 						hasAdded = true;
 			}
 		} else if ("select".equals(gui.tools.getCommand())) {
@@ -263,7 +263,7 @@ public class Board extends JPanel implements MouseInputListener {
 
 		} else if ("darken".equals(gui.tools.getCommand())) {
 //			QBoard board = gui.getQuest().getBoard(lastColumn, lastRow);
-			final Quest.Board board = gui.getXmlQuest().getBoard(lastColumn, lastRow);
+			final Quest.Board board = gui.getQuest().getBoard(lastColumn, lastRow);
 
 			if (1 <= lastLeft && lastLeft <= board.getWidth()
 					&& 1 <= lastTop && lastTop <= board.getHeight()) {
@@ -277,10 +277,10 @@ public class Board extends JPanel implements MouseInputListener {
 					isDark = true;
 				}
 
-				if (gui.getXmlQuest().getBoard(lastColumn, lastRow)
+				if (gui.getQuest().getBoard(lastColumn, lastRow)
 						.isDark(lastLeft, lastTop)
 						!= isDark)
-					gui.getXmlQuest().getBoard(lastColumn, lastRow)
+					gui.getQuest().getBoard(lastColumn, lastRow)
 							.toggleDark(lastLeft, lastTop);
 
 				isPaintingDark = true;
@@ -307,9 +307,9 @@ public class Board extends JPanel implements MouseInputListener {
 				}
 
 				if (lastLeft < 1 || lastLeft > board.getWidth()) {
-					gui.getXmlQuest().setHorizontalBridge(value, column, row, lastTop);
+					gui.getQuest().setHorizontalBridge(value, column, row, lastTop);
 				} else {
-					gui.getXmlQuest().setVerticalBridge(value, column, row, lastLeft);
+					gui.getQuest().setVerticalBridge(value, column, row, lastLeft);
 				}
 			}
 		}

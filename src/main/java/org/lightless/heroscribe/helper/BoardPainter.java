@@ -59,8 +59,8 @@ public class BoardPainter implements ImageObserver {
 
 		adjacentBoardsOffset = Math.round(boxEdge * gui.getObjectList().getBoard().getAdjacentBoardsOffset());
 
-		framePixelSize = new Dimension(boardPixelSize.width * gui.getXmlQuest().getWidth() + adjacentBoardsOffset * (gui.getXmlQuest().getWidth() - 1),
-				boardPixelSize.height * gui.getXmlQuest().getHeight() + adjacentBoardsOffset * (gui.getXmlQuest().getHeight() - 1));
+		framePixelSize = new Dimension(boardPixelSize.width * gui.getQuest().getWidth() + adjacentBoardsOffset * (gui.getQuest().getWidth() - 1),
+				boardPixelSize.height * gui.getQuest().getHeight() + adjacentBoardsOffset * (gui.getQuest().getHeight() - 1));
 	}
 
 	private void drawBridge(int column, int row, boolean horizontal, int position, Graphics2D g2d) {
@@ -68,14 +68,14 @@ public class BoardPainter implements ImageObserver {
 		int width, height;
 
 		if (horizontal) {
-			x = getIntX(column, gui.getXmlQuest().getBoard(column, row).getWidth() + 1);
+			x = getIntX(column, gui.getQuest().getBoard(column, row).getWidth() + 1);
 			y = getIntY(row, position);
 
 			width = getIntX(column + 1, 1) - x + 1;
 			height = getIntY(row, position + 1) - y + 1;
 		} else {
 			x = getIntX(column, position);
-			y = getIntY(row, gui.getXmlQuest().getBoard(column, row).getHeight() + 1);
+			y = getIntY(row, gui.getQuest().getBoard(column, row).getHeight() + 1);
 
 			width = getIntX(column, position + 1) - x + 1;
 			height = getIntY(row + 1, 1) - y + 1;
@@ -121,9 +121,9 @@ public class BoardPainter implements ImageObserver {
 
 		g2d.fillRect(0, 0, framePixelSize.width, framePixelSize.height);
 
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Corridors */
 				if (getRegion().equals("Europe"))
@@ -152,24 +152,24 @@ public class BoardPainter implements ImageObserver {
 			}
 
 		/* Bridges */
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
-				if (i < gui.getXmlQuest().getWidth() - 1)
+				if (i < gui.getQuest().getWidth() - 1)
 					for (int top = 1; top <= board.getHeight(); top++)
-						if (gui.getXmlQuest().getHorizontalBridge(i, j, top))
+						if (gui.getQuest().getHorizontalBridge(i, j, top))
 							drawBridge(i, j, true, top, g2d);
 
-				if (j < gui.getXmlQuest().getHeight() - 1)
+				if (j < gui.getQuest().getHeight() - 1)
 					for (int left = 1; left <= board.getWidth(); left++)
-						if (gui.getXmlQuest().getVerticalBridge(i, j, left))
+						if (gui.getQuest().getVerticalBridge(i, j, left))
 							drawBridge(i, j, false, left, g2d);
 			}
 
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Objects */
 		/*		Iterator<QObject> iterator = board.iterator();
@@ -193,9 +193,9 @@ public class BoardPainter implements ImageObserver {
 
 		g2d.fillRect(0, 0, framePixelSize.width, framePixelSize.height + 400);
 
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Corridors */
 				if (getRegion().equals("Europe"))
@@ -224,24 +224,24 @@ public class BoardPainter implements ImageObserver {
 			}
 
 		/* Bridges */
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
-				if (i < gui.getXmlQuest().getWidth() - 1)
+				if (i < gui.getQuest().getWidth() - 1)
 					for (int top = 1; top <= board.getHeight(); top++)
-						if (gui.getXmlQuest().getHorizontalBridge(i, j, top))
+						if (gui.getQuest().getHorizontalBridge(i, j, top))
 							drawBridge(i, j, true, top, g2d);
 
-				if (j < gui.getXmlQuest().getHeight() - 1)
+				if (j < gui.getQuest().getHeight() - 1)
 					for (int left = 1; left <= board.getWidth(); left++)
-						if (gui.getXmlQuest().getVerticalBridge(i, j, left))
+						if (gui.getQuest().getVerticalBridge(i, j, left))
 							drawBridge(i, j, false, left, g2d);
 			}
 
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Objects */
 		/*		Iterator<QObject> iterator = board.iterator();
@@ -267,13 +267,13 @@ public class BoardPainter implements ImageObserver {
 
 		margin = 40;
 
-		textWidth = metrics.stringWidth(gui.getXmlQuest().getName());
+		textWidth = metrics.stringWidth(gui.getQuest().getName());
 		xPos = (framePixelSize.width / 2) - (textWidth / 2);
-		yPos = (gui.getXmlQuest().getHeight() * 700) + 20;
+		yPos = (gui.getQuest().getHeight() * 700) + 20;
 
 		g2d.setColor(new Color(127, 0, 21, 255));
 		g2d.setFont(font);
-		g2d.drawString(gui.getXmlQuest().getName(), xPos, yPos);
+		g2d.drawString(gui.getQuest().getName(), xPos, yPos);
 
 		// HSE - write quest speech
 		g2d.setColor(new Color(0, 0, 0, 255));
@@ -284,7 +284,7 @@ public class BoardPainter implements ImageObserver {
 		yPos += (metrics.getHeight() * 2);
 
 		// HSE - break out speech by line
-		String[] linefeeds = gui.getXmlQuest().getSpeech().split("\n");
+		String[] linefeeds = gui.getQuest().getSpeech().split("\n");
 		String[] words;
 		StringBuilder output = new StringBuilder();
 
@@ -325,14 +325,14 @@ public class BoardPainter implements ImageObserver {
 		xPos = margin;
 		yPos += (metrics.getHeight() * 3);
 
-		for (String note : gui.getXmlQuest().getNotesForUI()) {
+		for (String note : gui.getQuest().getNotesForUI()) {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
 		}
 
 		// HSE - write wandering monster
 		metrics = g2d.getFontMetrics(font);
-		final String wanderingMonsterId = gui.getXmlQuest().getWanderingId();
+		final String wanderingMonsterId = gui.getQuest().getWanderingId();
 		final String wanderingMonsterName = gui.getObjectList().getObject(wanderingMonsterId).getName();
 		textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + wanderingMonsterName);
 
@@ -349,15 +349,15 @@ public class BoardPainter implements ImageObserver {
 	public void paintPDF(QObject floating, int column, int row, PdfWriter writer, Document document) {
 
 		PdfContentByte cb = writer.getDirectContent();
-		PdfTemplate[][] tp = new PdfTemplate[gui.getXmlQuest().getWidth()][gui.getXmlQuest().getHeight()];
+		PdfTemplate[][] tp = new PdfTemplate[gui.getQuest().getWidth()][gui.getQuest().getHeight()];
 		Graphics2D g2d;
 
 		// reset the frame size so we can print one page per board
 		Dimension tmpFrame = framePixelSize;
 		this.framePixelSize = new Dimension(boardPixelSize.width + adjacentBoardsOffset, boardPixelSize.height + adjacentBoardsOffset);
 
-		for (int i = 0; i < gui.getXmlQuest().getWidth(); i++)
-			for (int j = 0; j < gui.getXmlQuest().getHeight(); j++) {
+		for (int i = 0; i < gui.getQuest().getWidth(); i++)
+			for (int j = 0; j < gui.getQuest().getHeight(); j++) {
 
 				tp[i][j] = cb.createTemplate(this.framePixelSize.width, this.framePixelSize.height + 400);
 				g2d = tp[i][j].createGraphics(this.framePixelSize.width, this.framePixelSize.height + 400, new DefaultFontMapper());
@@ -365,7 +365,7 @@ public class BoardPainter implements ImageObserver {
 				g2d.setColor(Color.WHITE);
 				g2d.fillRect(0, 0, framePixelSize.width, framePixelSize.height + 400);
 
-				Quest.Board board = gui.getXmlQuest().getBoard(i, j);
+				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Corridors */
 				if (getRegion().equals("Europe"))
@@ -393,14 +393,14 @@ public class BoardPainter implements ImageObserver {
 				g2d.drawImage(getBoardIcon(), getIntX(0, 0), getIntY(0, 0), this);
 
 				/* Bridges */
-				if (i < gui.getXmlQuest().getWidth() - 1)
+				if (i < gui.getQuest().getWidth() - 1)
 					for (int top = 1; top <= board.getHeight(); top++)
-						if (gui.getXmlQuest().getHorizontalBridge(i, j, top))
+						if (gui.getQuest().getHorizontalBridge(i, j, top))
 							drawBridge(0, 0, true, top, g2d);
 
-				if (j < gui.getXmlQuest().getHeight() - 1)
+				if (j < gui.getQuest().getHeight() - 1)
 					for (int left = 1; left <= board.getWidth(); left++)
-						if (gui.getXmlQuest().getVerticalBridge(i, j, left))
+						if (gui.getQuest().getVerticalBridge(i, j, left))
 							drawBridge(0, 0, false, left, g2d);
 
 				/* Objects */
@@ -423,13 +423,13 @@ public class BoardPainter implements ImageObserver {
 
 				margin = 40;
 
-				textWidth = metrics.stringWidth(gui.getXmlQuest().getName());
+				textWidth = metrics.stringWidth(gui.getQuest().getName());
 				xPos = (framePixelSize.width / 2) - (textWidth / 2);
 				yPos = 720;
 
 				g2d.setColor(new Color(127, 0, 21, 255));
 				g2d.setFont(font);
-				g2d.drawString(gui.getXmlQuest().getName(), xPos, yPos);
+				g2d.drawString(gui.getQuest().getName(), xPos, yPos);
 
 				// HSE - write quest speech
 				g2d.setColor(new Color(0, 0, 0, 255));
@@ -440,7 +440,7 @@ public class BoardPainter implements ImageObserver {
 				yPos += (metrics.getHeight() * 2);
 
 				// HSE - break out speech by line
-				String[] linefeeds = gui.getXmlQuest().getSpeech().split("\n");
+				String[] linefeeds = gui.getQuest().getSpeech().split("\n");
 				String[] words;
 				StringBuilder output = new StringBuilder("");
 
@@ -481,13 +481,13 @@ public class BoardPainter implements ImageObserver {
 				xPos = margin;
 				yPos += (metrics.getHeight() * 3);
 
-				for (String note : gui.getXmlQuest().getNotesForUI()) {
+				for (String note : gui.getQuest().getNotesForUI()) {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
 				}
 
 				// HSE - write map coords if multi map
-				if (gui.getXmlQuest().getHeight() > 1 || gui.getXmlQuest().getWidth() > 1) {
+				if (gui.getQuest().getHeight() > 1 || gui.getQuest().getWidth() > 1) {
 					String note = "Board Location: (" + i + "," + j + ")";
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
@@ -495,12 +495,12 @@ public class BoardPainter implements ImageObserver {
 
 				// HSE - write wandering monster
 				metrics = g2d.getFontMetrics(font);
-				textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + gui.getXmlQuest().getWanderingId());
+				textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + gui.getQuest().getWanderingId());
 
 				xPos = (framePixelSize.width / 2) - (textWidth / 2);
 				yPos = framePixelSize.height + 400 - 40;
-				g2d.drawString("Wandering Monster in this Quest: " + gui.getXmlQuest().getWanderingId(), xPos, yPos);
-				Image icon = getObjectIconByName(gui.getXmlQuest().getWanderingId());
+				g2d.drawString("Wandering Monster in this Quest: " + gui.getQuest().getWanderingId(), xPos, yPos);
+				Image icon = getObjectIconById(gui.getQuest().getWanderingId());
 				if (icon != null) {
 					g2d.drawImage(icon,
 							Math.round(xPos - icon.getWidth(null) - 5),
@@ -625,7 +625,7 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	private String getRegion() {
-		return gui.getXmlQuest().getRegion();
+		return gui.getQuest().getRegion();
 	}
 
 	public boolean isWellPositioned(Quest.Board.Object piece) {

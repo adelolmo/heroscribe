@@ -21,14 +21,17 @@
 
 package org.lightless.heroscribe.export;
 
-import org.lightless.heroscribe.list.*;
-import org.lightless.heroscribe.quest.*;
+import org.lightless.heroscribe.xml.*;
 
 import java.io.*;
 import java.nio.file.*;
 
 public class ExportPDF {
-	public static void write(File ghostscript, File file, Quest quest, List objects, boolean isMultiPage) throws Exception {
+	public static void write(File ghostscript,
+							 File file,
+							 Quest quest,
+							 ObjectList objects,
+							 boolean isMultiPage) throws Exception {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
 
@@ -65,7 +68,6 @@ public class ExportPDF {
 		Files.delete(eps.toPath());
 
 		if (exitValue == 0) {
-			Files.delete(file.toPath());
 			Files.move(pdf.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} else {
 			Files.delete(pdf.toPath());

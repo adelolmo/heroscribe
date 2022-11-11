@@ -164,6 +164,22 @@ public class ObjectList {
 						rasterSuffix);
 	}
 
+	public Path getVectorPath(String id, String region) {
+		return Path.of(
+				basePath.toString(),
+				vectorPrefix,
+				getObject(id).getIcon(region).path +
+						vectorSuffix);
+	}
+
+	public Path getVectorPath(String region) {
+		return Path.of(
+				basePath.toString(),
+				vectorPrefix,
+				getBoard().getIcon(region).path +
+						vectorSuffix);
+	}
+
 	public void setBasePath(Path basePath) {
 		this.basePath = basePath;
 	}
@@ -197,7 +213,7 @@ public class ObjectList {
 	}
 
 	public static class Board {
-//		private boolean[][] corridors;
+		//		private boolean[][] corridors;
 		@JacksonXmlProperty(isAttribute = true)
 		private int width;
 		@JacksonXmlProperty(isAttribute = true)
