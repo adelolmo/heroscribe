@@ -587,8 +587,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			if ((file = askPath("eps")) != null) {
 				try {
 					ExportEPS.writeMultiPage(file,
-							null, // TODO pass xml Quest
-							null // TODO pass xml ObjectList
+							quest,
+							objectList
 					);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
