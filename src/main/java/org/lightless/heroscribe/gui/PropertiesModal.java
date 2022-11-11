@@ -79,25 +79,13 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 		add(panel, BorderLayout.NORTH);
 
 		// HSE - populate the combo box for the wandering monster list
-		final ObjectList.Object defObj = gui.getObjectList().getObject("Orc");
+		final ObjectList.Object defaultWanderingMonster = gui.getObjectList().getObject("Orc");
 
-		/*final Iterator<LObject> iterator = gui.getObjects().objectsIterator();
-		while (iterator.hasNext()) {
-			LObject obj = iterator.next();
-
-			if (obj.kind.contentEquals("monster")) {
-				wandering.addItem(obj);
-				//noteData.addElement(obj);
-				if (obj.name.contentEquals("Orc")) {
-					defObj = obj;
-				}
-			}
-		}*/
 		gui.getObjectList().getObjects().stream()
 				.filter(object -> "monster".equals(object.getKind()))
 				.forEach(wandering::addItem);
 		// HSE - set the default selected monster to Orc
-		wandering.setSelectedItem(defObj);
+		wandering.setSelectedItem(defaultWanderingMonster);
 
 		refreshQuestData(quest);
 	}
@@ -132,7 +120,7 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 		speech.setText(quest.getSpeech());
 
 		for (int i = 0; i < wandering.getItemCount(); i++) {
-			if (wandering.getItemAt(i).toString().contentEquals(quest.getWanderingId())) {
+			if (wandering.getItemAt(i).getId().contentEquals(quest.getWanderingId())) {
 				wandering.setSelectedItem(wandering.getItemAt(i));
 			}
 		}

@@ -158,11 +158,10 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	public void refreshQuestData(org.lightless.heroscribe.xml.Quest xmlQuest) {
 		// HSE - refreshed quest data fields from current quest object
-//		this.quest = openQuest;
 		this.xmlQuest = xmlQuest;
 		noteData.clear();
 
-		xmlQuest.getNotes().forEach(note -> noteData.addElement(note));
+		xmlQuest.getNotesForUI().forEach(note -> noteData.addElement(note));
 
 	}
 
@@ -218,8 +217,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
 			modal.showDialog().ifPresent(text -> {
 				noteData.addElement(text);
-//				quest.addNote(text);
-//				quest.setModified(true);
 				xmlQuest.getNotes().add(text);
 				xmlQuest.setModified(true);
 			});
@@ -229,8 +226,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			modal.setInitialText(note.getSelectedValue());
 			modal.showDialog().ifPresent(text -> {
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
-//				quest.setNote(text, note.getLeadSelectionIndex());
-//				quest.setModified(true);
 				xmlQuest.getNotes().set(note.getLeadSelectionIndex(), text);
 				xmlQuest.setModified(true);
 			});
@@ -240,11 +235,8 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this note?", "Confirm Delete",
 						JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
-//					quest.removeNote(note.getSelectedValue());
 					xmlQuest.getNotes().remove(note.getSelectedValue());
 					noteData.removeElement(note.getSelectedValue());
-
-//					quest.setModified(true);
 					xmlQuest.setModified(true);
 				}
 			}

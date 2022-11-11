@@ -142,10 +142,15 @@ public class Quest {
 		this.speech = speech;
 	}
 
-	public List<String> getNotes() {
+	@JsonIgnore
+	public List<String> getNotesForUI() {
 		return notes.stream()
 				.filter(n -> !n.startsWith(WANDERING_MONSTER_NOTE_MESSAGE))
 				.collect(Collectors.toList());
+	}
+
+	public List<String> getNotes() {
+		return notes;
 	}
 
 	public void setNotes(List<String> notes) {

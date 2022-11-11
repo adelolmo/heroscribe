@@ -331,19 +331,21 @@ public class BoardPainter implements ImageObserver {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
 		}*/
-		for (String note : gui.getXmlQuest().getNotes()) {
+		for (String note : gui.getXmlQuest().getNotesForUI()) {
 			g2d.drawString(note, margin, yPos);
 			yPos += (metrics.getHeight() * 1.5);
 		}
 
 		// HSE - write wandering monster
 		metrics = g2d.getFontMetrics(font);
-		textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + gui.getXmlQuest().getWanderingId());
+		final String wanderingMonsterId = gui.getXmlQuest().getWanderingId();
+		final String wanderingMonsterName = gui.getObjectList().getObject(wanderingMonsterId).getName();
+		textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + wanderingMonsterName);
 
 		xPos = (framePixelSize.width / 2) - (textWidth / 2);
 		yPos = framePixelSize.height + 400 - 40;
-		g2d.drawString("Wandering Monster in this Quest: " + gui.getXmlQuest().getWanderingId(), xPos, yPos);
-		Image icon = getObjectIconByName(gui.getXmlQuest().getWanderingId());
+		g2d.drawString("Wandering Monster in this Quest: " + wanderingMonsterName, xPos, yPos);
+		Image icon = getObjectIconById(wanderingMonsterId);
 		if (icon != null) {
 			g2d.drawImage(icon, Math.round(xPos - icon.getWidth(null) - 5), Math.round(yPos - 3 - (icon.getHeight(null) / 2)), this);
 		}
@@ -491,7 +493,7 @@ public class BoardPainter implements ImageObserver {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
 				}*/
-				for (String note : gui.getXmlQuest().getNotes()) {
+				for (String note : gui.getXmlQuest().getNotesForUI()) {
 					g2d.drawString(note, margin, yPos);
 					yPos += (metrics.getHeight() * 1.5);
 				}
@@ -610,16 +612,16 @@ public class BoardPainter implements ImageObserver {
 			g2d.setTransform(rotated);
 		}
 
-		x -= getObjectIcon(obj.getId()).getWidth(this) / 2.0f;
-		y -= getObjectIcon(obj.getId()).getHeight(this) / 2.0f;
+		x -= getObjectIconById(obj.getId()).getWidth(this) / 2.0f;
+		y -= getObjectIconById(obj.getId()).getHeight(this) / 2.0f;
 
-		g2d.drawImage(getObjectIcon(obj.getId()), Math.round(x), Math.round(y), this);
+		g2d.drawImage(getObjectIconById(obj.getId()), Math.round(x), Math.round(y), this);
 
 		if (piece.getRotation().getNumber() != 0)
 			g2d.setTransform(original);
 	}
 
-	private Image getObjectIcon(String id) {
+	private Image getObjectIconById(String id) {
 //		return gui.getObjects().getObject(id).getIcon(getRegion()).image;
 		return gui.getObjectList().getObject(id).getIcon(getRegion()).getImage();
 	}

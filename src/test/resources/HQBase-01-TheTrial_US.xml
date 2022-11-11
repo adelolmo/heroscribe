@@ -290,5 +290,5 @@
         <object id="SingleBlockedSquare" left="15.0" top="19.0" rotation="leftward" zorder="0.0"/>
         <object id="Orc" left="9.0" top="16.0" rotation="downward" zorder="1.0"/>
     </board>
-    <speech></speech>
+    <speech>The Orc says: "Heroes you shouldn't go through this quest: after all it's only a test :)"</speech>
 </quest>
