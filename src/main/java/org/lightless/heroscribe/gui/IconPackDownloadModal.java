@@ -53,47 +53,44 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 
 		try {
 			iconPackDetails.addAll(websiteParser.parse());
-
-			for (int i = 0; i < 10; i++) {
-				final WebsiteParser.IconPackDetails iconPack = iconPackDetails.get(i);
-				final JCheckBox checkBox = new JCheckBox(iconPack.getName());
-				iconPackCheckBoxes.add(checkBox);
-				checkBox.addItemListener(this);
-				box.add(checkBox);
-			}
-
-//			for (JCheckBox checkBox : iconPackCheckBoxes) {
-//				box.add(checkBox);
-//			}
-
-
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			JOptionPane.showMessageDialog(this,
+					format("Can't read Icon Packs remote content.\nDetailed Error: %s",
+							e.getMessage()),
+					"Error",
+					JOptionPane.ERROR_MESSAGE);
+			log.warn("Cannot parse website for icon pack", e);
 		}
 
-		final int option = JOptionPane.showOptionDialog(null,
+		for (int i = 0; i < 10; i++) {
+			final WebsiteParser.IconPackDetails iconPack = iconPackDetails.get(i);
+			final JCheckBox checkBox = new JCheckBox(iconPack.getName());
+			iconPackCheckBoxes.add(checkBox);
+			checkBox.addItemListener(this);
+			box.add(checkBox);
+		}
+
+		if (JOptionPane.showOptionDialog(null,
 				this,
 				"www.heroscribe.org",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
 				null,
-				null);
-		if (option == JOptionPane.YES_OPTION) {
+				null) == JOptionPane.YES_OPTION) {
 			for (JCheckBox checkBox : iconPackCheckBoxes) {
 				if (!checkBox.isSelected()) {
 					continue;
 				}
 
-				final List<WebsiteParser.IconPackDetails> packDetails = iconPackDetails.stream()
-						.filter(iconPack -> checkBox.getText().equals(iconPack.getName()))
-						.collect(Collectors.toList());
-				for (WebsiteParser.IconPackDetails pack : packDetails) {
-					final File iconPackFile = new File(Constants.getBundleDirectory(), pack.getFilename());
+				for (WebsiteParser.IconPackDetails pack : getSelectedIconPacks(checkBox)) {
+					final File iconPackFile =
+							new File(Constants.getBundleDirectory(), pack.getFilename());
 
 					try {
 						HseFileUtils.downloadToFile(pack.getLink(), iconPackFile);
 						iconPackService.importIconPack(iconPackFile);
+
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(this,
 								format("Can't install Icon Pack %s.\nDetailed Error: %s",
@@ -106,6 +103,12 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 				}
 			}
 		}
+	}
+
+	private List<WebsiteParser.IconPackDetails> getSelectedIconPacks(JCheckBox checkBox) {
+		return iconPackDetails.stream()
+				.filter(iconPack -> checkBox.getText().equals(iconPack.getName()))
+				.collect(Collectors.toList());
 	}
 
 
