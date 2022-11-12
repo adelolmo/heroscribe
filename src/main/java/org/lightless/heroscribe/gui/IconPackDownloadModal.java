@@ -85,7 +85,7 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 
 				for (WebsiteParser.IconPackDetails pack : getSelectedIconPacks(checkBox)) {
 					final File iconPackFile =
-							new File(Constants.getBundleDirectory(), pack.getFilename());
+							new File(Constants.getIconPackDirectory(), pack.getFilename());
 
 					try {
 						HseFileUtils.downloadToFile(pack.getLink(), iconPackFile);

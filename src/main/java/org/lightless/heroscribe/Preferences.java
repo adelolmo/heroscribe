@@ -91,7 +91,7 @@ public class Preferences extends DefaultHandler {
 	/* Write XML */
 
 	public void write() throws IOException {
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(Constants.preferencesFile)));
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(Constants.PREFERENCES_FILE)));
 
 		out.println("<?xml version=\"1.0\"?>");
 		out.println("<preferences>");

@@ -31,6 +31,7 @@ public class ExportPDF {
 							 File file,
 							 Quest quest,
 							 ObjectList objects,
+							 String paperSize,
 							 boolean isMultiPage) throws Exception {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
@@ -47,8 +48,8 @@ public class ExportPDF {
 					"-dNOPAUSE",
 					"-sDEVICE=pdfwrite",
 					"-dFIXEDMEDIA",
-					"-sDEFAULTPAPERSIZE=letter",
-					"-sPAPERSIZE=letter",
+					"-sDEFAULTPAPERSIZE=" + paperSize,
+					"-sPAPERSIZE=" + paperSize,
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
 			}).waitFor();

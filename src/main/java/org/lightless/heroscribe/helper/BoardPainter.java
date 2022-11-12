@@ -24,7 +24,6 @@ package org.lightless.heroscribe.helper;
 import com.itextpdf.awt.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.quest.*;
 import org.lightless.heroscribe.xml.Quest;
@@ -35,6 +34,8 @@ import java.awt.Image;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
+
+import static org.lightless.heroscribe.Constants.*;
 
 public class BoardPainter implements ImageObserver {
 	private final Gui gui;
@@ -85,9 +86,9 @@ public class BoardPainter implements ImageObserver {
 		g2d.fillRect(x, y, width, height);
 
 		if (getRegion().equals("Europe"))
-			g2d.setColor(Constants.europeCorridorColor);
+			g2d.setColor(EUROPE_CORRIDOR_COLOR);
 		else if (getRegion().equals("USA"))
-			g2d.setColor(Constants.usaCorridorColor);
+			g2d.setColor(USA_CORRIDOR_COLOR);
 
 		g2d.fillRect(x + 1, y + 1, width - 2, height - 2);
 	}
@@ -127,9 +128,9 @@ public class BoardPainter implements ImageObserver {
 
 				/* Corridors */
 				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeCorridorColor);
+					g2d.setColor(EUROPE_CORRIDOR_COLOR);
 				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaCorridorColor);
+					g2d.setColor(USA_CORRIDOR_COLOR);
 
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
@@ -138,9 +139,9 @@ public class BoardPainter implements ImageObserver {
 
 				/* Dark Areas */
 				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeDarkColor);
+					g2d.setColor(EUROPE_DARK_COLOR);
 				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaDarkColor);
+					g2d.setColor(USA_DARK_COLOR);
 
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
@@ -199,9 +200,9 @@ public class BoardPainter implements ImageObserver {
 
 				/* Corridors */
 				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeCorridorColor);
+					g2d.setColor(EUROPE_CORRIDOR_COLOR);
 				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaCorridorColor);
+					g2d.setColor(USA_CORRIDOR_COLOR);
 
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
@@ -210,9 +211,9 @@ public class BoardPainter implements ImageObserver {
 
 				/* Dark Areas */
 				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeDarkColor);
+					g2d.setColor(EUROPE_DARK_COLOR);
 				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaDarkColor);
+					g2d.setColor(USA_DARK_COLOR);
 
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
@@ -368,21 +369,26 @@ public class BoardPainter implements ImageObserver {
 				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Corridors */
-				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeCorridorColor);
-				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaCorridorColor);
+				if (getRegion().equals("Europe")) {
+					g2d.setColor(EUROPE_CORRIDOR_COLOR);
+				} else if (getRegion().equals("USA")) {
+					g2d.setColor(USA_CORRIDOR_COLOR);
+				}
 
-				for (int left = 1; left <= board.getWidth(); left++)
-					for (int top = 1; top <= board.getHeight(); top++)
-						if (gui.getObjectList().getBoard().getCorridors()[left][top])
+				for (int left = 1; left <= board.getWidth(); left++) {
+					for (int top = 1; top <= board.getHeight(); top++) {
+						if (gui.getObjectList().getBoard().getCorridors()[left][top]) {
 							drawRectangle(i, j, left, top, 1, 1, g2d);
+						}
+					}
+				}
 
 				/* Dark Areas */
-				if (getRegion().equals("Europe"))
-					g2d.setColor(Constants.europeDarkColor);
-				else if (getRegion().equals("USA"))
-					g2d.setColor(Constants.usaDarkColor);
+				if (getRegion().equals("Europe")) {
+					g2d.setColor(EUROPE_DARK_COLOR);
+				} else if (getRegion().equals("USA")) {
+					g2d.setColor(USA_DARK_COLOR);
+				}
 
 				for (int left = 1; left <= board.getWidth(); left++)
 					for (int top = 1; top <= board.getHeight(); top++)
@@ -404,13 +410,6 @@ public class BoardPainter implements ImageObserver {
 							drawBridge(0, 0, false, left, g2d);
 
 				/* Objects */
-		/*		Iterator<QObject> iterator = board.iterator();
-				while (iterator.hasNext()) {
-					QObject obj = iterator.next();
-
-					drawIcon(obj, 0, 0, g2d);
-				}*/
-
 				for (Quest.Board.Object object : board.getObjects()) {
 					drawIcon(object, 0, 0, g2d);
 				}
@@ -440,12 +439,11 @@ public class BoardPainter implements ImageObserver {
 				yPos += (metrics.getHeight() * 2);
 
 				// HSE - break out speech by line
-				String[] linefeeds = gui.getQuest().getSpeech().split("\n");
 				String[] words;
 				StringBuilder output = new StringBuilder("");
 
 				// HSE - loop for each line
-				for (String linefeed : linefeeds) {
+				for (String linefeed : gui.getQuest().getSpeech().split("\n")) {
 					words = linefeed.split(" ");
 					// HSE - loop for each word in the line
 					for (int j1 = 0; j1 < words.length; j1++) {
@@ -500,7 +498,7 @@ public class BoardPainter implements ImageObserver {
 				xPos = (framePixelSize.width / 2) - (textWidth / 2);
 				yPos = framePixelSize.height + 400 - 40;
 				g2d.drawString("Wandering Monster in this Quest: " + gui.getQuest().getWanderingId(), xPos, yPos);
-				Image icon = getObjectIconById(gui.getQuest().getWanderingId());
+				final Image icon = getObjectIconById(gui.getQuest().getWanderingId());
 				if (icon != null) {
 					g2d.drawImage(icon,
 							Math.round(xPos - icon.getWidth(null) - 5),
@@ -519,35 +517,33 @@ public class BoardPainter implements ImageObserver {
 
 	private void drawIcon(Quest.Board.Object piece, int column, int row, Graphics2D g2d) {
 		AffineTransform original = null;
-		float x, y, xoffset, yoffset;
-		int width, height;
-//		LObject obj = gui.getObjects().getObject(piece.id);
-		final ObjectList.Object obj = gui.getObjectList().getObject(piece.getId());
+		final int width, height;
+		final ObjectList.Object object = gui.getObjectList().getObject(piece.getId());
 
 		if (!isWellPositioned(piece))
 			return;
 
-		if (piece.getRotation().getNumber() % 2 == 0) {
-			width = obj.getWidth();
-			height = obj.getHeight();
+		if (piece.getRotation().isPair()) {
+			width = object.getWidth();
+			height = object.getHeight();
 		} else {
-			width = obj.getHeight();
-			height = obj.getWidth();
+			width = object.getHeight();
+			height = object.getWidth();
 		}
 
-		if (obj.isTrap()) {
+		if (object.isTrap()) {
 			if (getRegion().equals("Europe"))
-				g2d.setColor(Constants.europeTrapColor);
+				g2d.setColor(EUROPE_TRAP_COLOR);
 			else if (getRegion().equals("USA"))
-				g2d.setColor(Constants.usaTrapColor);
+				g2d.setColor(USA_TRAP_COLOR);
 
 			drawRectangle(0, 0, piece.getLeft(), piece.getTop(), width, height, g2d);
 		}
 
-		x = piece.getLeft() + width / 2.0f;
-		y = piece.getTop() + height / 2.0f;
+		float x = piece.getLeft() + width / 2.0f;
+		float y = piece.getTop() + height / 2.0f;
 
-		if (obj.isDoor()) {
+		if (object.isDoor()) {
 			if (piece.getRotation().getNumber() % 2 == 0) {
 				if (piece.getTop() == 0)
 					y -= gui.getObjectList().getBoard().getBorderDoorsOffset();
@@ -561,8 +557,8 @@ public class BoardPainter implements ImageObserver {
 			}
 		}
 
-		xoffset = obj.getIcon(getRegion()).getXoffset();
-		yoffset = obj.getIcon(getRegion()).getYoffset();
+		final float xoffset = object.getIcon(getRegion()).getXoffset();
+		final float yoffset = object.getIcon(getRegion()).getYoffset();
 
 		switch (piece.getRotation()) {
 			case DOWNWARD:
@@ -590,34 +586,26 @@ public class BoardPainter implements ImageObserver {
 		y = getY(row, y);
 
 		if (piece.getRotation().getNumber() != 0) {
-			AffineTransform rotated;
-
 			original = g2d.getTransform();
-			rotated = (AffineTransform) (original.clone());
 
+			final AffineTransform rotated = (AffineTransform) (original.clone());
 			rotated.rotate((-Math.PI / 2) * piece.getRotation().getNumber(), x, y);
 
 			g2d.setTransform(rotated);
 		}
 
-		x -= getObjectIconById(obj.getId()).getWidth(this) / 2.0f;
-		y -= getObjectIconById(obj.getId()).getHeight(this) / 2.0f;
+		x -= getObjectIconById(object.getId()).getWidth(this) / 2.0f;
+		y -= getObjectIconById(object.getId()).getHeight(this) / 2.0f;
 
-		g2d.drawImage(getObjectIconById(obj.getId()), Math.round(x), Math.round(y), this);
+		g2d.drawImage(getObjectIconById(object.getId()), Math.round(x), Math.round(y), this);
 
-		if (piece.getRotation().getNumber() != 0)
+		if (piece.getRotation().getNumber() != 0) {
 			g2d.setTransform(original);
+		}
 	}
 
 	private Image getObjectIconById(String id) {
-//		return gui.getObjects().getObject(id).getIcon(getRegion()).image;
 		return gui.getObjectList().getObject(id).getIcon(getRegion()).getImage();
-	}
-
-	// HSE - get an object by its name
-	private Image getObjectIconByName(String name) {
-//		return gui.getObjects().getObjectByName(name).getIcon(getRegion()).image;
-		return gui.getObjectList().getObjectByName(name).getIcon(getRegion()).getImage();
 	}
 
 	private Image getBoardIcon() {
@@ -629,11 +617,10 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	public boolean isWellPositioned(Quest.Board.Object piece) {
-//		LObject obj = gui.getObjects().getObject(piece.id);
 		final ObjectList.Object obj = gui.getObjectList().getObject(piece.getId());
-		int width, height;
+		final int width, height;
 
-		if (piece.getRotation().getNumber() % 2 == 0) {
+		if (piece.getRotation().isPair()) {
 			width = obj.getWidth();
 			height = obj.getHeight();
 		} else {
@@ -642,12 +629,18 @@ public class BoardPainter implements ImageObserver {
 		}
 
 		if (obj.isDoor()) {
-			if (piece.getLeft() < 0 || piece.getTop() < 0 || piece.getLeft() + width - 1 > boardSize.width + 1 || piece.getTop() + height - 1 > boardSize.height + 1
-					|| (piece.getRotation().getNumber() % 2 == 0 && (piece.getLeft() == 0 || piece.getLeft() == boardSize.width + 1))
-					|| (piece.getRotation().getNumber() % 2 == 1 && (piece.getTop() == 0 || piece.getTop() == boardSize.height + 1)))
+			if (piece.getLeft() < 0
+					|| piece.getTop() < 0
+					|| piece.getLeft() + width - 1 > boardSize.width + 1
+					|| piece.getTop() + height - 1 > boardSize.height + 1
+					|| (piece.getRotation().isPair() && (piece.getLeft() == 0 || piece.getLeft() == boardSize.width + 1))
+					|| (piece.getRotation().isOdd() && (piece.getTop() == 0 || piece.getTop() == boardSize.height + 1)))
 				return false;
 		} else {
-			if (piece.getLeft() < 1 || piece.getTop() < 1 || piece.getLeft() + width - 1 > boardSize.width || piece.getTop() + height - 1 > boardSize.height)
+			if (piece.getLeft() < 1
+					|| piece.getTop() < 1
+					|| piece.getLeft() + width - 1 > boardSize.width
+					|| piece.getTop() + height - 1 > boardSize.height)
 				return false;
 		}
 

@@ -115,7 +115,7 @@ public class Read extends DefaultHandler {
 				quest.setName(attrs.getValue("name"));
 				quest.setRegion(attrs.getValue("region"));
 
-				if (!org.lightless.heroscribe.Constants.questVersion.equals(attrs.getValue("version")))
+				if (!org.lightless.heroscribe.Constants.QUEST_VERSION.equals(attrs.getValue("version")))
 					throw new SAXException("Heroscribe's and quest's version numbers don't match.");
 
 				break;

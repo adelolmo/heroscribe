@@ -137,13 +137,13 @@ public class ObjectList {
 
 	private Optional<Object> getOptionalObject(String id) {
 		return objects.stream()
-				.filter(object1 -> object1.getId().equals(id))
+				.filter(object -> object.getId().equals(id))
 				.findFirst();
 	}
 
 	public Object getObjectByName(String name) {
 		return objects.stream()
-				.filter(object1 -> object1.getName().equals(name))
+				.filter(object -> object.getName().equals(name))
 				.findFirst()
 				.orElseThrow(IllegalStateException::new);
 	}
@@ -213,7 +213,7 @@ public class ObjectList {
 	}
 
 	public static class Board {
-		//		private boolean[][] corridors;
+
 		@JacksonXmlProperty(isAttribute = true)
 		private int width;
 		@JacksonXmlProperty(isAttribute = true)
@@ -271,12 +271,9 @@ public class ObjectList {
 			this.icons = icons;
 		}
 
-
 		public Icon getIcon(String region) {
 			return icons.stream()
-					.filter(icon1 -> {
-						return icon1.getRegion().equals(region);
-					})
+					.filter(icon -> icon.getRegion().equals(region))
 					.findFirst()
 					.orElseThrow(IllegalStateException::new);
 		}
@@ -434,14 +431,11 @@ public class ObjectList {
 		}
 
 		public String getIconPath(String region) {
-			final String iconPath = icon.stream()
-					.filter(icon1 -> {
-						return region.equals(icon1.getRegion());
-					})
+			return icon.stream()
+					.filter(icon1 -> region.equals(icon1.getRegion()))
 					.findFirst()
 					.orElseThrow(IllegalStateException::new)
 					.getPath();
-			return iconPath;
 		}
 
 		public String toString() {

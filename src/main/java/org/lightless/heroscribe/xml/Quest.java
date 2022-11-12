@@ -14,7 +14,7 @@ public class Quest {
 			"Wandering Monster in this quest: ";
 
 	@JacksonXmlProperty(isAttribute = true)
-	private String name;
+	private String name = "Untitled";
 	@JacksonXmlProperty(isAttribute = true)
 	private String region = "Europe";
 	@JacksonXmlProperty(isAttribute = true)
@@ -27,7 +27,7 @@ public class Quest {
 	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<Board> boards = new ArrayList<>();
 	@JacksonXmlProperty
-	private String speech;
+	private String speech = "";
 
 	@JsonProperty("note")
 	@JacksonXmlElementWrapper(useWrapping = false)
@@ -54,6 +54,7 @@ public class Quest {
 		for (int i = 0; i < width * height; i++) {
 			boards.add(new Board());
 		}
+		setWanderingMonster("Orc");
 		updateDimensions(boardWidth, boardHeight);
 	}
 
@@ -214,9 +215,10 @@ public class Quest {
 		}
 	}
 
-	public boolean hasWanderingMonster(){
+	public boolean hasWanderingMonster() {
 		return findWanderingMonsterNote().isPresent();
 	}
+
 	private Optional<String> findWanderingMonsterNote() {
 		return notes.stream()
 				.filter(n -> n.startsWith(WANDERING_MONSTER_NOTE_MESSAGE))

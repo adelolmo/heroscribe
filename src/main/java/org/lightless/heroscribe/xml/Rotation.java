@@ -35,4 +35,12 @@ public enum Rotation {
 	public int getNumber() {
 		return number;
 	}
+
+	public boolean isPair() {
+		return number % 2 == 0;
+	}
+
+	public boolean isOdd() {
+		return number % 2 == 1;
+	}
 }

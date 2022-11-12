@@ -82,7 +82,7 @@ public class Read extends DefaultHandler {
 		if ("objectList".equals(qName)) {
 			objects.version = attrs.getValue("version");
 
-			if (!objects.version.equals(org.lightless.heroscribe.Constants.objectVersion))
+			if (!objects.version.equals(org.lightless.heroscribe.Constants.OBJECT_VERSION))
 				throw new SAXException("HeroScribe's objectVersion and Objects.xml's version numbers don't match.");
 
 			objects.setVector(attrs.getValue("vectorPrefix"),

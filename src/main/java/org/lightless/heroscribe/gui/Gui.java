@@ -82,6 +82,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 
+		fileChooser.setPreferredSize(new Dimension(900, 700));
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
 		filters.put("pdf", new ActualFileFilter("pdf", "PDF files (*.pdf)"));
 		filters.put("eps", new ActualFileFilter("eps", "EPS files (*.eps)"));
@@ -120,7 +121,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	public void updateTitle() {
 		final StringBuilder sb =
-				new StringBuilder(Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
+				new StringBuilder(Constants.APPLICATION_NAME + " " + Constants.VERSION + Constants.applicationVersionSuffix + " - ");
 		if (quest.getFile() == null) {
 			sb.append("Untitled");
 		} else {
@@ -541,6 +542,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
+							"a4",
 							true);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -573,6 +575,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
+							"a4",
 							false);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -651,7 +654,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				final File bundleFile = chooser.getSelectedFile();
-				final File importedBundle = new File(Constants.getBundleDirectory(), bundleFile.getName());
+				final File importedBundle = new File(Constants.getIconPackDirectory(), bundleFile.getName());
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
 							importedBundle.toPath());
@@ -705,10 +708,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		} else if (aboutKey == source) {
 			JOptionPane.showMessageDialog(this,
-					Constants.applicationName + " " + Constants.VERSION + Constants.applicationVersionSuffix + "\n"
+					Constants.APPLICATION_NAME + " " + Constants.VERSION + Constants.applicationVersionSuffix + "\n"
 							+ "HeroScribe Enhanced modifications (C) 2011 Jason Allen.\n"
 							+ "HeroScribe original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
-							+ Constants.applicationName + " is free software, distributed under the terms of the GNU GPL 2.\n"
+							+ Constants.APPLICATION_NAME + " is free software, distributed under the terms of the GNU GPL 2.\n"
 							+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
 					"About", JOptionPane.PLAIN_MESSAGE);
 		}

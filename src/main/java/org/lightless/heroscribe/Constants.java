@@ -23,43 +23,45 @@ import java.io.*;
 import java.util.*;
 
 public class Constants {
-	public static final String applicationName = "HeroScribe Enhanced";
+	public static final String APPLICATION_NAME = "HeroScribe Enhanced";
 
-	public static final String objectVersion = "1.0";
-	public static final String questVersion = "1.0";
+	public static final String OBJECT_VERSION = "1.0";
+	public static final String QUEST_VERSION = "1.0";
 	public static final String VERSION;
 
 	public static final String applicationVersionSuffix = "";
 
-	public static final Color europeCorridorColor = new Color(255, 255, 255, 255);
-	public static final Color usaCorridorColor = new Color(246, 246, 246, 255);
+	public static final Color EUROPE_CORRIDOR_COLOR = new Color(255, 255, 255, 255);
+	public static final Color USA_CORRIDOR_COLOR = new Color(246, 246, 246, 255);
 
-	public static final Color europeDarkColor = new Color(204, 204, 204, 255);
-	public static final Color usaDarkColor = new Color(178, 178, 178, 255);
+	public static final Color EUROPE_DARK_COLOR = new Color(204, 204, 204, 255);
+	public static final Color USA_DARK_COLOR = new Color(178, 178, 178, 255);
 
-	public static final Color europeTrapColor = new Color(0, 0, 0, 0);
-	public static final Color usaTrapColor = new Color(250, 125, 51, 255);
+	public static final Color EUROPE_TRAP_COLOR = new Color(0, 0, 0, 0);
+	public static final Color USA_TRAP_COLOR = new Color(250, 125, 51, 255);
 
-	public static final File preferencesFile;
+	public static final File PREFERENCES_FILE;
 
 	static {
-		String appVersion = ResourceBundle.getBundle("version", Locale.ENGLISH).getString("app.version");
+		final String appVersion = ResourceBundle
+				.getBundle("version", Locale.ENGLISH)
+				.getString("app.version");
 		VERSION = "v" + ("${project.version}".equals(appVersion) ? "" : appVersion);
 
-		File prefDir = getConfigurationDirectory();
-		preferencesFile = new File(prefDir, "Preferences.xml");
+		final File prefDir = getConfigurationDirectory();
+		PREFERENCES_FILE = new File(prefDir, "Preferences.xml");
 	}
 
 	public static File getConfigurationDirectory() {
-		String home = System.getProperty("user.home");
-		File prefDir = new File(home, ".heroscribe");
+		final String home = System.getProperty("user.home");
+		final File prefDir = new File(home, ".heroscribe");
 		if (!prefDir.exists()) {
 			prefDir.mkdir();
 		}
 		return prefDir;
 	}
 
-	public static File getBundleDirectory(){
+	public static File getIconPackDirectory() {
 		final File bundleDir = new File(getConfigurationDirectory(), "iconPacks");
 		if (!bundleDir.exists()) {
 			bundleDir.mkdir();

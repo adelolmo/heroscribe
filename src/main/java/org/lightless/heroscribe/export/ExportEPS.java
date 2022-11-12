@@ -28,70 +28,24 @@ import java.util.zip.*;
 
 public class ExportEPS {
 
-	private static final int linesPerBlock = 500;
+	private static final int LINES_PER_BLOCK = 500;
 
 	private ExportEPS() {
 	}
 
-	private static int[] appendPS(Path inPath, PrintWriter out, boolean printComments, boolean divideInBlocks) throws Exception {
-
-		final BufferedReader in = new BufferedReader(
-				new InputStreamReader(
-						new GZIPInputStream(
-								new FileInputStream(inPath.toFile()))));
-
-		int[] boundingBox = null;
-
-		String data = in.readLine();
-		int lines = 0;
-
-		while (data != null) {
-			if (printComments || (data.trim().length() > 0 && data.trim().charAt(0) != '%')) {
-				if (divideInBlocks && lines % linesPerBlock == 0) {
-					if (lines != 0)
-						out.write(" } exec ");
-					out.write(" { ");
-				}
-
-				lines++;
-				out.println(data);
-			}
-
-			if (data.trim().startsWith("%%BoundingBox:") && boundingBox == null) {
-				String[] bit = data.split(" ");
-				boundingBox = new int[4];
-
-				for (int i = 0; i < 4; i++) {
-					boundingBox[i] = Integer.parseInt(bit[bit.length - 4 + i]);
-				}
-			}
-
-			data = in.readLine();
-		}
-
-		if (divideInBlocks && lines > 0)
-			out.write(" } exec ");
-
-		in.close();
-
-		return boundingBox;
-
-	}
-
-	public static void write(File file, Quest quest, ObjectList objectList) throws Exception {
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-
-
-		float bBoxWidth, bBoxHeight;
+	public static void write(File file,
+							 Quest quest,
+							 ObjectList objectList) throws Exception {
+		final PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
 		// HSE - set the box height to accommodate quest text
-		bBoxWidth = (quest.getWidth()
+		final float bBoxWidth = (quest.getWidth()
 				* (quest.getBoard(0, 0).getWidth() + 2)
 				+ (quest.getWidth() - 1)
 				* objectList.getBoard().getAdjacentBoardsOffset())
 				* 19.2f; //612.0f
 
-		bBoxHeight = ((quest.getHeight()
+		final float bBoxHeight = ((quest.getHeight()
 				* (quest.getBoard(0, 0).getHeight() + 2)
 				+ (quest.getHeight() - 1)
 				* objectList.getBoard().getAdjacentBoardsOffset())
@@ -114,40 +68,27 @@ public class ExportEPS {
 
 		appendPS(objectList.getVectorPath(quest.getRegion()),
 				out,
-				false,
 				false);
 
 		out.println(quest.getWidth() + " " + quest.getHeight() + " BoundingBox");
 		out.println("2 dict dup dup /showpage {} put /setpagedevice {} put begin");
 
-		TreeSet<String> set = new TreeSet<>();
+		final TreeSet<String> set = new TreeSet<>();
 		for (int i = 0; i < quest.getWidth(); i++)
 			for (int j = 0; j < quest.getHeight(); j++) {
-			/*	Iterator<QObject> boardIterator = quest.getBoard(i, j).iterator();
-
-				while (boardIterator.hasNext()) {
-					var qObject = (QObject) boardIterator.next();
-					set.add(qObject.id);
-				}*/
 				for (Quest.Board.Object object : quest.getBoard(i, j).getObjects()) {
 					set.add(object.getId());
 				}
 			}
 
-		Iterator<String> iterator;
-		iterator = set.iterator();
-		while (iterator.hasNext()) {
-			String id = iterator.next();
-			int[] boundingBox;
-
+		for (String id : set) {
 			out.println("/Icon" + id + " << /FormType 1 /PaintProc { pop");
 
 			/* the postscript is divided in "{ } exec" blocks to broaden
 			 * compatibility
 			 */
-			boundingBox = appendPS(objectList.getVectorPath(id, quest.getRegion()),
+			final int[] boundingBox = appendPS(objectList.getVectorPath(id, quest.getRegion()),
 					out,
-					false,
 					true);
 
 			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox ["
@@ -161,26 +102,32 @@ public class ExportEPS {
 					+ "] >> def");
 		}
 		// HSE - add wandering monster object
-		String id = quest.getWanderingId();
-		int[] boundingBox;
-
-		out.println("/Icon" + id + " << /FormType 1 /PaintProc { pop");
+		out.println("/Icon" + quest.getWanderingId() + " << /FormType 1 /PaintProc { pop");
 
 		/* the postscript is divided in "{ } exec" blocks to broaden
 		 * compatibility
 		 */
-		boundingBox = appendPS(objectList.getVectorPath(id, quest.getRegion()),
-				out,
-				false,
-				true);
+		final int[] boundingBox =
+				appendPS(objectList
+								.getVectorPath(quest.getWanderingId(),
+										quest.getRegion()),
+						out,
+						true);
 
-		out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [" + boundingBox[0] + " " + boundingBox[1] + " " + boundingBox[2] + " " + boundingBox[3]
+		out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox ["
+				+ boundingBox[0]
+				+ " "
+				+ boundingBox[1]
+				+ " "
+				+ boundingBox[2]
+				+ " "
+				+ boundingBox[3]
 				+ "] >> def");
 		// END wandering monster object
 
 		for (int column = 0; column < quest.getWidth(); column++)
 			for (int row = 0; row < quest.getHeight(); row++) {
-				Quest.Board board = quest.getBoard(column, row);
+				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println(column + " "
 						+ (quest.getHeight() - row - 1)
@@ -206,7 +153,7 @@ public class ExportEPS {
 		/* Bridges */
 		for (int column = 0; column < quest.getWidth(); column++)
 			for (int row = 0; row < quest.getHeight(); row++) {
-				Quest.Board board = quest.getBoard(column, row);
+				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println(column + " " + (quest.getHeight() - row - 1) + " StartBoard");
 
@@ -225,20 +172,14 @@ public class ExportEPS {
 
 		for (int column = 0; column < quest.getWidth(); column++)
 			for (int row = 0; row < quest.getHeight(); row++) {
-				Quest.Board board = quest.getBoard(column, row);
+				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println(column + " " + (quest.getHeight() - row - 1) + " StartBoard");
 
 				for (Quest.Board.Object object : board.getObjects()) {
-
-//				}
-//				Iterator<QObject> boardIterator = board.iterator();
-//				while (iterator.hasNext()) {
-//					QObject obj = boardIterator.next();
 					int width, height;
-					float x, y, xoffset, yoffset;
 
-					if (object.getRotation().getNumber() % 2 == 0) {
+					if (object.getRotation().isPair()) {
 						width = objectList.getObject(object.getId()).getWidth();
 						height = objectList.getObject(object.getId()).getHeight();
 					} else {
@@ -246,8 +187,8 @@ public class ExportEPS {
 						height = objectList.getObject(object.getId()).getWidth();
 					}
 
-					x = object.getLeft() + width / 2.0f;
-					y = object.getTop() + height / 2.0f;
+					float x = object.getLeft() + width / 2.0f;
+					float y = object.getTop() + height / 2.0f;
 
 					if (objectList.getObject(object.getId()).isTrap()) {
 						out.println(object.getLeft()
@@ -259,7 +200,7 @@ public class ExportEPS {
 								+ height
 								+ " Trap");
 					} else if (objectList.getObject(object.getId()).isDoor()) {
-						if (object.getRotation().getNumber() % 2 == 0) {
+						if (object.getRotation().isPair()) {
 							if (object.getTop() == 0)
 								y -= objectList.getBoard().getBorderDoorsOffset();
 							else if (object.getTop() == board.getHeight())
@@ -272,9 +213,9 @@ public class ExportEPS {
 						}
 					}
 
-					xoffset = objectList.getObject(object.getId())
+					final float xoffset = objectList.getObject(object.getId())
 							.getIcon(quest.getRegion()).getXoffset();
-					yoffset = objectList.getObject(object.getId())
+					final float yoffset = objectList.getObject(object.getId())
 							.getIcon(quest.getRegion()).getYoffset();
 
 					switch (object.getRotation()) {
@@ -307,7 +248,6 @@ public class ExportEPS {
 					out.println("Icon" + object.getId() + " execform");
 					out.println("grestore");
 					out.println();
-
 				}
 
 				out.println("EndBoard");
@@ -347,46 +287,28 @@ public class ExportEPS {
 		out.println("/P { S L } bind def % paragraph advance %");
 
 		// HSE - output the quest name in dark red
-		out.println("0.50 0 0.20 setrgbcolor (" + quest.getName().replace("(", "\\(").replace(")", "\\)") + ") c newline");
+		out.println("0.50 0 0.20 setrgbcolor (" + sanitize(quest.getName()) + ") c newline");
 
 		// HSE - output the quest speech including line feeds
 		out.println("0 0 0 setrgbcolor");
-		String[] linefeeds = quest.getSpeech().split("\n");
-		for (String linefeed : linefeeds)
-			out.println("(" + linefeed.replace("(", "\\(").replace(")", "\\)") + " ) S L");
+		for (String linefeed : quest.getSpeech().split("\n"))
+			out.println("(" + sanitize(linefeed) + " ) S L");
 
 		// HSE - output the notes in regular black font, smaller line spacing
 		out.println("/LG { /lg exch def } def 10 LG");
 		out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 		out.println("/Times-Roman findfont 10 scalefont setfont");
-//		iterator = quest.notesIterator();
-//		while (iterator.hasNext()) {
-//			String note = (String) iterator.next();
 		for (String note : quest.getNotesForUI()) {
-			out.println("newline newline ("
-					+ note
-					.replace("(", "\\(")
-					.replace(")", "\\)")
-					+ " ) S");
+			out.println("newline newline (" + sanitize(note) + " ) S");
 		}
 
 		// HSE - output the wandering monster
-		//QObject obj =  quest.getWandering();
-
 		out.println("grestore");
 		out.println("gsave 0 ph 430 sub translate textbox");
 		final String wanderingMonsterName = objectList.getObject(quest.getWanderingId()).getName();
-		out.println("(Wandering Monster in this Quest: "
-				+ wanderingMonsterName
-				.replace("(", "\\(")
-				.replace(")", "\\)")
-				+ " ) c");
+		out.println("(Wandering Monster in this Quest: " + sanitize(wanderingMonsterName) + " ) c");
 
-		out.println("170 ("
-				+ wanderingMonsterName
-				.replace("(", "\\(")
-				.replace(")", "\\)")
-				+ ") stringwidth pop 2 div sub 40 translate");
+		out.println("170 (" + sanitize(wanderingMonsterName) + ") stringwidth pop 2 div sub 40 translate");
 		out.println("Icon" + quest.getWanderingId() + " execform");
 
 		// HSE - restore the coords
@@ -401,17 +323,15 @@ public class ExportEPS {
 	public static void writeMultiPage(File file,
 									  Quest quest,
 									  ObjectList objects) throws Exception {
-		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-
-		float bBoxWidth, bBoxHeight;
+		final PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
 		// HSE - set the box height to accommodate quest text
-		bBoxWidth = (quest.getBoard(0, 0).getWidth()
+		final float bBoxWidth = (quest.getBoard(0, 0).getWidth()
 				+ 2
 				+ objects.getBoard().getAdjacentBoardsOffset())
 				* 19.2f;
 
-		bBoxHeight = ((quest.getBoard(0, 0).getHeight()
+		final float bBoxHeight = ((quest.getBoard(0, 0).getHeight()
 				+ 2
 				+ objects.getBoard().getAdjacentBoardsOffset())
 				* 19.2f)
@@ -429,7 +349,9 @@ public class ExportEPS {
 				+ objects.getBoard().getAdjacentBoardsOffset()
 				+ " def");
 
-		appendPS(objects.getVectorPath(quest.getRegion()), out, false, false);
+		appendPS(objects.getVectorPath(quest.getRegion()),
+				out,
+				false);
 
 		out.println(quest.getWidth() + " " + quest.getHeight() + " BoundingBox");
 		out.println("/sysshowpage {systemdict /showpage get exec} def");
@@ -461,49 +383,44 @@ public class ExportEPS {
 
 		out.println("2 dict dup dup /showpage {} put /setpagedevice {} put begin");
 
-		TreeSet<String> set = new TreeSet<>();
+		final TreeSet<String> set = new TreeSet<>();
 		for (int i = 0; i < quest.getWidth(); i++)
 			for (int j = 0; j < quest.getHeight(); j++) {
-				/*Iterator<QObject> boardIterator = quest.getBoard(i, j).iterator();
-
-				while (boardIterator.hasNext())
-					set.add(boardIterator.next().id);*/
-
 				for (Quest.Board.Object object : quest.getBoard(i, j).getObjects()) {
 					set.add(object.getId());
 				}
 			}
 
-
 		for (String id : set) {
-			int[] boundingBox;
-
 			out.println("/Icon" + id + " << /FormType 1 /PaintProc { pop");
 
 			/* the postscript is divided in "{ } exec" blocks to broaden
 			 * compatibility
 			 */
-			boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()),
+			int[] boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()),
 					out,
-					false,
 					true);
 
-			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [" + boundingBox[0] + " " + boundingBox[1] + " " + boundingBox[2] + " " + boundingBox[3]
+			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox ["
+					+ boundingBox[0]
+					+ " "
+					+ boundingBox[1]
+					+ " "
+					+ boundingBox[2]
+					+ " "
+					+ boundingBox[3]
 					+ "] >> def");
 		}
 		// HSE - add wandering monster object
-		String id = quest.getWanderingId();
-		int[] boundingBox;
-
-		out.println("/Icon" + id + " << /FormType 1 /PaintProc { pop");
+		out.println("/Icon" + quest.getWanderingId() + " << /FormType 1 /PaintProc { pop");
 
 		/* the postscript is divided in "{ } exec" blocks to broaden
 		 * compatibility
 		 */
-		boundingBox = appendPS(objects.getVectorPath(id, quest.getRegion()),
-				out,
-				false,
-				true);
+		final int[] boundingBox =
+				appendPS(objects.getVectorPath(quest.getWanderingId(), quest.getRegion()),
+						out,
+						true);
 
 		out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox ["
 				+ boundingBox[0]
@@ -516,14 +433,14 @@ public class ExportEPS {
 				+ "] >> def");
 		// END wandering monster object
 
-		int PageCount = 1;
+		int pageCount = 1;
 
 		// loop through each board, generating a new page for each one
 		for (int column = 0; column < quest.getWidth(); column++)
 			for (int row = 0; row < quest.getHeight(); row++) {
-				Quest.Board board = quest.getBoard(column, row);
+				final Quest.Board board = quest.getBoard(column, row);
 
-				out.println("%%Page: " + PageCount + " " + PageCount);
+				out.println("%%Page: " + pageCount + " " + pageCount);
 				out.println("0 0 StartBoard");
 
 				for (int i = 1; i <= board.getWidth(); i++)
@@ -558,16 +475,11 @@ public class ExportEPS {
 				/* Objects */
 				out.println("0 0 StartBoard");
 
-//				Iterator<QObject> boardIterator = board.iterator();
-//				while (boardIterator.hasNext()) {
-//					QObject obj = boardIterator.next();
-
 				for (Quest.Board.Object object : board.getObjects()) {
-
 					int width, height;
 					float x, y, xoffset, yoffset;
 
-					if (object.getRotation().getNumber() % 2 == 0) {
+					if (object.getRotation().isPair()) {
 						width = objects.getObject(object.getId()).getWidth();
 						height = objects.getObject(object.getId()).getHeight();
 					} else {
@@ -587,8 +499,9 @@ public class ExportEPS {
 								+ " "
 								+ height
 								+ " Trap");
+
 					} else if (objects.getObject(object.getId()).isDoor()) {
-						if (object.getRotation().getNumber() % 2 == 0) {
+						if (object.getRotation().isPair()) {
 							if (object.getTop() == 0)
 								y -= objects.getBoard().getBorderDoorsOffset();
 							else if (object.getTop() == board.getHeight())
@@ -648,49 +561,34 @@ public class ExportEPS {
 				out.println("gsave 0 ph 120 sub translate textbox");
 
 				// HSE - output the quest name in dark red
-				out.println("0.50 0 0.20 setrgbcolor (" + quest.getName().replace("(", "\\(").replace(")", "\\)") + ") c newline");
+				out.println("0.50 0 0.20 setrgbcolor (" + sanitize(quest.getName()) + ") c newline");
 
 				// HSE - output the quest speech including line feeds
 				out.println("0 0 0 setrgbcolor");
-				String[] linefeeds = quest.getSpeech().split("\n");
-				for (String linefeed : linefeeds)
-					out.println("(" + linefeed.replace("(", "\\(").replace(")", "\\)") + " ) S L");
+				for (String linefeed : quest.getSpeech().split("\n")) {
+					out.println("(" + sanitize(linefeed) + " ) S L");
+				}
 
 				// HSE - output the notes in regular black font, smaller line spacing
 				out.println("/LG { /lg exch def } def 10 LG");
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
-//				Iterator<String> iterator = quest.notesIterator();
-//				while (iterator.hasNext()) {
-//					String note = iterator.next();
 				for (String note : quest.getNotesForUI()) {
-					out.println("newline newline ("
-							+ note
-							.replace("(", "\\(")
-							.replace(")", "\\)")
-							+ " ) S");
+					out.println("newline newline (" + sanitize(note) + " ) S");
 				}
 				// HSE - output board location if multi board quest
 				if (quest.getWidth() > 1 || quest.getHeight() > 1) {
-					String note = "Board Location: \\(" + column + "," + row + "\\)";
+					final String note = "Board Location: \\(" + column + "," + row + "\\)";
 					out.println("newline newline (" + note + " ) S");
 				}
 
 				// HSE - output the wandering monster
-				//QObject obj =  quest.getWandering();
-
 				out.println("grestore");
 				out.println("gsave 0 ph 430 sub translate textbox");
 				final ObjectList.Object wanderingMonster = objects.getObject(quest.getWanderingId());
-				out.println("(Wandering Monster in this Quest: "
-						+ wanderingMonster.getName()
-						.replace("(", "\\(")
-						.replace(")", "\\)")
-						+ " ) c");
+				out.println("(Wandering Monster in this Quest: " + sanitize(wanderingMonster.getName()) + " ) c");
 
-				out.println("170 (" + wanderingMonster.getName()
-						.replace("(", "\\(")
-						.replace(")", "\\)")
+				out.println("170 (" + sanitize(wanderingMonster.getName())
 						+ ") stringwidth pop 2 div sub 40 translate");
 				out.println("Icon" + wanderingMonster.getId() + " execform");
 
@@ -700,12 +598,63 @@ public class ExportEPS {
 				out.println("sysshowpage");
 				out.println("%%EndPage");
 
-				PageCount++;
+				pageCount++;
 			}
 
 		out.println("end");
 		out.println("%%EOF");
 
 		out.close();
+	}
+
+	private static int[] appendPS(Path inPath,
+								  PrintWriter out,
+								  boolean divideInBlocks) throws Exception {
+		final BufferedReader in = new BufferedReader(
+				new InputStreamReader(
+						new GZIPInputStream(
+								new FileInputStream(inPath.toFile()))));
+
+		int[] boundingBox = null;
+
+		String data = in.readLine();
+		int lines = 0;
+
+		while (data != null) {
+			if (data.trim().length() > 0 && data.trim().charAt(0) != '%') {
+				if (divideInBlocks && lines % LINES_PER_BLOCK == 0) {
+					if (lines != 0)
+						out.write(" } exec ");
+					out.write(" { ");
+				}
+
+				lines++;
+				out.println(data);
+			}
+
+			if (data.trim().startsWith("%%BoundingBox:") && boundingBox == null) {
+				final String[] bit = data.split(" ");
+				boundingBox = new int[4];
+
+				for (int i = 0; i < 4; i++) {
+					boundingBox[i] = Integer.parseInt(bit[bit.length - 4 + i]);
+				}
+			}
+
+			data = in.readLine();
+		}
+
+		if (divideInBlocks && lines > 0)
+			out.write(" } exec ");
+
+		in.close();
+
+		return boundingBox;
+
+	}
+
+	private static String sanitize(String input) {
+		return input.replace("(", "\\(")
+				.replace(")", "\\)");
 	}
 }

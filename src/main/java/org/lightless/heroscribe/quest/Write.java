@@ -46,7 +46,7 @@ public class Write {
 		out.println();
 
 		out.println("<quest name=\"" + xmlEscape(quest.getName()) + "\" region=\"" + xmlEscape(quest.getRegion()) + "\" version=\""
-				+ xmlEscape(org.lightless.heroscribe.Constants.questVersion) + "\" width=\"" + quest.getWidth() + "\" height=\"" + quest.getHeight()
+				+ xmlEscape(org.lightless.heroscribe.Constants.QUEST_VERSION) + "\" width=\"" + quest.getWidth() + "\" height=\"" + quest.getHeight()
 				+ "\">");
 
 		for (int row = 0; row < quest.getHeight(); row++)

@@ -7,10 +7,9 @@ import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
-import java.util.List;
+import java.util.*;
 import java.util.stream.*;
 
 public class IconPackService {
@@ -30,13 +29,13 @@ public class IconPackService {
 	}
 
 	public void loadImportedIconPacks() throws IOException {
-		final String[] iconPackFilenames = Constants.getBundleDirectory()
+		final String[] iconPackFilenames = Constants.getIconPackDirectory()
 				.list((dir, name) -> name.endsWith(".zip"));
 		if (iconPackFilenames == null) {
 			return;
 		}
 		for (String iconPackFilename : iconPackFilenames) {
-			importIconPack(new File(Constants.getBundleDirectory(), iconPackFilename));
+			importIconPack(new File(Constants.getIconPackDirectory(), iconPackFilename));
 		}
 	}
 
@@ -48,15 +47,12 @@ public class IconPackService {
 		final ObjectList bundleObjectList =
 				objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
 
-		final List<ObjectList.Kind> bundleKinds = bundleObjectList.getKinds().stream()
-				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId())
-				).collect(Collectors.toList());
-
-		bundleKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
+		final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(bundleObjectList);
+		iconPackKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
 		bundleObjectList.getObjects()
 				.stream()
-				.filter(object1 -> !systemObjectList.getKindIds().contains(object1.getKind()))
+				.filter(object -> !systemObjectList.getKindIds().contains(object.getKind()))
 				.forEach(object -> {
 					log.info("<{}> <{}> Importing object '{}'...",
 							iconPackFile.getName(), object.getKind(), object.getId());
@@ -69,11 +65,15 @@ public class IconPackService {
 					systemObjectList.getObjects().add(object);
 				});
 
-		systemObjectList.getKinds().addAll(bundleKinds);
+		systemObjectList.getKinds().addAll(iconPackKinds);
 
 		imageLoader.flush();
+	}
 
-
+	private List<ObjectList.Kind> getNewKindsFromIconPack(ObjectList bundleObjectList) {
+		return bundleObjectList.getKinds().stream()
+				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId()))
+				.collect(Collectors.toList());
 	}
 
 	private void loadObjectIcons(ObjectList.Object object, String region, Path bundleDirectory) {
@@ -82,8 +82,8 @@ public class IconPackService {
 				systemObjectList.getRasterPrefix(),
 				iconPath + systemObjectList.getRasterSuffix());
 
-		final Image image = imageLoader.addImage(path.toString(), 20);
-		object.getIcon(region).setImage(image);
+		object.getIcon(region)
+				.setImage(imageLoader.addImage(path.toString(), 20));
 	}
 
 	private void extract(final File zipFile, final Path targetDir) throws IOException {

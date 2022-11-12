@@ -48,7 +48,7 @@ public class HeroScribe {
 			log.error("Error when defining look and feel", e);
 		}
 
-		final Preferences preferences = new Preferences(Constants.preferencesFile);
+		final Preferences preferences = new Preferences(Constants.PREFERENCES_FILE);
 
 		final Path basePath = getBasePath(args);
 		final Path objectPath = getFilePath(basePath, "Objects.xml");
