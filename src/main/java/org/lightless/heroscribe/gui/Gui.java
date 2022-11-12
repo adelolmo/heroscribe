@@ -40,7 +40,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
-	private final IconPack iconPack;
+	private final IconPackService iconPackService;
 	private final ObjectList objectList;
 	private final QuestParser questParser;
 
@@ -66,13 +66,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	JLabel hint, status;
 
-	public Gui(IconPack iconPack,
+	public Gui(IconPackService iconPackService,
 			   Preferences preferences,
 			   ObjectList objectList,
 			   QuestParser questParser,
 			   Quest quest) {
 		super();
-		this.iconPack = iconPack;
+		this.iconPackService = iconPackService;
 		this.objectList = objectList;
 		this.questParser = questParser;
 		// HSE - set app icon
@@ -644,7 +644,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (iconPackImport == source) {
 			final JFileChooser chooser = new JFileChooser();
 			chooser.setCurrentDirectory(prefs.defaultDir);
-			chooser.setDialogTitle("Import bundle");
+			chooser.setDialogTitle("Import Icon Pack");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new ZipFileFilter());
 			chooser.setAcceptAllFileFilterUsed(false);
@@ -655,20 +655,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
 							importedBundle.toPath());
-					iconPack.importIconPack(importedBundle);
+					iconPackService.importIconPack(importedBundle);
 					tools.refreshData();
 
 				} catch (FileAlreadyExistsException ex) {
 					if (JOptionPane.showConfirmDialog(this,
-							"The bundle already exists.\nDo you want to replace it?",
-							"Import bundle",
+							"The Icon Pack already exists.\nDo you want to replace it?",
+							"Import Icon Pack",
 							JOptionPane.YES_NO_OPTION,
 							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
 						try {
 							Files.copy(chooser.getSelectedFile().toPath(),
 									importedBundle.toPath(),
 									StandardCopyOption.REPLACE_EXISTING);
-							iconPack.importIconPack(importedBundle);
+							iconPackService.importIconPack(importedBundle);
 							tools.refreshData();
 
 						} catch (IOException exc) {
@@ -679,6 +679,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					throw new RuntimeException(ex);
 				}
 			}
+		} else if (iconPackDownload == source) {
+			final IconPackDownloadModal modal = new IconPackDownloadModal(iconPackService);
+			modal.showDialog();
+			tools.refreshData();
+
 		} else if (quitKey == source) {
 			windowClosing(null);
 

@@ -13,17 +13,17 @@ import java.nio.file.*;
 import java.util.List;
 import java.util.stream.*;
 
-public class IconPack {
+public class IconPackService {
 
-	private static final Logger log = LoggerFactory.getLogger(IconPack.class);
+	private static final Logger log = LoggerFactory.getLogger(IconPackService.class);
 
 	private final ImageLoader imageLoader;
 	private final ObjectList systemObjectList;
 	private final ObjectsParser objectsParser;
 
-	public IconPack(ImageLoader imageLoader,
-					ObjectList systemObjectList,
-					ObjectsParser objectsParser) {
+	public IconPackService(ImageLoader imageLoader,
+						   ObjectList systemObjectList,
+						   ObjectsParser objectsParser) {
 		this.imageLoader = imageLoader;
 		this.systemObjectList = systemObjectList;
 		this.objectsParser = objectsParser;

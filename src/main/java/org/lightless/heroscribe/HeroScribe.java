@@ -62,7 +62,7 @@ public class HeroScribe {
 
 		final ObjectList objectList = objectsParser.parse(objectPath.toFile());
 		final Quest quest = new Quest(objectList.getBoard());
-		final IconPack iconPack = new IconPack(imageLoader,
+		final IconPackService iconPackService = new IconPackService(imageLoader,
 				objectList,
 				objectsParser);
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
@@ -72,11 +72,11 @@ public class HeroScribe {
 		final SplashScreenImageLoader loader = new SplashScreenImageLoader(imageLoader);
 		loader.run(() -> {
 			mediaLoader.loadIcons(objectList);
-			iconPack.loadImportedIconPacks();
+			iconPackService.loadImportedIconPacks();
 			return null;
 		});
 
-		new Gui(iconPack,
+		new Gui(iconPackService,
 				preferences,
 				objectList,
 				questParser,
