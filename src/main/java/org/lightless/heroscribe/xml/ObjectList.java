@@ -141,22 +141,15 @@ public class ObjectList {
 				.findFirst();
 	}
 
-	public Object getObjectByName(String name) {
-		return objects.stream()
-				.filter(object -> object.getName().equals(name))
-				.findFirst()
-				.orElseThrow(IllegalStateException::new);
-	}
-
-	public Path getRasterPath(String id, String region) {
+	public Path getObjectRasterPath(String objectId, String region) {
 		return Path.of(
 				basePath.toString(),
 				rasterPrefix,
-				getObject(id).getIcon(region).path +
+				getObject(objectId).getIcon(region).path +
 						rasterSuffix);
 	}
 
-	public Path getRasterPath(String region) {
+	public Path getBoardRasterPath(String region) {
 		return Path.of(
 				basePath.toString(),
 				rasterPrefix,
@@ -164,15 +157,15 @@ public class ObjectList {
 						rasterSuffix);
 	}
 
-	public Path getVectorPath(String id, String region) {
+	public Path getObjectVectorPath(String objectId, String region) {
 		return Path.of(
 				basePath.toString(),
 				vectorPrefix,
-				getObject(id).getIcon(region).path +
+				getObject(objectId).getIcon(region).path +
 						vectorSuffix);
 	}
 
-	public Path getVectorPath(String region) {
+	public Path getBoardVectorPath(String region) {
 		return Path.of(
 				basePath.toString(),
 				vectorPrefix,

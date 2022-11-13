@@ -542,7 +542,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
-							"a4",
+							PaperType.A4,
 							true);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -575,7 +575,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
-							"a4",
+							PaperType.A4,
 							false);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
