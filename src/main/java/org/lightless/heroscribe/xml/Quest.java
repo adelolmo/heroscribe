@@ -61,7 +61,6 @@ public class Quest {
 	public void updateDimensions(int boardWidth, int boardHeight) {
 		horizontalBridges = new boolean[width - 1][height][boardHeight];
 		verticalBridges = new boolean[width][height - 1][boardWidth];
-//		boards.add(new Board());
 		for (Board b : boards) {
 			b.setWidth(boardWidth);
 			b.setHeight(boardHeight);

@@ -21,10 +21,14 @@
 
 package org.lightless.heroscribe.export;
 
+import org.apache.commons.io.*;
 import org.lightless.heroscribe.xml.*;
 
 import java.io.*;
+import java.nio.charset.*;
 import java.nio.file.*;
+
+import static java.lang.String.*;
 
 public class ExportPDF {
 	public static void write(File ghostscript,
@@ -42,7 +46,7 @@ public class ExportPDF {
 		if (isMultiPage) {
 			ExportEPS.writeMultiPage(eps, quest, objects);
 
-			exitValue = Runtime.getRuntime().exec(new String[]{
+			final Process process = Runtime.getRuntime().exec(new String[]{
 					ghostscript.getAbsoluteFile().toString(),
 					"-dBATCH",
 					"-dNOPAUSE",
@@ -52,27 +56,41 @@ public class ExportPDF {
 					"-sPAPERSIZE=" + paperType.getName(),
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
-			}).waitFor();
+			});
+
+			executeAndEvaluateProcessOutput(process, file, eps, pdf);
+
 		} else {
 			ExportEPS.write(eps, quest, objects);
 
-			exitValue = Runtime.getRuntime().exec(new String[]{
+			final Process process = Runtime.getRuntime().exec(new String[]{
 					ghostscript.getAbsoluteFile().toString(),
 					"-dBATCH",
 					"-dNOPAUSE",
 					"-sDEVICE=pdfwrite",
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
-			}).waitFor();
+			});
+
+			executeAndEvaluateProcessOutput(process, file, eps, pdf);
 		}
 
+	}
+
+	private static void executeAndEvaluateProcessOutput(Process process, File file, File eps, File pdf) throws Exception {
+		int exitValue = process.waitFor();
 		Files.delete(eps.toPath());
 
 		if (exitValue == 0) {
 			Files.move(pdf.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} else {
+
 			Files.delete(pdf.toPath());
-			throw new Exception("Process returned " + exitValue + ".");
+			final String errorMessage =
+					IOUtils.toString(process.getErrorStream(), StandardCharsets.UTF_8);
+
+			throw new Exception(format("Process execution failed! exit value: %d\n%s",
+					exitValue, errorMessage));
 		}
 	}
 

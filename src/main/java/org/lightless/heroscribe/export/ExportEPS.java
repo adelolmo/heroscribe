@@ -372,7 +372,7 @@ public class ExportEPS {
 		out.println("/circle { np arc set }def ");
 		out.println(format("/ph %f def", bBoxHeight));  // 793.6
 		out.println("/s /show load def /L { newline } def /n { s L } def");
-		out.println("/textbox { /lm 36 def /bm 0 def /rm 502 def /tm 36 def lm tm moveto } def");
+		out.println("/textbox { /lm 36 def /bm 0 def /rm 552 def /tm 36 def lm tm moveto } def");
 		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
 		out.println("/centre { dup stringwidth pop 2 div rm lm sub 2 div exch sub lm add tm moveto } def");
 		out.println("/n { show newline } def /c {centre n } def /s {show } def /L { newline } def");
@@ -444,7 +444,7 @@ public class ExportEPS {
 				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println("%%Page: " + pageCount + " " + pageCount);
-				out.println("0 0 StartBoard");
+				out.println("0.05 1.10 StartBoard");
 
 				for (int i = 1; i <= board.getWidth(); i++) {
 					for (int j = 1; j <= board.getHeight(); j++) {
@@ -469,7 +469,7 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Bridges */
-				out.println("0 0 StartBoard");
+				out.println("0.05 1.10 StartBoard");
 
 				if (column < quest.getWidth() - 1) {
 					for (int top = 1; top <= board.getHeight(); top++) {
@@ -492,7 +492,7 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Objects */
-				out.println("0 0 StartBoard");
+				out.println("0.05 1.10 StartBoard");
 
 				for (Quest.Board.Object object : board.getObjects()) {
 					int width, height;
@@ -578,7 +578,7 @@ public class ExportEPS {
 
 				// HSE - create the text bounding box in PS
 				out.println(format("gsave 0 ph %d sub translate textbox",
-						400));
+						460));
 
 				// HSE - output the quest name in dark red
 				out.println(format("0.50 0 0.20 setrgbcolor (%s) c newline",
@@ -613,7 +613,7 @@ public class ExportEPS {
 				out.println(format("(Wandering Monster in this Quest: %s ) c",
 						sanitize(wanderingMonster.getName())));
 
-				out.println(format("170 (%s) stringwidth pop 2 div sub 40 translate",
+				out.println(format("195 (%s) stringwidth pop 2 div sub 40 translate",
 						sanitize(wanderingMonster.getName())));
 				out.println(format("Icon%s execform",
 						wanderingMonster.getId()));
