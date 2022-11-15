@@ -64,7 +64,8 @@ public class HeroScribe {
 		final Quest quest = new Quest(objectList.getBoard());
 		final IconPackService iconPackService = new IconPackService(imageLoader,
 				objectList,
-				objectsParser);
+				objectsParser,
+				new ZipExtractor());
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
 
 		log.info("Objects read.");

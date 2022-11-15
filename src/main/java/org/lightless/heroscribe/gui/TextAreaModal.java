@@ -56,15 +56,14 @@ public class TextAreaModal extends JPanel implements AncestorListener {
 		add(new Label(label));
 		add(new JScrollPane(textArea), BorderLayout.PAGE_START);
 
-		final int option = JOptionPane.showOptionDialog(null,
+		if (JOptionPane.showOptionDialog(null,
 				this,
 				title,
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
 				null,
-				null);
-		if (option == JOptionPane.YES_OPTION) {
+				null) == JOptionPane.YES_OPTION) {
 			return Optional.ofNullable(textArea.getText());
 		}
 
