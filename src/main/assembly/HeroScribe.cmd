@@ -1,2 +1,1 @@
-
-%JAVA_HOME%\bin\java -jar heroscribe.jar
+%JAVA_HOME%\bin\java -jar heroscribe-enhanced.jar
