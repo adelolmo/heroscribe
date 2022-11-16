@@ -21,9 +21,10 @@ public class ImageLoader extends JWindow {
 		tk = Toolkit.getDefaultToolkit();
 	}
 
-	public Dimension getScreenSize(){
+	public Dimension getScreenSize() {
 		return tk.getScreenSize();
 	}
+
 	public Image addImageAndFlush(String path, int id) {
 		final Image image = tk.createImage(ResourceHelper.getResourceUrl(path));
 		mt.addImage(image, id);
@@ -40,13 +41,18 @@ public class ImageLoader extends JWindow {
 
 		return image;
 	}
-	public Image addImage(String path, int id){
+
+	public Image addImage(String path, int id) {
 		final Image image = tk.createImage(path);
 		mt.addImage(image, id);
 		return image;
 	}
 
-	public void flush(){
+	public void removeImage(Image image) {
+		mt.removeImage(image);
+	}
+
+	public void flush() {
 		try {
 			mt.waitForAll();
 		} catch (InterruptedException e) {

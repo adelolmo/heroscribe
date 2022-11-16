@@ -65,7 +65,8 @@ public class HeroScribe {
 		final IconPackService iconPackService = new IconPackService(imageLoader,
 				objectList,
 				objectsParser,
-				new ZipExtractor());
+				new ZipExtractor(),
+				objectPath);
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
 
 		log.info("Objects read.");

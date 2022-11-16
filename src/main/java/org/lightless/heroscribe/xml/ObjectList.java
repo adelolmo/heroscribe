@@ -135,7 +135,7 @@ public class ObjectList {
 		return getOptionalObject(id).isPresent();
 	}
 
-	private Optional<Object> getOptionalObject(String id) {
+	public Optional<Object> getOptionalObject(String id) {
 		return objects.stream()
 				.filter(object -> object.getId().equals(id))
 				.findFirst();

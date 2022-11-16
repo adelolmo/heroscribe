@@ -20,6 +20,7 @@
 
 package org.lightless.heroscribe.iconpack;
 
+import org.apache.commons.io.*;
 import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.gui.*;
 import org.lightless.heroscribe.xml.*;
@@ -33,45 +34,60 @@ import java.util.stream.*;
 public class IconPackService {
 
 	private static final Logger log = LoggerFactory.getLogger(IconPackService.class);
+	private static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe");
 
 	private final ImageLoader imageLoader;
 	private final ObjectList systemObjectList;
+
+	private final Path objectXmlPath;
 	private final ObjectsParser objectsParser;
 	private final ZipExtractor zipExtractor;
 
 	public IconPackService(ImageLoader imageLoader,
 						   ObjectList systemObjectList,
 						   ObjectsParser objectsParser,
-						   ZipExtractor zipExtractor) {
+						   ZipExtractor zipExtractor,
+						   Path objectXmlPath) {
 		this.imageLoader = imageLoader;
 		this.systemObjectList = systemObjectList;
 		this.objectsParser = objectsParser;
 		this.zipExtractor = zipExtractor;
+		this.objectXmlPath = objectXmlPath;
 	}
 
 	public void loadImportedIconPacks() throws IOException {
-		final String[] iconPackFilenames = Constants.getIconPackDirectory()
-				.list((dir, name) -> name.endsWith(".zip"));
+		for (File iconPackFile : getInstalledIconPacks()) {
+			importIconPack(iconPackFile);
+		}
+	}
+
+	public List<File> getInstalledIconPacks() {
+		final String[] iconPackFilenames =
+				Constants.getIconPackDirectory()
+						.list((dir, name) -> name.endsWith(".zip"));
 		if (iconPackFilenames == null) {
-			return;
+			return Collections.emptyList();
 		}
-		for (String iconPackFilename : iconPackFilenames) {
-			importIconPack(new File(Constants.getIconPackDirectory(), iconPackFilename));
-		}
+		return Arrays.stream(iconPackFilenames)
+				.map(filename -> new File(Constants.getIconPackDirectory(), filename))
+				.collect(Collectors.toList());
+
 	}
 
 	public void importIconPack(final File iconPackFile) throws IOException {
 		log.info("Importing icon pack {}...", iconPackFile.getName());
-		final Path tempBundleDirectory = Files.createTempDirectory("hse");
-		zipExtractor.extract(iconPackFile, tempBundleDirectory);
+//		final Path tempBundleDirectory = Files.createTempDirectory("hse");
+		final Path tempIconPackDirectory = getTempIconPackDirectory(iconPackFile);
+		tempIconPackDirectory.toFile().mkdirs();
+		zipExtractor.extract(iconPackFile, tempIconPackDirectory);
 
-		final ObjectList bundleObjectList =
-				objectsParser.parse(new File(tempBundleDirectory.toString(), "Objects.xml"));
+		final ObjectList iconPackObjectList =
+				objectsParser.parse(new File(tempIconPackDirectory.toString(), "Objects.xml"));
 
-		final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(bundleObjectList);
+		final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(systemObjectList, iconPackObjectList);
 		iconPackKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
-		bundleObjectList.getObjects()
+		iconPackObjectList.getObjects()
 				.stream()
 				.filter(object -> !systemObjectList.getKindIds().contains(object.getKind()))
 				.forEach(object -> {
@@ -79,8 +95,8 @@ public class IconPackService {
 							iconPackFile.getName(), object.getKind(), object.getId());
 
 					// add icons
-					loadObjectIcons(object, "Europe", tempBundleDirectory);
-					loadObjectIcons(object, "USA", tempBundleDirectory);
+					loadObjectIcons(object, "Europe", tempIconPackDirectory);
+					loadObjectIcons(object, "USA", tempIconPackDirectory);
 
 					// update system objects
 					systemObjectList.getObjects().add(object);
@@ -91,9 +107,46 @@ public class IconPackService {
 		imageLoader.flush();
 	}
 
-	private List<ObjectList.Kind> getNewKindsFromIconPack(ObjectList bundleObjectList) {
-		return bundleObjectList.getKinds().stream()
-				.filter(kind -> !systemObjectList.getKindIds().contains(kind.getId()))
+	public void removePack(File iconPackFile) throws IOException {
+		final ObjectList iconPackObjectList =
+				objectsParser.parse(
+						new File(getTempIconPackDirectory(iconPackFile).toString(), "Objects.xml"));
+
+		final List<String> iconPackKindIds =
+				getNewKindsFromIconPack(
+						objectsParser.parse(objectXmlPath.toFile()), iconPackObjectList)
+						.stream()
+						.map(ObjectList.Kind::getId)
+						.collect(Collectors.toList());
+		Arrays.stream(systemObjectList.getObjects().toArray(new ObjectList.Object[]{}))
+//				.filter(Objects::nonNull)
+				.filter(object -> iconPackKindIds.contains(object.getKind()))
+				.forEach(object -> {
+					log.info("<{}> <{}> Removing object '{}'...",
+							iconPackFile.getName(), object.getKind(), object.getId());
+
+					// remove icons
+					imageLoader.removeImage(object.getIcon("Europe").getImage());
+					imageLoader.removeImage(object.getIcon("USA").getImage());
+
+					// update system objects
+					systemObjectList.getObjects().remove(object);
+				});
+
+		FileUtils.deleteDirectory(getTempIconPackDirectory(iconPackFile).toFile());
+		Files.delete(iconPackFile.toPath());
+
+	}
+
+	private Path getTempIconPackDirectory(File iconPackFile) {
+		return Paths.get(TEMP_DIR.toString(),
+				FilenameUtils.getBaseName(iconPackFile.getName()));
+	}
+
+	private List<ObjectList.Kind> getNewKindsFromIconPack(final ObjectList referenceObjectList,
+														  final ObjectList iconPackObjectList) {
+		return iconPackObjectList.getKinds().stream()
+				.filter(kind -> !referenceObjectList.getKindIds().contains(kind.getId()))
 				.collect(Collectors.toList());
 	}
 
@@ -106,6 +159,5 @@ public class IconPackService {
 		object.getIcon(region)
 				.setImage(imageLoader.addImage(path.toString(), 20));
 	}
-
 
 }

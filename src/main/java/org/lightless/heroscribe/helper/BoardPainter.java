@@ -34,6 +34,7 @@ import java.awt.Image;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
+import java.util.*;
 
 import static org.lightless.heroscribe.Constants.*;
 
@@ -518,7 +519,12 @@ public class BoardPainter implements ImageObserver {
 	private void drawIcon(Quest.Board.Object piece, int column, int row, Graphics2D g2d) {
 		AffineTransform original = null;
 		final int width, height;
-		final ObjectList.Object object = gui.getObjectList().getObject(piece.getId());
+		final Optional<ObjectList.Object> optionalObject = gui.getObjectList().getOptionalObject(piece.getId());
+		if (optionalObject.isEmpty()) {
+			// the icon pack containing this object was deleted in this session, so we ignore it ¯\_(ツ)_/¯
+			return;
+		}
+		final ObjectList.Object object = optionalObject.get();
 
 		if (!isWellPositioned(piece))
 			return;

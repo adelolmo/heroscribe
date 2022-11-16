@@ -60,7 +60,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
 			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
-	private JMenuItem iconPackImport, iconPackDownload;
+	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
 
 	private final Vector<JMenuItem> newSpecialKeys;
 
@@ -139,7 +139,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		Container content;
 		final JMenuBar menu = new JMenuBar();
 		final JMenu file = new JMenu("File");
-		final JMenu objects = new JMenu("Icon Packs");
+		final JMenu iconPacks = new JMenu("Icon Packs");
 		final JMenu region = new JMenu("Region");
 		final JMenu help = new JMenu("Help");
 
@@ -269,12 +269,17 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		/* Icon Packs menu */
 		iconPackDownload = new JMenuItem("Download...");
 		iconPackDownload.addActionListener(this);
-		objects.add(iconPackDownload);
+		iconPacks.add(iconPackDownload);
 
 		iconPackImport = new JMenuItem("Import...");
 		iconPackImport.addActionListener(this);
-		objects.add(iconPackImport);
-		menu.add(objects);
+		iconPacks.add(iconPackImport);
+
+		iconPackRemove = new JMenuItem("Remove...");
+		iconPackRemove.addActionListener(this);
+		iconPacks.add(iconPackRemove);
+
+		menu.add(iconPacks);
 
 		/* Region menu */
 		europeItem = new JRadioButtonMenuItem("Europe layout");
@@ -684,6 +689,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			}
 		} else if (iconPackDownload == source) {
 			final IconPackDownloadModal modal = new IconPackDownloadModal(iconPackService);
+			modal.showDialog();
+			tools.refreshData();
+
+		} else if (iconPackRemove == source) {
+			final IconPackRemoveModal modal = new IconPackRemoveModal(iconPackService);
 			modal.showDialog();
 			tools.refreshData();
 

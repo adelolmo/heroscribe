@@ -28,9 +28,7 @@ import org.slf4j.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
 import java.util.List;
 import java.util.*;
@@ -38,11 +36,9 @@ import java.util.stream.*;
 
 import static java.lang.String.*;
 
-public class IconPackDownloadModal extends JPanel implements AncestorListener, ItemListener {
+public class IconPackDownloadModal extends JPanel {
 
 	private static final Logger log = LoggerFactory.getLogger(IconPackDownloadModal.class);
-	private static final int ELEMENTS_PER_PAGE = 15;
-	private static final int ELEMENTS_PER_COLUMN = 10;
 
 	private final WebsiteParser websiteParser = new WebsiteParser();
 
@@ -66,7 +62,7 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
 
-		panel.add(new JLabel("Select the Icon Packs to install"));
+		panel.add(new JLabel("Select the Icon Packs to install:"));
 		panel.add(jScrollPane, BorderLayout.PAGE_START);
 
 		add(panel, BorderLayout.NORTH);
@@ -88,7 +84,6 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 		for (final WebsiteParser.IconPackDetails iconPack : iconPackDetails) {
 			final JCheckBox checkBox = new JCheckBox(iconPack.getName());
 			iconPackCheckBoxes.add(checkBox);
-			checkBox.addItemListener(this);
 			box.add(checkBox);
 		}
 
@@ -100,34 +95,82 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 				null,
 				null,
 				null) == JOptionPane.YES_OPTION) {
-			for (JCheckBox checkBox : iconPackCheckBoxes) {
-				if (!checkBox.isSelected()) {
-					continue;
+			final List<DownloadReport> downloadReports = new ArrayList<>();
+
+			new Thread(new DialogThread(this))
+					.start();
+
+			final SwingWorker<Void, String> worker = new SwingWorker<>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					for (JCheckBox checkBox : iconPackCheckBoxes) {
+						if (!checkBox.isSelected()) {
+							continue;
+						}
+
+						for (WebsiteParser.IconPackDetails pack : getSelectedIconPacks(checkBox)) {
+							downloadReports.add(downloadAndInstallIconPack(pack));
+						}
+					}
+					return null;
 				}
 
-				for (WebsiteParser.IconPackDetails pack : getSelectedIconPacks(checkBox)) {
-					downloadAndInstallIconPack(pack);
+				@Override
+				protected void process(List<String> chunks) {
+					super.process(chunks);
 				}
-			}
+
+				@Override
+				protected void done() {
+					super.done();
+					for (Window window : Window.getWindows()) {
+						if (window instanceof JDialog) {
+							JDialog dialog = (JDialog) window;
+							dialog.dispose();
+						}
+					}
+
+					showReportDialog(downloadReports);
+
+				}
+			};
+			worker.addPropertyChangeListener(evt -> {
+				System.out.println(evt.getNewValue());
+			});
+			worker.execute();
 		}
 	}
 
-	private void downloadAndInstallIconPack(WebsiteParser.IconPackDetails pack) {
+	private void showReportDialog(List<DownloadReport> downloadReports) {
+		final List<String> reportEntries = downloadReports.stream()
+				.map(downloadReport -> {
+					if (downloadReport.isSuccessful()) {
+						return format("\"%s\" installed.",
+								downloadReport.getIconPackDetails().getName());
+					}
+					return format("\"%s\" not installed.\n   Reason is: %s",
+							downloadReport.getIconPackDetails().getName(),
+							downloadReport.getMessage().substring(0, 100));
+				}).collect(Collectors.toList());
+
+		JOptionPane.showMessageDialog(this,
+				String.join("\n", reportEntries),
+				"Download Results",
+				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private DownloadReport downloadAndInstallIconPack(WebsiteParser.IconPackDetails pack) {
 		final File iconPackFile =
 				new File(Constants.getIconPackDirectory(), pack.getFilename());
 
 		try {
 			HseFileUtils.downloadToFile(pack.getLink(), iconPackFile);
 			iconPackService.importIconPack(iconPackFile);
-
+			return DownloadReport.ofSuccess(pack);
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this,
-					format("Can't install Icon Pack %s.\nDetailed Error: %s",
-							pack.getFilename(), e.getMessage()),
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
 			log.warn("Cannot install icon pack: {}", pack.getName(), e);
 			FileUtils.deleteQuietly(iconPackFile);
+			return DownloadReport.ofFailure(pack, e.getMessage());
 		}
 	}
 
@@ -137,26 +180,55 @@ public class IconPackDownloadModal extends JPanel implements AncestorListener, I
 				.collect(Collectors.toList());
 	}
 
+	private static class DownloadReport {
+		private final boolean successful;
+		private final WebsiteParser.IconPackDetails iconPackDetails;
+		private final String message;
 
-	@Override
-	public void ancestorAdded(AncestorEvent event) {
+		private DownloadReport(boolean successful,
+							   WebsiteParser.IconPackDetails iconPackDetails,
+							   String message) {
+			this.successful = successful;
+			this.iconPackDetails = iconPackDetails;
+			this.message = message;
+		}
 
+		private static DownloadReport ofSuccess(WebsiteParser.IconPackDetails iconPackDetails) {
+			return new DownloadReport(true, iconPackDetails, "");
+		}
+
+		public static DownloadReport ofFailure(WebsiteParser.IconPackDetails iconPackDetails,
+											   String message) {
+			return new DownloadReport(false, iconPackDetails, message);
+		}
+
+		public boolean isSuccessful() {
+			return successful;
+		}
+
+		public WebsiteParser.IconPackDetails getIconPackDetails() {
+			return iconPackDetails;
+		}
+
+		public String getMessage() {
+			return message;
+		}
 	}
 
-	@Override
-	public void ancestorRemoved(AncestorEvent event) {
+	private static class DialogThread implements Runnable {
+		private final IconPackDownloadModal modal;
 
+		public DialogThread(IconPackDownloadModal iconPackDownloadModal) {
+			this.modal = iconPackDownloadModal;
+		}
+
+		@Override
+		public void run() {
+			JOptionPane.showConfirmDialog(modal,
+					"Downloading Icon Packs, please wait",
+					null,
+					JOptionPane.DEFAULT_OPTION,
+					JOptionPane.PLAIN_MESSAGE);
+		}
 	}
-
-	@Override
-	public void ancestorMoved(AncestorEvent event) {
-
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		System.out.println(e.getSource());
-	}
-
-
 }

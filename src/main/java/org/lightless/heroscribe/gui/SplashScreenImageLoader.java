@@ -46,7 +46,7 @@ public class SplashScreenImageLoader extends JWindow {
 
 		callable.call();
 
-		pauseExecution(Duration.ofSeconds(2));
+		pauseExecution(Duration.ofSeconds(1));
 		setVisible(false);
 	}
 
