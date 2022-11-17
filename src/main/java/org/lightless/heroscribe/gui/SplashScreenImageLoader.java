@@ -58,7 +58,7 @@ public class SplashScreenImageLoader extends JWindow {
 
 	private static void pauseExecution(Duration duration) {
 		try {
-			Thread.sleep(duration);
+			Thread.sleep(duration.toMillis());
 		} catch (InterruptedException e) {
 			throw new RuntimeException(e);
 		}
