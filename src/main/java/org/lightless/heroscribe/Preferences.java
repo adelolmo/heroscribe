@@ -18,6 +18,7 @@
 
 package org.lightless.heroscribe;
 
+import org.lightless.heroscribe.export.*;
 import org.lightless.heroscribe.helper.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
@@ -28,12 +29,14 @@ import java.io.*;
 public class Preferences extends DefaultHandler {
 	public File ghostscriptExec;
 	public File defaultDir;
+	private PaperType paperType;
 
 	public Preferences() {
 		super();
 
 		ghostscriptExec = new File("");
 		defaultDir = new File("");
+		paperType = PaperType.A4;
 
 		if (OS.isWindows()) {
 			File base = new File("c:\\gs\\");
@@ -86,6 +89,17 @@ public class Preferences extends DefaultHandler {
 				defaultDir = file;
 			}
 		}
+		if ("paperSize".equals(qName)) {
+			paperType = PaperType.valueOf(attrs.getValue("type"));
+		}
+	}
+
+	public PaperType getPaperSize() {
+		return paperType;
+	}
+
+	public void setPaperSize(PaperType paperType) {
+		this.paperType = paperType;
 	}
 
 	/* Write XML */
@@ -98,6 +112,7 @@ public class Preferences extends DefaultHandler {
 
 		out.println("<ghostscript path=\"" + ghostscriptExec.getAbsoluteFile().toString().replaceAll("\"", "&quot;") + "\"/>");
 		out.println("<defaultDir path=\"" + defaultDir.getAbsolutePath().replaceAll("\"", "&quot;") + "\"/>");
+		out.println("<paperSize type=\"" + paperType.name() + "\"/>");
 		out.println("</preferences>");
 
 		out.close();

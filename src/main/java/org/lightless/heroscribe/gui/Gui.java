@@ -59,7 +59,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
-			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey;
+			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey, paperKey;
 	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
 
 	private final Vector<JMenuItem> newSpecialKeys;
@@ -223,6 +223,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		dirKey = new JMenuItem("Default directory...");
 		dirKey.addActionListener(this);
 		prefsMenu.add(dirKey);
+
+		paperKey = new JMenuItem("Paper size...");
+		paperKey.addActionListener(this);
+		prefsMenu.add(paperKey);
 
 		/* File Menu */
 		file.add(newMenu);
@@ -547,7 +551,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
-							PaperType.A4,
+							prefs.getPaperSize(),
 							true);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -580,7 +584,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							file,
 							quest,
 							objectList,
-							PaperType.A4,
+							prefs.getPaperSize(),
 							false);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -648,6 +652,16 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			}
+		} else if (paperKey == source) {
+			final PaperSizeModal modal = new PaperSizeModal();
+			modal.showDialog(prefs.getPaperSize()).ifPresent(paperType -> {
+				prefs.setPaperSize(paperType);
+				try {
+					prefs.write();
+				} catch (Exception ex) {
+					log.error("Error.", ex);
+				}
+			});
 
 		} else if (iconPackImport == source) {
 			final JFileChooser chooser = new JFileChooser();
