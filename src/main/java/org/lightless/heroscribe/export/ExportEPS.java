@@ -32,6 +32,8 @@ import static org.lightless.heroscribe.Constants.*;
 public class ExportEPS {
 
 	private static final int LINES_PER_BLOCK = 500;
+	private static final float BOARD_X_POSITION = 0.05f;
+	private static final float BOARD_Y_POSITION = 1.07f;
 
 	private ExportEPS() {
 	}
@@ -372,7 +374,7 @@ public class ExportEPS {
 		out.println("/circle { np arc set }def ");
 		out.println(format("/ph %f def", bBoxHeight));  // 793.6
 		out.println("/s /show load def /L { newline } def /n { s L } def");
-		out.println("/textbox { /lm 36 def /bm 0 def /rm 552 def /tm 36 def lm tm moveto } def");
+		out.println("/textbox { /lm 35 def /bm 0 def /rm 552 def /tm 35 def lm tm moveto } def");
 		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
 		out.println("/centre { dup stringwidth pop 2 div rm lm sub 2 div exch sub lm add tm moveto } def");
 		out.println("/n { show newline } def /c {centre n } def /s {show } def /L { newline } def");
@@ -444,7 +446,8 @@ public class ExportEPS {
 				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println("%%Page: " + pageCount + " " + pageCount);
-				out.println("0.05 1.10 StartBoard");
+				out.println(format("%f %f StartBoard",
+						BOARD_X_POSITION, BOARD_Y_POSITION));
 
 				for (int i = 1; i <= board.getWidth(); i++) {
 					for (int j = 1; j <= board.getHeight(); j++) {
@@ -469,7 +472,8 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Bridges */
-				out.println("0.05 1.10 StartBoard");
+				out.println(format("%f %f StartBoard",
+						BOARD_X_POSITION, BOARD_Y_POSITION));
 
 				if (column < quest.getWidth() - 1) {
 					for (int top = 1; top <= board.getHeight(); top++) {
@@ -492,7 +496,8 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Objects */
-				out.println("0.05 1.10 StartBoard");
+				out.println(format("%f %f StartBoard",
+						BOARD_X_POSITION, BOARD_Y_POSITION));
 
 				for (Quest.Board.Object object : board.getObjects()) {
 					int width, height;
@@ -574,17 +579,18 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				// HSE - text area
-				out.println("/Times-Roman findfont 12 scalefont setfont");
+				out.println("/Times-Roman findfont 16 scalefont setfont");
 
 				// HSE - create the text bounding box in PS
 				out.println(format("gsave 0 ph %d sub translate textbox",
-						460));
+						440));
 
 				// HSE - output the quest name in dark red
 				out.println(format("0.50 0 0.20 setrgbcolor (%s) c newline",
 						sanitize(quest.getName())));
 
 				// HSE - output the quest speech including line feeds
+				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println("0 0 0 setrgbcolor");
 				for (String linefeed : quest.getSpeech().split("\n")) {
 					out.println(format("(%s ) S L",
@@ -608,8 +614,9 @@ public class ExportEPS {
 
 				// HSE - output the wandering monster
 				out.println("grestore");
-				out.println(format("gsave 0 ph %d sub translate textbox", 810));
+				out.println(format("gsave 20 ph %d sub translate textbox", 795));
 				final ObjectList.Object wanderingMonster = objects.getObject(quest.getWanderingId());
+				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println(format("(Wandering Monster in this Quest: %s ) c",
 						sanitize(wanderingMonster.getName())));
 

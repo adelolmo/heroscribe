@@ -12,6 +12,7 @@ public class Quest {
 
 	private static final String WANDERING_MONSTER_NOTE_MESSAGE =
 			"Wandering Monster in this quest: ";
+	private static final String DEFAULT_WANDERING_MONSTER = "Orc";
 
 	@JacksonXmlProperty(isAttribute = true)
 	private String name = "Untitled";
@@ -194,8 +195,8 @@ public class Quest {
 	@JsonIgnore
 	public String getWanderingId() {
 		return findWanderingMonsterNote()
-				.orElseThrow(IllegalStateException::new)
-				.substring(WANDERING_MONSTER_NOTE_MESSAGE.length());
+				.map(note -> note.substring(WANDERING_MONSTER_NOTE_MESSAGE.length()))
+				.orElse(DEFAULT_WANDERING_MONSTER);
 	}
 
 	public void setWandering(String name, String id) {
