@@ -20,10 +20,13 @@ package org.lightless.heroscribe;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 public class Constants {
 	public static final String APPLICATION_NAME = "HeroScribe Enhanced";
+	public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe");
+
 
 	public static final String OBJECT_VERSION = "1.0";
 	public static final String QUEST_VERSION = "1.0";

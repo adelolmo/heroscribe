@@ -39,7 +39,7 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 	private final IconPackService iconPackService;
 	private final List<JCheckBox> iconPackCheckBoxes = new ArrayList<>();
 	private final Box box;
-	private final List<File> installedIconPacks = new ArrayList<>();
+	private final List<IconPackService.IconPack> installedIconPacks = new ArrayList<>();
 
 	public IconPackRemoveModal(IconPackService iconPackService) {
 		super();
@@ -47,7 +47,7 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 		setLayout(new BorderLayout());
 
 		final JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(400, 400));
+		panel.setPreferredSize(new Dimension(300, 300));
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
 		box = new Box(BoxLayout.Y_AXIS);
@@ -61,10 +61,10 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 	}
 
 	public void showDialog() {
-		installedIconPacks.addAll(iconPackService.getInstalledIconPacks());
-		for (File iconPackFile : installedIconPacks) {
+		installedIconPacks.addAll(iconPackService.getInstalledIconPackDetails());
+		for (IconPackService.IconPack iconPack : installedIconPacks) {
 
-			final JCheckBox checkBox = new JCheckBox(iconPackFile.getName());
+			final JCheckBox checkBox = new JCheckBox(iconPack.getKindNames());
 			iconPackCheckBoxes.add(checkBox);
 			checkBox.addItemListener(this);
 			box.add(checkBox);
@@ -72,7 +72,7 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 
 		if (JOptionPane.showOptionDialog(null,
 				this,
-				"Remove Icon Pack",
+				"Remove",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,
@@ -83,8 +83,8 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 					continue;
 				}
 
-				for (File iconPackFile : getSelectedIconPacks(checkBox)) {
-					deleteIconPack(iconPackFile);
+				for (IconPackService.IconPack iconPackFile : getSelectedIconPacks(checkBox)) {
+					deleteIconPack(iconPackFile.getZipFile());
 				}
 			}
 			JOptionPane.showMessageDialog(this,
@@ -106,9 +106,9 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 		}
 	}
 
-	private List<File> getSelectedIconPacks(JCheckBox checkBox) {
+	private List<IconPackService.IconPack> getSelectedIconPacks(JCheckBox checkBox) {
 		return installedIconPacks.stream()
-				.filter(iconPack -> checkBox.getText().equals(iconPack.getName()))
+				.filter(iconPack -> checkBox.getText().equals(iconPack.getKindNames()))
 				.collect(Collectors.toList());
 	}
 

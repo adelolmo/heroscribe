@@ -31,10 +31,11 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import static org.lightless.heroscribe.Constants.*;
+
 public class IconPackService {
 
 	private static final Logger log = LoggerFactory.getLogger(IconPackService.class);
-	private static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe");
 
 	private final ImageLoader imageLoader;
 	private final ObjectList systemObjectList;
@@ -71,12 +72,34 @@ public class IconPackService {
 		return Arrays.stream(iconPackFilenames)
 				.map(filename -> new File(Constants.getIconPackDirectory(), filename))
 				.collect(Collectors.toList());
+	}
 
+	public List<IconPack> getInstalledIconPackDetails() {
+		try {
+			final List<File> installedIconPacks = getInstalledIconPacks();
+			final ObjectList originalObjectList = objectsParser.parse(objectXmlPath.toFile());
+			return installedIconPacks.stream()
+					.map(file -> {
+						try {
+							final Path iconPackDirectory = getTempIconPackDirectory(file);
+							final File objectsXmlFile = new File(iconPackDirectory.toFile(), "Objects.xml");
+							final ObjectList objectList = objectsParser.parse(objectsXmlFile);
+							final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(originalObjectList, objectList);
+
+							return new IconPack(file,
+									iconPackKinds);
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}).collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public void importIconPack(final File iconPackFile) throws IOException {
 		log.info("Importing icon pack {}...", iconPackFile.getName());
-//		final Path tempBundleDirectory = Files.createTempDirectory("hse");
+
 		final Path tempIconPackDirectory = getTempIconPackDirectory(iconPackFile);
 		tempIconPackDirectory.toFile().mkdirs();
 		zipExtractor.extract(iconPackFile, tempIconPackDirectory);
@@ -119,7 +142,6 @@ public class IconPackService {
 						.map(ObjectList.Kind::getId)
 						.collect(Collectors.toList());
 		Arrays.stream(systemObjectList.getObjects().toArray(new ObjectList.Object[]{}))
-//				.filter(Objects::nonNull)
 				.filter(object -> iconPackKindIds.contains(object.getKind()))
 				.forEach(object -> {
 					log.info("<{}> <{}> Removing object '{}'...",
@@ -160,4 +182,27 @@ public class IconPackService {
 				.setImage(imageLoader.addImage(path.toString(), 20));
 	}
 
+	public static class IconPack {
+		private final File zipFile;
+		private final List<ObjectList.Kind> kinds;
+
+		public IconPack(File zipFile, List<ObjectList.Kind> kinds) {
+			this.zipFile = zipFile;
+			this.kinds = kinds;
+		}
+
+		public File getZipFile() {
+			return zipFile;
+		}
+
+		public List<ObjectList.Kind> getKinds() {
+			return kinds;
+		}
+
+		public String getKindNames(){
+			return kinds.stream()
+					.map(ObjectList.Kind::getName)
+					.collect(Collectors.joining(" & "));
+		}
+	}
 }
