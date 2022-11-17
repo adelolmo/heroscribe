@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lightless.heroscribe</groupId>
     <artifactId>heroscribe-enhanced</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.3</version>
     <name>HeroScribe Enhanced</name>
 
     <properties>
