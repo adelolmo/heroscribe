@@ -154,9 +154,6 @@ public class Board extends JPanel implements MouseInputListener {
 		else if (left > gui.getObjectList().getBoard().getWidth() + 1)
 			left = gui.getObjectList().getBoard().getWidth() + 1;
 
-		//TODO
-		//System.err.println("row: " + row + "   column: " + column + "   top: " + top + "   left: " + left);
-
 		if (top != lastTop || left != lastLeft || row != lastRow || column != lastColumn) {
 			hasAdded = false;
 
@@ -167,10 +164,12 @@ public class Board extends JPanel implements MouseInputListener {
 
 			if (isPaintingDark && gui.getQuest()
 					.getBoard(lastColumn, lastRow)
-					.isDark(lastLeft, lastTop) != isDark)
+					.isDark(lastLeft, lastTop) != isDark) {
 				gui.getQuest()
 						.getBoard(lastColumn, lastRow)
 						.toggleDark(lastLeft, lastTop);
+				gui.getQuest().setModified(true);
+			}
 
 			repaint();
 
@@ -195,12 +194,7 @@ public class Board extends JPanel implements MouseInputListener {
 			first = false;
 		}
 
-//		Iterator<QObject> iterator =
-//				gui.getXmlQuest().getBoard(lastColumn, lastRow).iterator();
-//		while (iterator.hasNext()) {
 		for (Quest.Board.Object qobj : gui.getQuest().getBoard(lastColumn, lastRow).getObjects()) {
-
-//					QObject qobj = iterator.next();
 			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
 
 			if (qobj.getRotation().getNumber() % 2 == 0) {
@@ -255,14 +249,15 @@ public class Board extends JPanel implements MouseInputListener {
 				Quest.Board.Object obj = getNewObject(false);
 
 				if (isWellPositioned(obj))
-					if (gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj))
+					if (gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj)) {
 						hasAdded = true;
+						gui.getQuest().setModified(true);
+					}
 			}
 		} else if ("select".equals(gui.tools.getCommand())) {
 			gui.tools.displayerPanel.createList(lastColumn, lastRow, lastLeft, lastTop);
 
 		} else if ("darken".equals(gui.tools.getCommand())) {
-//			QBoard board = gui.getQuest().getBoard(lastColumn, lastRow);
 			final Quest.Board board = gui.getQuest().getBoard(lastColumn, lastRow);
 
 			if (1 <= lastLeft && lastLeft <= board.getWidth()

@@ -413,8 +413,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to create a new one?",
 					"New Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
 
 				final Quest xmlNewQuest = new Quest(objectList.getBoard());
 
@@ -440,8 +440,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to create a new one?",
 					"New Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
 
 				final Quest newXmlQuest = new Quest(menuItem.getQuestWidth(),
 						menuItem.getQuestHeight(),
@@ -469,8 +469,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to open a new one?",
 					"Open Quest",
-					JOptionPane.WARNING_MESSAGE,
-					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
 
 				fileChooser.resetChoosableFileFilters();
 
@@ -774,8 +774,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		if (!quest.isModified() || JOptionPane.showConfirmDialog(this,
 				"The current quest has not been saved.\nDo you really want to quit?",
 				"Quit",
-				JOptionPane.WARNING_MESSAGE,
-				JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
 
 			try {
 				prefs.write();

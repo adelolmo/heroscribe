@@ -314,9 +314,6 @@ public class Quest {
 			} else {
 				darks.add(Dark.of(left, top));
 			}
-
-//			quest.setModified(true); TODO implement
-
 		}
 
 		private Optional<Dark> findDark(int left, int top) {
@@ -342,7 +339,6 @@ public class Quest {
 			}
 
 			objects.add(newObj);
-			//setModified(true); TODO imlement
 
 			return true;
 		}
