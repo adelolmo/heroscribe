@@ -153,6 +153,44 @@ public class Quest {
 				.collect(Collectors.toList());
 	}
 
+	public void addNote(String text) {
+		// Ensures that the wandering monster note is always the last one
+		int wanderingMonsterNoteIndex = -1;
+		for (int i = 0; i < notes.size(); i++) {
+			final String note = notes.get(i);
+			if (!note.startsWith(WANDERING_MONSTER_NOTE_MESSAGE)) {
+				continue;
+			}
+			wanderingMonsterNoteIndex = i;
+		}
+		if (wanderingMonsterNoteIndex == -1) {
+			notes.add(text);
+		} else {
+			final String wanderingMonsterNote = notes.get(wanderingMonsterNoteIndex);
+			notes.set(wanderingMonsterNoteIndex, text);
+			notes.add(wanderingMonsterNote);
+		}
+	}
+
+	public void setNote(int index, String text) {
+		notes.set(index,text);
+		/*int wanderingMonsterNoteIndex = -1;
+		for (int i = 0; i < notes.size(); i++) {
+			final String note = notes.get(i);
+			if (!note.startsWith(WANDERING_MONSTER_NOTE_MESSAGE)) {
+				continue;
+			}
+			wanderingMonsterNoteIndex = i;
+		}
+		if (wanderingMonsterNoteIndex == -1) {
+			notes.add(text);
+		} else {
+			final String wanderingMonsterNote = notes.get(wanderingMonsterNoteIndex);
+			notes.set(wanderingMonsterNoteIndex, text);
+			notes.add(wanderingMonsterNote);
+		}*/
+	}
+
 	public List<String> getNotes() {
 		return notes;
 	}

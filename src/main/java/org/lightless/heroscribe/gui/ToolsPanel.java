@@ -212,26 +212,29 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	public void actionPerformed(ActionEvent e) {
 		if (newNote == e.getSource()) {
 			// HSE - listener for new note click
-			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
+			final TextAreaModal modal = new TextAreaModal("Enter Note",
+					"Enter the QuestMaster Note:");
 			modal.showDialog().ifPresent(text -> {
 				noteData.addElement(text);
-				xmlQuest.getNotes().add(text);
+				xmlQuest.addNote(text);
 				xmlQuest.setModified(true);
 			});
 		} else if (editNote == e.getSource()) {
 			// HSE - listener for edit note click
-			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
+			final TextAreaModal modal = new TextAreaModal("Enter Note",
+					"Enter the QuestMaster Note:");
 			modal.setInitialText(note.getSelectedValue());
 			modal.showDialog().ifPresent(text -> {
-				// TODO edition duplicates notes
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
-				xmlQuest.getNotes().set(note.getLeadSelectionIndex(), text);
+				xmlQuest.setNote(note.getLeadSelectionIndex(), text);
 				xmlQuest.setModified(true);
 			});
 		} else if (delNote == e.getSource()) {
 			// HSE - listener for del note click
 			if (note.getSelectedValue() != null) {
-				int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this note?", "Confirm Delete",
+				int response = JOptionPane.showConfirmDialog(null,
+						"Are you sure you want to delete this note?",
+						"Confirm Delete",
 						JOptionPane.YES_NO_OPTION);
 				if (response == JOptionPane.YES_OPTION) {
 					xmlQuest.getNotes().remove(note.getSelectedValue());
