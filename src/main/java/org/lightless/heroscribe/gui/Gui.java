@@ -40,6 +40,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 
+	private final ImageLoader imageLoader;
 	private final IconPackService iconPackService;
 	private final ObjectList objectList;
 	private final QuestParser questParser;
@@ -66,12 +67,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	JLabel hint, status;
 
-	public Gui(IconPackService iconPackService,
+	public Gui(ImageLoader imageLoader,
+			   IconPackService iconPackService,
 			   Preferences preferences,
 			   ObjectList objectList,
 			   QuestParser questParser,
 			   Quest quest) {
 		super();
+		this.imageLoader = imageLoader;
 		this.iconPackService = iconPackService;
 		this.objectList = objectList;
 		this.questParser = questParser;
@@ -153,7 +156,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* New Menu */
 		newKey = new JMenuItem("Quest",
-				new ImageIcon(ResourceHelper.getResourceUrl("Icons/new.png").getFile()));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/new.png", 2)));
 		// HSE - add menu modifier 'Ctrl+N'
 		newKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -171,8 +174,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		}
 
 		/* Export Menu */
+
 		exportPdfKey = new JMenuItem("PDF (high quality, requires GhostScript) ...",
-				new ImageIcon(ResourceHelper.getResourceUrl("Icons/export.png").getFile()));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png", 2)));
 		// HSE - add menu modifier 'Ctrl-P'
 		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -216,7 +220,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* Prefs Menu */
 		ghostscriptKey = new JMenuItem("GhostScript path...",
-				new ImageIcon(ResourceHelper.getResourceUrl("Icons/prefs.png").getFile()));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/prefs.png", 2)));
 		ghostscriptKey.addActionListener(this);
 		prefsMenu.add(ghostscriptKey);
 
@@ -232,7 +236,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		file.add(newMenu);
 
 		openKey = new JMenuItem("Open Quest...",
-				new ImageIcon(ResourceHelper.getResourceUrl("Icons/open.png").getFile()));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png", 2)));
 		// HSE - add menu modifier 'Ctrl+O'
 		openKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -242,7 +246,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		file.addSeparator();
 
 		saveKey = new JMenuItem("Save Quest",
-				new ImageIcon(ResourceHelper.getResourceUrl("Icons/save.png").getFile()));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png", 2)));
 		// HSE - add menu modifier 'Ctrl-S'
 		saveKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),

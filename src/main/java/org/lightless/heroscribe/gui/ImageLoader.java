@@ -6,10 +6,6 @@ import org.lightless.heroscribe.helper.*;
 import javax.swing.*;
 import java.awt.*;
 
-/**
- * @author Andoni del Olmo
- * @since 07/11/2022
- */
 public class ImageLoader extends JWindow {
 
 	private final MediaTracker mt;

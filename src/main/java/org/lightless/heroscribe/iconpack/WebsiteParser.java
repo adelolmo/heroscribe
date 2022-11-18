@@ -3,7 +3,6 @@ package org.lightless.heroscribe.iconpack;
 import org.jsoup.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
-import org.slf4j.*;
 
 import java.io.*;
 import java.net.*;
@@ -12,7 +11,6 @@ import java.util.*;
 
 public class WebsiteParser {
 
-	private static final Logger log = LoggerFactory.getLogger(WebsiteParser.class);
 	private static final String HEROSCRIBE_ICONS_URL =
 			"http://www.heroscribe.org/icons.html";
 

@@ -36,7 +36,6 @@ public class HeroScribe {
 
 	public static void main(String[] args) throws Exception {
 		log.info("Starting up HeroScribe Enhanced {}", Constants.VERSION);
-
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
@@ -78,7 +77,8 @@ public class HeroScribe {
 			return null;
 		});
 
-		new Gui(iconPackService,
+		new Gui(imageLoader,
+				iconPackService,
 				preferences,
 				objectList,
 				questParser,
