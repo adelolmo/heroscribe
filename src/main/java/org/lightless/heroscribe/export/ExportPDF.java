@@ -52,8 +52,8 @@ public class ExportPDF {
 					"-dNOPAUSE",
 					"-sDEVICE=pdfwrite",
 					"-dFIXEDMEDIA",
-					"-sDEFAULTPAPERSIZE=" + paperType.getName(),
-					"-sPAPERSIZE=" + paperType.getName(),
+					"-sDEFAULTPAPERSIZE=" + paperType.getId(),
+					"-sPAPERSIZE=" + paperType.getId(),
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
 			});

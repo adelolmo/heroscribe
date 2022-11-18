@@ -223,6 +223,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 			final TextAreaModal modal = new TextAreaModal("Enter Note", "Enter the QuestMaster Note:");
 			modal.setInitialText(note.getSelectedValue());
 			modal.showDialog().ifPresent(text -> {
+				// TODO edition duplicates notes
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
 				xmlQuest.getNotes().set(note.getLeadSelectionIndex(), text);
 				xmlQuest.setModified(true);

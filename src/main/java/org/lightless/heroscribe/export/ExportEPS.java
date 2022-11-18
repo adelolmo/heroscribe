@@ -602,8 +602,11 @@ public class ExportEPS {
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
 				for (String note : quest.getNotesForUI()) {
-					out.println(format("newline newline (%s ) S",
-							sanitize(note)));
+					for (String noteLine : note.split("\n")) {
+						out.println(format("newline (%s ) S",
+								sanitize(noteLine)));
+					}
+					out.println("newline");
 				}
 				// HSE - output board location if multi board quest
 				if (quest.getWidth() > 1 || quest.getHeight() > 1) {

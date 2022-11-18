@@ -35,21 +35,27 @@ Paper Size                      Dimension (in points)
    B10                             91 x 127
  */
 public enum PaperType {
-	LETTER("Letter", 612, 792, "8.5\" x 11.0\""),
-	A3("A3", 595, 842, "297mm x 420mm"),
-	A4("A4", 595, 842, "210mm x 297mm"),
-	A5("A5", 420, 595, "148mm x 210mm");
+	LETTER("letter", "Letter", 612, 792, "8.5\" x 11.0\""),
+	A3("a3", "A3", 595, 842, "297mm x 420mm"),
+	A4("a4", "A4", 595, 842, "210mm x 297mm"),
+	A5("a5", "A5", 420, 595, "148mm x 210mm");
 
+	private final String id;
 	private final String name;
 	private final int width;
 	private final int height;
 	private final String humanDimension;
 
-	PaperType(String name, int width, int height, String humanDimension) {
+	PaperType(String id, String name, int width, int height, String humanDimension) {
+		this.id = id;
 		this.name = name;
 		this.width = width;
 		this.height = height;
 		this.humanDimension = humanDimension;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getName() {
