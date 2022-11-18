@@ -79,7 +79,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		this.objectList = objectList;
 		this.questParser = questParser;
 		// HSE - set app icon
-		setIconImage(Toolkit.getDefaultToolkit().getImage("HeroScribe.png"));
+		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png",1));
 		this.prefs = preferences;
 		this.quest = quest;
 
