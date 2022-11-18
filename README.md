@@ -27,13 +27,13 @@ In the project's root folder:
 
     mvn clean package
 
-This will create a `target` folder with a file called `heroscribe-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
+This will create a `target` folder with a file called `heroscribe-enhanced-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
 
 ## Running HeroScribe
 
 Unzip the bundle and run
 
-    java -jar heroscribe.jar
+    java -jar heroscribe-enhanced.jar
 
 ## Links
 
