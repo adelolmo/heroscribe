@@ -39,6 +39,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
+	private static final Dimension DIRECTORY_CHOOSER_DIMENSION = new Dimension(600, 700);
 
 	private final ImageLoader imageLoader;
 	private final IconPackService iconPackService;
@@ -78,12 +79,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		this.iconPackService = iconPackService;
 		this.objectList = objectList;
 		this.questParser = questParser;
-		// HSE - set app icon
-		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png",1));
 		this.prefs = preferences;
 		this.quest = quest;
 
+		// HSE - set app icon
+		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png",1));
+
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
+		ghostscriptChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 
 		fileChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
@@ -642,6 +645,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (dirKey == source) {
 			// HSE - get default directory
 			final JFileChooser chooser = new JFileChooser();
+			chooser.setPreferredSize(DIRECTORY_CHOOSER_DIMENSION);
 			chooser.setCurrentDirectory(new File("."));
 			chooser.setDialogTitle("Default Directory");
 			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
