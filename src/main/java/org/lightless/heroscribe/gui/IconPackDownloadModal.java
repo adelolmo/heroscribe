@@ -62,7 +62,7 @@ public class IconPackDownloadModal extends JPanel {
 		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
 
-		panel.add(new JLabel("Select the Icon Packs to install:"));
+		panel.add(new JLabel("Select the Icon Packs to install from www.heroscribe.org:"));
 		panel.add(jScrollPane, BorderLayout.PAGE_START);
 
 		add(panel, BorderLayout.NORTH);
@@ -89,7 +89,7 @@ public class IconPackDownloadModal extends JPanel {
 
 		if (JOptionPane.showOptionDialog(null,
 				this,
-				"www.heroscribe.org",
+				"Download",
 				JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE,
 				null,

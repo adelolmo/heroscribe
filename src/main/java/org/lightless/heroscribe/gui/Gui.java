@@ -39,6 +39,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
+	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
 
 	private final ImageLoader imageLoader;
 	private final IconPackService iconPackService;
@@ -85,7 +86,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 
-		fileChooser.setPreferredSize(new Dimension(900, 700));
+		fileChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
 		filters.put("pdf", new ActualFileFilter("pdf", "PDF files (*.pdf)"));
 		filters.put("eps", new ActualFileFilter("eps", "EPS files (*.eps)"));
@@ -669,34 +670,43 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		} else if (iconPackImport == source) {
 			final JFileChooser chooser = new JFileChooser();
+			chooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 			chooser.setCurrentDirectory(prefs.defaultDir);
-			chooser.setDialogTitle("Import Icon Pack");
+			chooser.setDialogTitle("Import");
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(new ZipFileFilter());
 			chooser.setAcceptAllFileFilterUsed(false);
 
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				final File bundleFile = chooser.getSelectedFile();
-				final File importedBundle = new File(Constants.getIconPackDirectory(), bundleFile.getName());
+				final File importedIconPackFile = new File(Constants.getIconPackDirectory(),
+						chooser.getSelectedFile().getName());
 				try {
 					Files.copy(chooser.getSelectedFile().toPath(),
-							importedBundle.toPath());
-					iconPackService.importIconPack(importedBundle);
+							importedIconPackFile.toPath());
+					iconPackService.importIconPack(importedIconPackFile);
 					tools.refreshData();
 
+					JOptionPane.showMessageDialog(this,
+							"Icon Pack successfully imported",
+							"Import",
+							JOptionPane.INFORMATION_MESSAGE);
 				} catch (FileAlreadyExistsException ex) {
 					if (JOptionPane.showConfirmDialog(this,
 							"The Icon Pack already exists.\nDo you want to replace it?",
-							"Import Icon Pack",
+							"Import",
 							JOptionPane.YES_NO_OPTION,
 							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
 						try {
 							Files.copy(chooser.getSelectedFile().toPath(),
-									importedBundle.toPath(),
+									importedIconPackFile.toPath(),
 									StandardCopyOption.REPLACE_EXISTING);
-							iconPackService.importIconPack(importedBundle);
+							iconPackService.importIconPack(importedIconPackFile);
 							tools.refreshData();
 
+							JOptionPane.showMessageDialog(this,
+									"Icon Pack successfully imported",
+									"Import",
+									JOptionPane.INFORMATION_MESSAGE);
 						} catch (IOException exc) {
 							throw new RuntimeException(exc);
 						}
