@@ -21,6 +21,8 @@
 
 package org.lightless.heroscribe.gui;
 
+import org.lightless.heroscribe.xml.Quest;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -47,9 +49,9 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	JPanel extraPanel;
 
 	String selected;
-	private org.lightless.heroscribe.xml.Quest xmlQuest;
+	private Quest xmlQuest;
 
-	public ToolsPanel(Gui gui, org.lightless.heroscribe.xml.Quest xmlQuest) {
+	public ToolsPanel(Gui gui, Quest xmlQuest) {
 		this.gui = gui;
 		this.xmlQuest = xmlQuest;
 		setLayout(new BorderLayout());
@@ -156,13 +158,13 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		noteData.clear();
 	}
 
-	public void refreshQuestData(org.lightless.heroscribe.xml.Quest xmlQuest) {
+	public void refreshQuestData(Quest quest) {
 		// HSE - refreshed quest data fields from current quest object
-		this.xmlQuest = xmlQuest;
+		this.xmlQuest = quest;
 		noteData.clear();
 
-		xmlQuest.getNotesForUI().forEach(note -> noteData.addElement(note));
-
+		quest.getNotesForUI().forEach(note -> noteData.addElement(note));
+		editNote.setEnabled(false);
 	}
 
 	public String getCommand() {
