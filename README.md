@@ -1,4 +1,6 @@
-# heroscribe
+# Heroscribe Enhanced
+
+![Heroscribe Enhance UI and PDF export](screenshot.png)
 
 Changes in HeroScribeEnhanced-1.0, by 2011 Jason Allen.
 
