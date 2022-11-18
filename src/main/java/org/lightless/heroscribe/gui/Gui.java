@@ -32,7 +32,6 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
@@ -669,52 +668,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			});
 
 		} else if (iconPackImport == source) {
-			final JFileChooser chooser = new JFileChooser();
-			chooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
-			chooser.setCurrentDirectory(prefs.defaultDir);
-			chooser.setDialogTitle("Import");
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(new ZipFileFilter());
-			chooser.setAcceptAllFileFilterUsed(false);
+			final IconPackImportFileChooser modal = new IconPackImportFileChooser(prefs.defaultDir, iconPackService);
+			modal.showModal();
+			tools.refreshData();
 
-			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				final File importedIconPackFile = new File(Constants.getIconPackDirectory(),
-						chooser.getSelectedFile().getName());
-				try {
-					Files.copy(chooser.getSelectedFile().toPath(),
-							importedIconPackFile.toPath());
-					iconPackService.importIconPack(importedIconPackFile);
-					tools.refreshData();
-
-					JOptionPane.showMessageDialog(this,
-							"Icon Pack successfully imported",
-							"Import",
-							JOptionPane.INFORMATION_MESSAGE);
-				} catch (FileAlreadyExistsException ex) {
-					if (JOptionPane.showConfirmDialog(this,
-							"The Icon Pack already exists.\nDo you want to replace it?",
-							"Import",
-							JOptionPane.YES_NO_OPTION,
-							JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
-						try {
-							Files.copy(chooser.getSelectedFile().toPath(),
-									importedIconPackFile.toPath(),
-									StandardCopyOption.REPLACE_EXISTING);
-							iconPackService.importIconPack(importedIconPackFile);
-							tools.refreshData();
-
-							JOptionPane.showMessageDialog(this,
-									"Icon Pack successfully imported",
-									"Import",
-									JOptionPane.INFORMATION_MESSAGE);
-						} catch (IOException exc) {
-							throw new RuntimeException(exc);
-						}
-					}
-				} catch (IOException ex) {
-					throw new RuntimeException(ex);
-				}
-			}
 		} else if (iconPackDownload == source) {
 			final IconPackDownloadModal modal = new IconPackDownloadModal(iconPackService);
 			modal.showDialog();
@@ -861,23 +818,6 @@ class ActualFileFilter extends FileFilter {
 	}
 }
 
-class ZipFileFilter extends FileFilter {
-	@Override
-	public boolean accept(File f) {
-		if (f.isDirectory()) {
-			return true;
-		}
-		if (f.getName().endsWith(".zip")) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public String getDescription() {
-		return null;
-	}
-}
 
 class SpecialQuestMenuItem extends JMenuItem {
 	private static final long serialVersionUID = 1L;
