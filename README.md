@@ -1,6 +1,6 @@
 # Heroscribe Enhanced Skull
 
-<img src="src/main/resources/Splash.jpg" width="201" height="160">
+<img src="src/main/resources/Splash.jpg" width="220" height="160">
 
 ![Heroscribe Enhance UI and PDF export](screenshot.png)
 
