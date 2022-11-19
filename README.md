@@ -1,5 +1,7 @@
 # Heroscribe Enhanced Skull
 
+<img src="src/main/resources/Splash.jpg" width="201" height="160">
+
 ![Heroscribe Enhance UI and PDF export](screenshot.png)
 
 Changes in HeroScribeEnhanced-1.0, by 2011 Jason Allen.
