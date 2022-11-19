@@ -6,7 +6,7 @@
     <groupId>org.lightless.heroscribe</groupId>
     <artifactId>heroscribe-enhanced</artifactId>
     <version>1.4</version>
-    <name>HeroScribe Enhanced</name>
+    <name>HeroScribe Enhanced Skull</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

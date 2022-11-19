@@ -24,7 +24,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class Constants {
-	public static final String APPLICATION_NAME = "HeroScribe Enhanced";
+	public static final String APPLICATION_NAME = "HeroScribe Enhanced Skull";
 	public static final Path TEMP_DIR = Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe");
 
 

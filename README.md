@@ -1,4 +1,4 @@
-# Heroscribe Enhanced
+# Heroscribe Enhanced Skull
 
 ![Heroscribe Enhance UI and PDF export](screenshot.png)
 
@@ -23,17 +23,35 @@ See https://asdf-vm.com/ for how to use asdf.
 
 ### Build
 
+#### Zin bundle
 In the project's root folder:
 
     mvn clean package
 
 This will create a `target` folder with a file called `heroscribe-enhanced-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
 
+#### Debian package
+
+    mvn clean package 
+    gbp buildpackage --no-sign --git-ignore-branch --git-ignore-new
+
+This will create the debian package in the parent directory. e.g: `../hse_1.4_all.deb`
+
 ## Running HeroScribe
+
+### Zip bundle
 
 Unzip the bundle and run
 
     java -jar heroscribe-enhanced.jar
+
+### Debian package
+
+Install the debian package in your computer
+
+    sudo dpkg -i ../hse_1.4_all.deb
+
+In your desktop, go to Applications -> Graphics -> Heroscribe Enhanced Skull
 
 ## Links
 

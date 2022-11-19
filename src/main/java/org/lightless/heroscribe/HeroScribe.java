@@ -1,7 +1,9 @@
-package org.lightless.heroscribe;
 /*
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
+
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
@@ -16,6 +18,8 @@ package org.lightless.heroscribe;
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+package org.lightless.heroscribe;
 
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.*;
