@@ -10,13 +10,12 @@ Using OpenJDK 11 and maven.
 
 Made for home use.
 
-## Building & running
+## Building
 
-### Maven & Java
+### Requirements
 
 - OpenJDK 11 - https://jdk.java.net/archive/
 - Maven - https://maven.apache.org/
-- Postscript - for high quality PDF generation
 
 ### Using asdf (Linux)
 
@@ -47,10 +46,13 @@ Unzip the bundle and run
 
     java -jar heroscribe-enhanced.jar
 
+Postscript is required for high quality PDF generation.
+
 ### Debian package
 
-Install the debian package in your computer
+Install the debian package in your system
 
+    sudo apt-get install default-jre-headless ghostscript
     sudo dpkg -i ../hse_1.4_all.deb
 
 In your desktop, go to Applications -> Graphics -> Heroscribe Enhanced Skull
