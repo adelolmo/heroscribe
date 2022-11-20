@@ -3,6 +3,7 @@ HeroScribeEnhanced.desktop /usr/share/applications/
 /target/heroscribe-enhanced.jar /usr/share/hse
 /HeroScribe.ico /usr/share/hse
 /Objects.xml /usr/share/hse
+/Objects.html /usr/share/hse
 /Preferences.xml /usr/share/hse
 /LICENSE /usr/share/hse
 /Icons /usr/share/hse/

@@ -58,7 +58,7 @@ public class OS {
 				 * If the (physical :) reader want to suggest something better,
 				 * I'm all ears :)
 				 */
-				Runtime.getRuntime().exec("mozilla " + url);
+				Runtime.getRuntime().exec("xdg-open " + url);
 			}
 		} catch (Exception e) {
 			log.error("Error", e);
