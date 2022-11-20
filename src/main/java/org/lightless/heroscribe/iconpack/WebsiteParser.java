@@ -12,7 +12,7 @@ import java.util.*;
 public class WebsiteParser {
 
 	private static final String HEROSCRIBE_ICONS_URL =
-			"http://www.heroscribe.org/icons.html";
+			"https://www.heroscribe.org/icons.html";
 
 	public List<IconPackDetails> parse() throws IOException {
 		final Document document =
