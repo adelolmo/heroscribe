@@ -608,7 +608,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			File file;
 			if ((file = askPath("eps")) != null) {
 				try {
-					ExportEPS.writeMultiPage(file,
+					ExportEPS.writeMultiPage(prefs.getPaperSize(),
+							file,
 							quest,
 							objectList
 					);

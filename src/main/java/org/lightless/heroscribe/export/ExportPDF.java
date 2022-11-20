@@ -44,7 +44,7 @@ public class ExportPDF {
 
 		// HSE - check for single page render or multi page render
 		if (isMultiPage) {
-			ExportEPS.writeMultiPage(eps, quest, objects);
+			ExportEPS.writeMultiPage(paperType, eps, quest, objects);
 
 			final Process process = Runtime.getRuntime().exec(new String[]{
 					ghostscript.getAbsoluteFile().toString(),
