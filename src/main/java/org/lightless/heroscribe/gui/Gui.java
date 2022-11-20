@@ -35,6 +35,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
@@ -50,6 +51,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private final QuestParser questParser;
 
 	private Quest quest;
+	private final Path objectHtmlPath;
 	private final Preferences prefs;
 
 	ToolsPanel tools;
@@ -76,7 +78,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			   Preferences preferences,
 			   ObjectList objectList,
 			   QuestParser questParser,
-			   Quest quest) {
+			   Quest quest,
+			   Path objectHtmlPath) {
 		super();
 		this.imageLoader = imageLoader;
 		this.iconPackService = iconPackService;
@@ -84,6 +87,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		this.questParser = questParser;
 		this.prefs = preferences;
 		this.quest = quest;
+		this.objectHtmlPath = objectHtmlPath;
 
 		// HSE - set app icon
 		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png", 1));
@@ -697,9 +701,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			String object = tools.selectorPanel.getSelectedObject();
 
 			if ("add".equals(tools.getCommand()) && object != null) {
-				OS.openURL(new File("Objects.html"), "object_" + object);
+				OS.openURL(objectHtmlPath.toFile(), "object_" + object);
 			} else {
-				OS.openURL(new File("Objects.html"), null);
+				OS.openURL(objectHtmlPath.toFile(), null);
 			}
 
 		} else if (readMeKey == source) {

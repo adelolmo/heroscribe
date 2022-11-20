@@ -55,6 +55,7 @@ public class HeroScribe {
 
 		final Path basePath = getBasePath(args);
 		final Path objectPath = getFilePath(basePath, "Objects.xml");
+		final Path objectHtmlPath = Paths.get(basePath.toString(), "Objects.html");
 
 		final ImageLoader imageLoader = new ImageLoader();
 		final ObjectMapper xmlMapper = new XmlMapper()
@@ -86,7 +87,8 @@ public class HeroScribe {
 				preferences,
 				objectList,
 				questParser,
-				quest);
+				quest,
+				objectHtmlPath);
 
 		log.info("GUI done.");
 	}
