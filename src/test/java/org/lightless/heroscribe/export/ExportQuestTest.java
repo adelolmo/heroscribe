@@ -82,16 +82,6 @@ class ExportQuestTest {
 	}
 
 	@Test
-	void shouldExportA3PdfQuestWithSpeechAndFewNotes() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
-		writePDF(PaperType.A3, quest, new File("/tmp/empty.pdf"));
-	}
-	@Test
 	void shouldExportA4PdfQuestWithSpeechAndFewNotes() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);

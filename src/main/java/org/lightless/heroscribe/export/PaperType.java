@@ -57,10 +57,11 @@ Paper Size                      Dimension (in points)
  */
 public enum PaperType {
 	LETTER("letter", "Letter", 612, 792, "8.5\" x 11.0\""),
-	LEGAL("legal", "Legal", 612, 1008, "8.5\" x 14.0\""),
-	A3("a3", "A3", 595, 842, "297mm x 420mm"),
+//	LEGAL("legal", "Legal", 612, 1008, "8.5\" x 14.0\""),
+//	A3("a3", "A3", 595, 842, "297mm x 420mm"),
 	A4("a4", "A4", 595, 842, "210mm x 297mm"),
-	A5("a5", "A5", 420, 595, "148mm x 210mm");
+//	A5("a5", "A5", 420, 595, "148mm x 210mm")
+	;
 
 	private final String id;
 	private final String name;
