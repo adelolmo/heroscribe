@@ -698,12 +698,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			windowClosing(null);
 
 		} else if (listKey == source) {
-			String object = tools.selectorPanel.getSelectedObject();
-
-			if ("add".equals(tools.getCommand()) && object != null) {
-				OS.openURL(objectHtmlPath.toFile(), "object_" + object);
+			final String objectId = tools.selectorPanel.getSelectedObject();
+			final String reference = "object_" + objectId;
+			if ("add".equals(tools.getCommand()) && objectId != null) {
+				if (!OS.canOpenUrl()) {
+					new HtmlPanel(this, objectHtmlPath, reference);
+				} else {
+					OS.openURL(objectHtmlPath.toFile(), reference);
+				}
 			} else {
-				OS.openURL(objectHtmlPath.toFile(), null);
+				if (!OS.canOpenUrl()) {
+					new HtmlPanel(this, objectHtmlPath);
+				} else {
+					OS.openURL(objectHtmlPath.toFile(), null);
+				}
 			}
 
 		} else if (readMeKey == source) {
@@ -723,6 +731,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 							+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
 					"About", JOptionPane.PLAIN_MESSAGE);
 		}
+
 	}
 
 	private File askPath(String extension) {
