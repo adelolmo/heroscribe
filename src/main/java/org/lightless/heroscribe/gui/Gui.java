@@ -38,6 +38,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.*;
+
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -629,7 +631,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			File file;
 			if ((file = askPath("png")) != null) {
 				try {
-					ExportRaster.write(file, "png", boardPainter);
+					ExportRaster.write(file, PNG, boardPainter);
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
 							"Can't save file.  Detailed Error: " + ex.getMessage(),

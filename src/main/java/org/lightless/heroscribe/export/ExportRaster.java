@@ -5,6 +5,9 @@
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
   Copyright (C) 2011 Jason Allen
 
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
@@ -29,17 +32,21 @@ import java.awt.image.*;
 import java.io.*;
 
 public class ExportRaster {
-	/* format should be either "png" or "jpg" */
-	public static void write(File file, String format, BoardPainter boardPainter) throws Exception {
+	public static void write(File file, ImageFormat format, BoardPainter boardPainter) throws Exception {
 		BufferedImage image = new BufferedImage(
 				boardPainter.framePixelSize.width,
-				boardPainter.framePixelSize.height,// + 400,
+				boardPainter.framePixelSize.height,
 				BufferedImage.TYPE_INT_RGB);
 
 		Graphics2D g = image.createGraphics();
 
 		boardPainter.paintWithText(null, 0, 0, g);
 
-		ImageIO.write(image, format, file);
+		ImageIO.write(image, format.name(), file);
+	}
+
+	public enum ImageFormat {
+		JPEG,
+		PNG
 	}
 }
