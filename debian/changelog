@@ -1,3 +1,10 @@
+hse (1.6) unstable; urgency=medium
+
+  * Disable unsupported paper sizes
+  * Render Objects.xml in modal for all OS
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Wed, 23 Nov 2022 15:33:11 +0100
+
 hse (1.5) unstable; urgency=medium
 
   * Rename to HeroScribe Enhanced Skull
