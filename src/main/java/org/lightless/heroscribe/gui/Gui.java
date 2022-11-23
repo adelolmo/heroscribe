@@ -699,19 +699,12 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		} else if (listKey == source) {
 			final String objectId = tools.selectorPanel.getSelectedObject();
-			final String reference = "object_" + objectId;
+
 			if ("add".equals(tools.getCommand()) && objectId != null) {
-				if (!OS.canOpenUrl()) {
-					new HtmlPanel(this, objectHtmlPath, reference);
-				} else {
-					OS.openURL(objectHtmlPath.toFile(), reference);
-				}
+				final String reference = "object_" + objectId;
+				new HtmlPanel(this, objectHtmlPath, reference);
 			} else {
-				if (!OS.canOpenUrl()) {
-					new HtmlPanel(this, objectHtmlPath);
-				} else {
-					OS.openURL(objectHtmlPath.toFile(), null);
-				}
+				new HtmlPanel(this, objectHtmlPath);
 			}
 
 		} else if (readMeKey == source) {

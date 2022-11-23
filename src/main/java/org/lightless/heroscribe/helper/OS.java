@@ -80,7 +80,4 @@ public class OS {
 		return new File(System.getProperty("user.dir"), relative).getAbsolutePath();
 	}
 
-	public static boolean canOpenUrl() {
-		return isWindows() || isMacOsX();
-	}
 }
