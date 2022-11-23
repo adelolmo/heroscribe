@@ -1,2 +1,5 @@
 build:
-	mvn clean package
+	mvn clean package -DskipTests
+
+test:
+	mvn test
