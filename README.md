@@ -33,7 +33,6 @@ This will create a `target` folder with a file called `heroscribe-enhanced-bundl
 
 #### Debian package
 
-    mvn clean package 
     gbp buildpackage --no-sign --git-ignore-branch --git-ignore-new
 
 This will create the debian package in the parent directory. e.g: `../hse_1.4_all.deb`
