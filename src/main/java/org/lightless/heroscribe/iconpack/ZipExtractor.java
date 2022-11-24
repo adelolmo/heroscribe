@@ -1,8 +1,6 @@
 /*
-  Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-
-  HeroScribe Enhanced (changes are prefixed with HSE in comments)
-  Copyright (C) 2011 Jason Allen
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not

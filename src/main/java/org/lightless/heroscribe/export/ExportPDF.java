@@ -5,6 +5,9 @@
   HeroScribe Enhanced (changes are prefixed with HSE in comments)
   Copyright (C) 2011 Jason Allen
 
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.

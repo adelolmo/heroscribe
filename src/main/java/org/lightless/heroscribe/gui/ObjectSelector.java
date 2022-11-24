@@ -93,22 +93,6 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 					list.addListSelectionListener(this);
 				}
 		);
-	/*	Iterator<Kind> kindIterator = gui.getObjects().kindsIterator();
-		while (kindIterator.hasNext()) {
-			Kind kind = kindIterator.next();
-
-			JList<LObject> list = new JList<>(new DefaultListModel<>());
-
-			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-			kindList.put(kind.id, list);
-
-			kindsComboBox.addItem(kind);
-
-			objectsPanel.add(new JScrollPane(list), kind.id);
-
-			list.addListSelectionListener(this);
-		}*/
 
 		objectList.getObjects().forEach(object -> {
 			final JList<ObjectList.Object> list = kindList.get(object.getKind());

@@ -1,7 +1,4 @@
 /*
-  HeroScribe
-  Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
-
   HeroScribe Enhanced Skull
   Copyright (C) 2022 Andoni del Olmo
 
@@ -30,6 +27,8 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 
+import static java.lang.String.*;
+
 public class HtmlPanel extends JPanel implements HyperlinkListener {
 	private static final Logger log = LoggerFactory.getLogger(HtmlPanel.class);
 
@@ -48,7 +47,7 @@ public class HtmlPanel extends JPanel implements HyperlinkListener {
 		try {
 			jEditorPane.setPage(getHtmlUrl(path, reference));
 		} catch (IOException e) {
-			jEditorPane.setText("<html>Page not found.</html>");
+			throw new IllegalStateException(format("Cannot render html file: %s", path));
 		}
 		final JScrollPane jScrollPane = new JScrollPane(jEditorPane);
 		jScrollPane.setPreferredSize(new Dimension(1000, 700));

@@ -2,6 +2,9 @@
   HeroScribe
   Copyright (C) 2002-2004 Flavio Chierichetti and Valerio Chierichetti
 
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
+
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2 (not
   later versions) as published by the Free Software Foundation.
@@ -85,11 +88,9 @@ public class Board extends JPanel implements MouseInputListener {
 			newObject.setId(id);
 			newObject.setZorder(Integer.MAX_VALUE);
 		} else {
-//			newObject = new QObject(id, gui.getObjectList());
 			newObject = new Quest.Board.Object();
 			newObject.setId(gui.tools.selectorPanel.getSelectedObject());
 
-//			final List objects = gui.getObjects();
 			final ObjectList.Object obj = gui.getObjectList().getObject(id);
 
 			newObject.setZorder(obj.getZorder());

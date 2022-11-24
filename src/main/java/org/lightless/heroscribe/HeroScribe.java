@@ -54,8 +54,8 @@ public class HeroScribe {
 		final Preferences preferences = new Preferences(Constants.PREFERENCES_FILE);
 
 		final Path basePath = getBasePath(args);
-		final Path objectPath = getFilePath(basePath, "Objects.xml");
-		final Path objectHtmlPath = Paths.get(basePath.toString(), "Objects.html");
+		final Path objectXmlPath = getFilePath(basePath, "Objects.xml");
+		final Path objectHtmlPath = getFilePath(basePath, "Objects.html");
 
 		final ImageLoader imageLoader = new ImageLoader();
 		final ObjectMapper xmlMapper = new XmlMapper()
@@ -64,13 +64,13 @@ public class HeroScribe {
 		final ObjectsParser objectsParser = new ObjectsParser(xmlMapper, basePath);
 		final QuestParser questParser = new QuestParser(xmlMapper);
 
-		final ObjectList objectList = objectsParser.parse(objectPath.toFile());
+		final ObjectList objectList = objectsParser.parse(objectXmlPath.toFile());
 		final Quest quest = new Quest(objectList.getBoard());
 		final IconPackService iconPackService = new IconPackService(imageLoader,
 				objectList,
 				objectsParser,
 				new ZipExtractor(),
-				objectPath);
+				objectXmlPath);
 		final ObjectsMediaLoader mediaLoader = new ObjectsMediaLoader(imageLoader);
 
 		log.info("Objects read.");
