@@ -1,5 +1,21 @@
-package org.lightless.heroscribe.export;
+/*
+  HeroScribe Enhanced Skull
+  Copyright (C) 2022 Andoni del Olmo
 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License version 2 (not
+  later versions) as published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+package org.lightless.heroscribe.export;
 
 import com.fasterxml.jackson.dataformat.xml.*;
 import org.junit.jupiter.api.*;
@@ -9,18 +25,15 @@ import org.lightless.heroscribe.xml.*;
 import java.io.*;
 import java.nio.file.*;
 
-/**
- * @author Andoni del Olmo
- * @since 14/11/2022
- */
 class ExportQuestTest {
 
-	private static final String LOREM_IPSUM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
+	private static final String LOREM_IPSUM =
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
 			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" +
 			"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 	private static final File GHOSTSCRIPT_BIN = new File("/usr/bin/gs");
 	private static final String[] ABC = new String[]{"A", "B", "C"};
-	private static final String[] ABC_LONG =
+	private static final String[] ABCDEFGHI =
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 	private static final Quest.Board.Object TREASURE_CHEST = new Quest.Board.Object() {{
 		setId("TreasureChest");
@@ -108,7 +121,7 @@ class ExportQuestTest {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
-		for (String character : ABC_LONG) {
+		for (String character : ABCDEFGHI) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
@@ -121,7 +134,7 @@ class ExportQuestTest {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
-		for (String character : ABC_LONG) {
+		for (String character : ABCDEFGHI) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		writePDF(PaperType.A4, quest, new File("/tmp/empty.pdf"));

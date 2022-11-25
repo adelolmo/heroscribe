@@ -128,12 +128,8 @@ public class IconPackDownloadModal extends JPanel {
 					}
 
 					showReportDialog(downloadReports);
-
 				}
 			};
-			worker.addPropertyChangeListener(evt -> {
-				System.out.println(evt.getNewValue());
-			});
 			worker.execute();
 		}
 	}
