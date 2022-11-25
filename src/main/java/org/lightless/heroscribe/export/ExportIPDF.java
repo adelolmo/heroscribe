@@ -29,7 +29,7 @@ public class ExportIPDF {
 		Document document = new Document(new Rectangle(0, 0, 950, 1100), 50, 50, 50, 50);
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
 		document.open();
-		boardPainter.paintPDF(null, 0, 0, writer, document);
+		boardPainter.paintPDF(writer, document);
 		document.close();
 	}
 

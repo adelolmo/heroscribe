@@ -25,8 +25,6 @@ import com.itextpdf.awt.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.quest.*;
-import org.lightless.heroscribe.xml.Quest;
 import org.lightless.heroscribe.xml.*;
 
 import java.awt.Font;
@@ -348,7 +346,7 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	// HSE - used to draw the board with the quest text included to a PDF
-	public void paintPDF(QObject floating, int column, int row, PdfWriter writer, Document document) {
+	public void paintPDF(PdfWriter writer, Document document) {
 
 		PdfContentByte cb = writer.getDirectContent();
 		PdfTemplate[][] tp = new PdfTemplate[gui.getQuest().getWidth()][gui.getQuest().getHeight()];
