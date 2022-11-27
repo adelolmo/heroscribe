@@ -39,7 +39,7 @@ public class HeroScribe {
 	private static final Logger log = LoggerFactory.getLogger(HeroScribe.class);
 
 	public static void main(String[] args) throws Exception {
-		log.info("Starting up HeroScribe Enhanced {}", Constants.VERSION);
+		log.info("Starting up {} {}", Constants.APPLICATION_NAME, Constants.VERSION);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 

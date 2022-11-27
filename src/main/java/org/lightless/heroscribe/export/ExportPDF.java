@@ -26,6 +26,7 @@ package org.lightless.heroscribe.export;
 
 import org.apache.commons.io.*;
 import org.lightless.heroscribe.xml.*;
+import org.slf4j.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -34,6 +35,9 @@ import java.nio.file.*;
 import static java.lang.String.*;
 
 public class ExportPDF {
+
+	private static final Logger log = LoggerFactory.getLogger(ExportPDF.class);
+
 	public static void write(File ghostscript,
 							 File file,
 							 Quest quest,
@@ -48,8 +52,7 @@ public class ExportPDF {
 		// HSE - check for single page render or multi page render
 		if (isMultiPage) {
 			ExportEPS.writeMultiPage(paperType, eps, quest, objects);
-
-			final Process process = Runtime.getRuntime().exec(new String[]{
+			final String[] ghostscriptCommand = {
 					ghostscript.getAbsoluteFile().toString(),
 					"-dBATCH",
 					"-dNOPAUSE",
@@ -59,21 +62,24 @@ public class ExportPDF {
 					"-sPAPERSIZE=" + paperType.getId(),
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
-			});
+			};
+			log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
+			final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
 
 			executeAndEvaluateProcessOutput(process, file, eps, pdf);
 
 		} else {
 			ExportEPS.write(eps, quest, objects);
-
-			final Process process = Runtime.getRuntime().exec(new String[]{
+			final String[] ghostscriptCommand = {
 					ghostscript.getAbsoluteFile().toString(),
 					"-dBATCH",
 					"-dNOPAUSE",
 					"-sDEVICE=pdfwrite",
 					"-sOutputFile=" + pdf.getAbsolutePath(),
 					eps.getAbsoluteFile().toString()
-			});
+			};
+			log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
+			final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
 
 			executeAndEvaluateProcessOutput(process, file, eps, pdf);
 		}
@@ -81,6 +87,7 @@ public class ExportPDF {
 	}
 
 	private static void executeAndEvaluateProcessOutput(Process process, File file, File eps, File pdf) throws Exception {
+		log.info(IOUtils.toString(process.getInputStream(), StandardCharsets.UTF_8));
 		int exitValue = process.waitFor();
 		Files.delete(eps.toPath());
 
