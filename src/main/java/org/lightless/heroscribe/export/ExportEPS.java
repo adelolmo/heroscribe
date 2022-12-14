@@ -445,7 +445,7 @@ public class ExportEPS {
 				final Quest.Board board = quest.getBoard(column, row);
 
 				out.println("%%Page: " + pageCount + " " + pageCount);
-				out.println(format("%f %f StartBoard",
+				out.println(format("%s %s StartBoard",
 						boardXPosition, boardYPosition));
 
 				for (int i = 1; i <= board.getWidth(); i++) {
@@ -471,7 +471,7 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Bridges */
-				out.println(format("%f %f StartBoard",
+				out.println(format("%s %s StartBoard",
 						boardXPosition, boardYPosition));
 
 				if (column < quest.getWidth() - 1) {
@@ -495,7 +495,7 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Objects */
-				out.println(format("%f %f StartBoard",
+				out.println(format("%s %s StartBoard",
 						boardXPosition, boardYPosition));
 
 				for (Quest.Board.Object object : board.getObjects()) {
