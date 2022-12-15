@@ -24,7 +24,7 @@
 			<outputDirectory>/</outputDirectory>
 		</file>
 		<file>
-			<source>target/heroscribe-enhanced.jar</source>
+			<source>target/heroscribe-enhanced-skull.jar</source>
 			<outputDirectory>/</outputDirectory>
 		</file>
 

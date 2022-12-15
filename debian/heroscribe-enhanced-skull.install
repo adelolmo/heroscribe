@@ -1,0 +1,9 @@
+src/main/assembly/heroscribe.sh /usr/share/heroscribe-enhanced-skull/
+HeroScribeEnhanced.desktop /usr/share/applications/
+target/heroscribe-enhanced-skull.jar /usr/share/heroscribe-enhanced-skull
+HeroScribe.ico /usr/share/heroscribe-enhanced-skull
+Objects.xml /usr/share/heroscribe-enhanced-skull
+Objects.html /usr/share/heroscribe-enhanced-skull
+Preferences.xml /usr/share/heroscribe-enhanced-skull
+LICENSE /usr/share/heroscribe-enhanced-skull
+Icons /usr/share/heroscribe-enhanced-skull/

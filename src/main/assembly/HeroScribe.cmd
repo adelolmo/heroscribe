@@ -1,1 +1,1 @@
-%JAVA_HOME%\bin\java -jar heroscribe-enhanced.jar
+%JAVA_HOME%\bin\java -jar heroscribe-enhanced-skull.jar

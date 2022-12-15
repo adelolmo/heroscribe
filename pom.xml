@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lightless.heroscribe</groupId>
-    <artifactId>heroscribe-enhanced</artifactId>
+    <artifactId>heroscribe-enhanced-skull</artifactId>
     <version>1.7</version>
     <name>HeroScribe Enhanced Skull</name>
 

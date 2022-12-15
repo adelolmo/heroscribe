@@ -7,8 +7,8 @@
 .run
 
 debian/files
-debian/hse.debhelper.log
-debian/hse.substvars
+debian/heroscribe-enhanced-skull.debhelper.log
+debian/heroscribe-enhanced-skull.substvars
 debian/debhelper-build-stamp
-debian/hse
+debian/heroscribe-enhanced-skull
 debian/.debhelper

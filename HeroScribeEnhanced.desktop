@@ -2,11 +2,11 @@
 Name=HeroScribe Enhanced Skull
 GenericName=HeroQuest Editor
 Comment=HeroScribe's aim is to give new life to HeroQuest©, one of the most celebrated Board Games/RPG of the '90s.
-Exec=/usr/share/hse/heroscribe.sh
+Exec=/usr/share/heroscribe-enhanced-skull/heroscribe.sh
 Terminal=false
 X-MultipleArgs=false
 Type=Application
-Icon=/usr/share/hse/HeroScribe.ico
-StartupWMClass=/usr/share/hse/heroscribe.sh
+Icon=/usr/share/heroscribe-enhanced-skull/HeroScribe.ico
+StartupWMClass=/usr/share/heroscribe-enhanced-skull/heroscribe.sh
 StartupNotify=true
 Categories=Graphics;
