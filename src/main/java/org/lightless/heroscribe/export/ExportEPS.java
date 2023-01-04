@@ -32,7 +32,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 
-import static java.lang.String.*;
 import static org.lightless.heroscribe.Constants.*;
 
 public class ExportEPS {
@@ -45,7 +44,7 @@ public class ExportEPS {
 	public static void write(File file,
 							 Quest quest,
 							 ObjectList objectList) throws Exception {
-		final PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		final FormatterWriter out = new FormatterWriter(new PrintWriter(new BufferedWriter(new FileWriter(file))));
 
 		// HSE - set the box height to accommodate quest text
 		final float bBoxWidth = (quest.getWidth()
@@ -313,7 +312,7 @@ public class ExportEPS {
 
 		// HSE - output the wandering monster
 		out.println("grestore");
-		out.println(format("gsave 0 ph %s sub translate textbox", 430));
+		out.println("gsave 0 ph %s sub translate textbox", 430);
 		final String wanderingMonsterName = objectList.getObject(quest.getWanderingId()).getName();
 		out.println("(Wandering Monster in this Quest: " + sanitize(wanderingMonsterName) + " ) c");
 
@@ -333,7 +332,7 @@ public class ExportEPS {
 									  File file,
 									  Quest quest,
 									  ObjectList objects) throws Exception {
-		final PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		final FormatterWriter out = new FormatterWriter(new PrintWriter(new BufferedWriter(new FileWriter(file))));
 
 		final float boardXPosition = calculateBoardXPosition(paperType);
 		final float boardYPosition = calculateBoardYPosition(paperType);
@@ -342,21 +341,23 @@ public class ExportEPS {
 		out.println("%%Creator: " + APPLICATION_NAME + " " + VERSION);
 		out.println("%%Title:" + quest.getName());
 		out.println("%%LanguageLevel: 2");
-		out.println("%%BoundingBox: 0 0 "
-				+ Math.round(Math.ceil(paperType.getWidth())) // 528
-				+ " "
-				+ Math.round(Math.ceil(paperType.getHeight()))); // 794
-		out.println("%%HiResBoundingBox: 0 0 " + paperType.getWidth() + " " + paperType.getHeight());  // 528.0 793.6
-		out.println("%%Pages: " + (quest.getHeight() * quest.getWidth()));
-		out.println(format("/adjacentBoardsOffset %s def",
-				objects.getBoard().getAdjacentBoardsOffset()));
+		out.println("%%BoundingBox: 0 0 %s %s",
+				Math.round(Math.ceil(paperType.getWidth())), // 528
+				Math.round(Math.ceil(paperType.getHeight()))); // 794
+		out.println("%%HiResBoundingBox: 0 0 %s %s",
+				paperType.getWidth(),
+				paperType.getHeight());  // 528.0 793.6
+		out.println("%%Pages: %s",
+				quest.getHeight() * quest.getWidth());
+		out.println("/adjacentBoardsOffset %s def",
+				objects.getBoard().getAdjacentBoardsOffset());
 
 		appendPS(objects.getBoardVectorPath(quest.getRegion()),
 				out,
 				false);
 
-		out.println(format("%d %d BoundingBox",
-				quest.getWidth(), quest.getHeight()));
+		out.println("%d %d BoundingBox",
+				quest.getWidth(), quest.getHeight());
 		out.println("/sysshowpage {systemdict /showpage get exec} def");
 		// HSE - output all the postscript definitions to write text
 		out.println("/gs /gsave def /gr /grestore def");
@@ -369,11 +370,11 @@ public class ExportEPS {
 		out.println("/ro /rotate def /rp /repeat def");
 		out.println("/box { np mt rl rl rl cp set }def ");
 		out.println("/circle { np arc set }def ");
-		out.println(format("/ph %d def",
-				paperType.getHeight()));  // 793.6
+		out.println("/ph %d def",
+				paperType.getHeight());  // 793.6
 		out.println("/s /show load def /L { newline } def /n { s L } def");
-		out.println(format("/textbox { /lm 35 def /bm 0 def /rm %d def /tm 35 def lm tm moveto } def",
-				paperType.getWidth() - 20));
+		out.println("/textbox { /lm 35 def /bm 0 def /rm %d def /tm 35 def lm tm moveto } def",
+				paperType.getWidth() - 20);
 		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
 		out.println("/centre { dup stringwidth pop 2 div rm lm sub 2 div exch sub lm add tm moveto } def");
 		out.println("/n { show newline } def /c {centre n } def /s {show } def /L { newline } def");
@@ -398,8 +399,8 @@ public class ExportEPS {
 		}
 
 		for (String id : set) {
-			out.println(format("/Icon%s << /FormType 1 /PaintProc { pop",
-					id));
+			out.println("/Icon%s << /FormType 1 /PaintProc { pop",
+					id);
 
 			/* the postscript is divided in "{ } exec" blocks to broaden
 			 * compatibility
@@ -410,16 +411,16 @@ public class ExportEPS {
 							out,
 							true);
 
-			out.println(format(" } bind /Matrix [1 0 0 1 0 0] /BBox [%d %d %d %d] >> def",
+			out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [%d %d %d %d] >> def",
 					boundingBox[0],
 					boundingBox[1],
 					boundingBox[2],
-					boundingBox[3]));
+					boundingBox[3]);
 
 		}
 		// HSE - add wandering monster object
-		out.println(format("/Icon%s << /FormType 1 /PaintProc { pop",
-				quest.getWanderingId()));
+		out.println("/Icon%s << /FormType 1 /PaintProc { pop",
+				quest.getWanderingId());
 
 		/* the postscript is divided in "{ } exec" blocks to broaden
 		 * compatibility
@@ -430,11 +431,11 @@ public class ExportEPS {
 						out,
 						true);
 
-		out.println(format(" } bind /Matrix [1 0 0 1 0 0] /BBox [%d %d %d %d] >> def",
+		out.println(" } bind /Matrix [1 0 0 1 0 0] /BBox [%d %d %d %d] >> def",
 				boundingBox[0],
 				boundingBox[1],
 				boundingBox[2],
-				boundingBox[3]));
+				boundingBox[3]);
 		// END wandering monster object
 
 		int pageCount = 1;
@@ -444,15 +445,17 @@ public class ExportEPS {
 			for (int row = 0; row < quest.getHeight(); row++) {
 				final Quest.Board board = quest.getBoard(column, row);
 
-				out.println("%%Page: " + pageCount + " " + pageCount);
-				out.println(format("%s %s StartBoard",
-						boardXPosition, boardYPosition));
+				out.println("%%Page: %s %s",
+						pageCount,
+						pageCount);
+				out.println("%s %s StartBoard",
+						boardXPosition, boardYPosition);
 
 				for (int i = 1; i <= board.getWidth(); i++) {
 					for (int j = 1; j <= board.getHeight(); j++) {
 						if (objects.getBoard().getCorridors()[i][j]) {
-							out.println(format("%d %d 1 1 Corridor",
-									i, board.getHeight() - j + 1));
+							out.println("%d %d 1 1 Corridor",
+									i, board.getHeight() - j + 1);
 						}
 					}
 				}
@@ -460,8 +463,8 @@ public class ExportEPS {
 				for (int i = 1; i <= board.getWidth(); i++) {
 					for (int j = 1; j <= board.getHeight(); j++) {
 						if (board.isDark(i, j)) {
-							out.println(format("%d %d 1 1 Dark",
-									i, board.getHeight() - j + 1));
+							out.println("%d %d 1 1 Dark",
+									i, board.getHeight() - j + 1);
 						}
 					}
 				}
@@ -471,14 +474,14 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Bridges */
-				out.println(format("%s %s StartBoard",
-						boardXPosition, boardYPosition));
+				out.println("%s %s StartBoard",
+						boardXPosition, boardYPosition);
 
 				if (column < quest.getWidth() - 1) {
 					for (int top = 1; top <= board.getHeight(); top++) {
 						if (quest.getHorizontalBridge(column, row, top)) {
-							out.println(format("%d HorizontalBridge",
-									board.getHeight() - top + 1));
+							out.println("%d HorizontalBridge",
+									board.getHeight() - top + 1);
 						}
 					}
 				}
@@ -486,8 +489,8 @@ public class ExportEPS {
 				if (row < quest.getHeight() - 1) {
 					for (int left = 1; left <= board.getWidth(); left++) {
 						if (quest.getVerticalBridge(column, row, left)) {
-							out.println(format("%d VerticalBridge",
-									left));
+							out.println("%d VerticalBridge",
+									left);
 						}
 					}
 				}
@@ -495,8 +498,8 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				/* Objects */
-				out.println(format("%s %s StartBoard",
-						boardXPosition, boardYPosition));
+				out.println("%s %s StartBoard",
+						boardXPosition, boardYPosition);
 
 				for (Quest.Board.Object object : board.getObjects()) {
 					int width, height;
@@ -581,20 +584,20 @@ public class ExportEPS {
 				out.println("/Times-Roman findfont 16 scalefont setfont");
 
 				// HSE - create the text bounding box in PS
-				out.println(format("gsave 0 ph %d sub translate textbox",
+				out.println("gsave 0 ph %d sub translate textbox",
 						paperType.getHeight() / 2 +
-								roundPercentage(paperType.getHeight(), 7.9f))); // 440  2.256f%
+								roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
 
 				// HSE - output the quest name in dark red
-				out.println(format("0.50 0 0.20 setrgbcolor (%s) c newline",
-						sanitize(quest.getName())));
+				out.println("0.50 0 0.20 setrgbcolor (%s) c newline",
+						sanitize(quest.getName()));
 
 				// HSE - output the quest speech including line feeds
 				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println("0 0 0 setrgbcolor");
 				for (String linefeed : quest.getSpeech().split("\n")) {
-					out.println(format("(%s ) S L",
-							sanitize(linefeed)));
+					out.println("(%s ) S L",
+							sanitize(linefeed));
 				}
 
 				// HSE - output the notes in regular black font, smaller line spacing
@@ -603,32 +606,32 @@ public class ExportEPS {
 				out.println("/Times-Roman findfont 10 scalefont setfont");
 				for (String note : quest.getNotesForUI()) {
 					for (String noteLine : note.split("\n")) {
-						out.println(format("newline (%s ) S",
-								sanitize(noteLine)));
+						out.println("newline (%s ) S",
+								sanitize(noteLine));
 					}
 					out.println("newline");
 				}
 				// HSE - output board location if multi board quest
 				if (quest.getWidth() > 1 || quest.getHeight() > 1) {
-					out.println(format("newline newline (Board Location: \\(%d,%d\\) ) S",
+					out.println("newline newline (Board Location: \\(%d,%d\\) ) S",
 							column,
-							row));
+							row);
 				}
 
 				// HSE - output the wandering monster
 				out.println("grestore");
-				out.println(format("gsave 20 ph %d sub translate textbox",
-						paperType.getHeight()));
+				out.println("gsave 20 ph %d sub translate textbox",
+						paperType.getHeight());
 				final ObjectList.Object wanderingMonster = objects.getObject(quest.getWanderingId());
 				out.println("/Times-Roman findfont 12 scalefont setfont");
-				out.println(format("(Wandering Monster in this Quest: %s ) c",
-						sanitize(wanderingMonster.getName())));
+				out.println("(Wandering Monster in this Quest: %s ) c",
+						sanitize(wanderingMonster.getName()));
 
-				out.println(format("%d (%s) stringwidth pop 2 div sub 40 translate",
+				out.println("%d (%s) stringwidth pop 2 div sub 40 translate",
 						paperType.getWidth() / 2 - 90,
-						sanitize(wanderingMonster.getName())));
-				out.println(format("Icon%s execform",
-						wanderingMonster.getId()));
+						sanitize(wanderingMonster.getName()));
+				out.println("Icon%s execform",
+						wanderingMonster.getId());
 
 				// HSE - restore the coords
 				out.println("grestore");

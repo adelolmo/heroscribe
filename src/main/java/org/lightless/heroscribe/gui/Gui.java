@@ -719,7 +719,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (aboutKey == source) {
 			JOptionPane.showMessageDialog(this,
 					Constants.APPLICATION_NAME + " " + Constants.VERSION + "\n"
-							+ Constants.APPLICATION_NAME + Constants.applicationVersionSuffix + " modifications (C) 2022 Andoni del Olmo.\n"
+							+ Constants.APPLICATION_NAME + Constants.applicationVersionSuffix + " modifications (C) 2023 Andoni del Olmo.\n"
 							+ "HeroScribe Enhanced modifications (C) 2011 Jason Allen.\n"
 							+ "HeroScribe original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
 							+ Constants.APPLICATION_NAME + " is free software, distributed under the terms of the GNU GPL 2.\n"
