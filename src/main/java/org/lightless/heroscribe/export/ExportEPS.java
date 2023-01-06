@@ -338,8 +338,8 @@ public class ExportEPS {
 		final float boardYPosition = calculateBoardYPosition(paperType);
 
 		out.println("%!PS-Adobe-3.0");
-		out.println("%%Creator: " + APPLICATION_NAME + " " + VERSION);
-		out.println("%%Title:" + quest.getName());
+		out.println("%%Creator: %s %s", APPLICATION_NAME, VERSION);
+		out.println("%%Title: %s", quest.getName());
 		out.println("%%LanguageLevel: 2");
 		out.println("%%BoundingBox: 0 0 %s %s",
 				Math.round(Math.ceil(paperType.getWidth())), // 528

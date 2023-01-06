@@ -26,9 +26,9 @@ public class FormatterWriter extends PrintWriter {
 		super(printWriter);
 	}
 
-	public void println(String x, Object... args) {
-		final String escapedFormat = x.startsWith("%%") ?
-				x.replaceAll("%%", "%%%%") : x;
+	public void println(String format, Object... args) {
+		final String escapedFormat = format.startsWith("%%") ?
+				format.replaceAll("%%", "%%%%") : format;
 		super.println(String.format(escapedFormat, args));
 	}
 }
