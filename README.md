@@ -29,13 +29,13 @@ In the project's root folder:
 
     mvn clean package
 
-This will create a `target` folder with a file called `heroscribe-enhanced-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
+This will create a `target` folder with a file called `heroscribe-enhanced-skull-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
 
 #### Debian package
 
     gbp buildpackage --no-sign --git-ignore-branch --git-ignore-new
 
-This will create the debian package in the parent directory. e.g: `../hse_1.4_all.deb`
+This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.7_all.deb`
 
 ## Running HeroScribe
 
@@ -43,7 +43,7 @@ This will create the debian package in the parent directory. e.g: `../hse_1.4_al
 
 Unzip the bundle and run
 
-    java -jar heroscribe-enhanced.jar
+    java -jar heroscribe-enhanced-skull.jar
 
 Postscript is required for high quality PDF generation.
 
@@ -52,7 +52,7 @@ Postscript is required for high quality PDF generation.
 Install the debian package in your system
 
     sudo apt-get install default-jre-headless ghostscript
-    sudo dpkg -i ../hse_1.4_all.deb
+    sudo dpkg -i ../heroscribe-enhanced-skull_1.7_all.deb
 
 In your desktop, go to Applications -> Graphics -> Heroscribe Enhanced Skull
 

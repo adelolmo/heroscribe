@@ -47,8 +47,6 @@ public class ExportPDF {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
 
-		int exitValue;
-
 		// HSE - check for single page render or multi page render
 		if (isMultiPage) {
 			ExportEPS.writeMultiPage(paperType, eps, quest, objects);
