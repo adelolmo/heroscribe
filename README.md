@@ -27,7 +27,7 @@ See https://asdf-vm.com/ for how to use asdf.
 #### Zin bundle
 In the project's root folder:
 
-    mvn clean package
+    make
 
 This will create a `target` folder with a file called `heroscribe-enhanced-skull-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
 
@@ -51,10 +51,10 @@ Postscript is required for high quality PDF generation.
 
 Install the debian package in your system
 
-    sudo apt-get install default-jre-headless ghostscript
-    sudo dpkg -i ../heroscribe-enhanced-skull_1.7_all.deb
+    # apt-get install default-jre-headless ghostscript
+    # dpkg -i ../heroscribe-enhanced-skull_1.7_all.deb
 
-In your desktop, go to Applications -> Graphics -> Heroscribe Enhanced Skull
+In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
 ## Links
 
