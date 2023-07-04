@@ -68,7 +68,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
-			quitKey, listKey, aboutKey, dirKey, readMeKey, exportPdf2Key, exportThumbNail, propertiesKey, paperKey;
+			quitKey, listKey, aboutKey, dirKey, exportPdf2Key, exportThumbNail, propertiesKey, paperKey;
 	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
 
 	private final Vector<JMenuItem> newSpecialKeys;
@@ -318,10 +318,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		listKey = new JMenuItem("Objects...");
 		listKey.addActionListener(this);
 		help.add(listKey);
-
-		readMeKey = new JMenuItem("Read Me...");
-		readMeKey.addActionListener(this);
-		help.add(readMeKey);
 
 		help.addSeparator();
 
@@ -708,9 +704,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			} else {
 				new HtmlPanel(this, objectHtmlPath);
 			}
-
-		} else if (readMeKey == source) {
-			OS.openURL(new File("Readme.html"), null);
 
 		} else if (propertiesKey == source) {
 			final PropertiesModal modal = new PropertiesModal(this, quest);

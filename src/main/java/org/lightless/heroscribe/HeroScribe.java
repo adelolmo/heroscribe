@@ -21,18 +21,28 @@
 
 package org.lightless.heroscribe;
 
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.dataformat.xml.*;
-import com.fasterxml.jackson.dataformat.xml.ser.*;
-import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.iconpack.*;
-import org.lightless.heroscribe.xml.*;
-import org.slf4j.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import org.lightless.heroscribe.gui.Gui;
+import org.lightless.heroscribe.gui.ImageLoader;
+import org.lightless.heroscribe.gui.ObjectsMediaLoader;
+import org.lightless.heroscribe.gui.SplashScreenImageLoader;
+import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.iconpack.IconPackService;
+import org.lightless.heroscribe.iconpack.ZipExtractor;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.ObjectsParser;
+import org.lightless.heroscribe.xml.Quest;
+import org.lightless.heroscribe.xml.QuestParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 public class HeroScribe {
 
