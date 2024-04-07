@@ -21,18 +21,18 @@
 
 package org.lightless.heroscribe.helper;
 
-import com.itextpdf.awt.*;
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.*;
-import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.xml.*;
+import com.itextpdf.awt.DefaultFontMapper;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
+import org.lightless.heroscribe.gui.Gui;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.Quest;
 
-import java.awt.Font;
-import java.awt.Image;
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.util.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.ImageObserver;
 
 import static org.lightless.heroscribe.Constants.*;
 
@@ -333,7 +333,7 @@ public class BoardPainter implements ImageObserver {
 		// HSE - write wandering monster
 		metrics = g2d.getFontMetrics(font);
 		final String wanderingMonsterId = gui.getQuest().getWanderingId();
-		final String wanderingMonsterName = gui.getObjectList().getObject(wanderingMonsterId).getName();
+		final String wanderingMonsterName = gui.getObjectList().getObjectById(wanderingMonsterId).getName();
 		textWidth = metrics.stringWidth("Wandering Monster in this Quest: " + wanderingMonsterName);
 
 		xPos = (framePixelSize.width / 2) - (textWidth / 2);
@@ -517,12 +517,14 @@ public class BoardPainter implements ImageObserver {
 	private void drawIcon(Quest.Board.Object piece, int column, int row, Graphics2D g2d) {
 		AffineTransform original = null;
 		final int width, height;
-		final Optional<ObjectList.Object> optionalObject = gui.getObjectList().getOptionalObject(piece.getId());
-		if (optionalObject.isEmpty()) {
-			// the icon pack containing this object was deleted in this session, so we ignore it ¯\_(ツ)_/¯
-			return;
-		}
-		final ObjectList.Object object = optionalObject.get();
+//		final Optional<ObjectList.Object> optionalObject = gui.getObjectList().getOptionalObject(piece.getId());
+//		if (optionalObject.isEmpty()) {
+//			 the icon pack containing this object was deleted in this session, so we ignore it ¯\_(ツ)_/¯
+//			return;
+//		}
+//		final ObjectList.Object object = optionalObject.get();
+
+		final ObjectList.Object object = gui.getObjectList().getObjectById(piece.getId());
 
 		if (!isWellPositioned(piece))
 			return;
@@ -609,7 +611,7 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	private Image getObjectIconById(String id) {
-		return gui.getObjectList().getObject(id).getIcon(getRegion()).getImage();
+		return gui.getObjectList().getObjectById(id).getIcon(getRegion()).getImage();
 	}
 
 	private Image getBoardIcon() {
@@ -621,7 +623,7 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	public boolean isWellPositioned(Quest.Board.Object piece) {
-		final ObjectList.Object obj = gui.getObjectList().getObject(piece.getId());
+		final ObjectList.Object obj = gui.getObjectList().getObjectById(piece.getId());
 		final int width, height;
 
 		if (piece.getRotation().isPair()) {

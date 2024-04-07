@@ -188,17 +188,17 @@ public class ExportEPS {
 					int width, height;
 
 					if (object.getRotation().isPair()) {
-						width = objectList.getObject(object.getId()).getWidth();
-						height = objectList.getObject(object.getId()).getHeight();
+						width = objectList.getObjectById(object.getId()).getWidth();
+						height = objectList.getObjectById(object.getId()).getHeight();
 					} else {
-						width = objectList.getObject(object.getId()).getHeight();
-						height = objectList.getObject(object.getId()).getWidth();
+						width = objectList.getObjectById(object.getId()).getHeight();
+						height = objectList.getObjectById(object.getId()).getWidth();
 					}
 
 					float x = object.getLeft() + width / 2.0f;
 					float y = object.getTop() + height / 2.0f;
 
-					if (objectList.getObject(object.getId()).isTrap()) {
+					if (objectList.getObjectById(object.getId()).isTrap()) {
 						out.println(object.getLeft()
 								+ " "
 								+ (board.getHeight() - object.getTop() - height + 2)
@@ -207,7 +207,7 @@ public class ExportEPS {
 								+ " "
 								+ height
 								+ " Trap");
-					} else if (objectList.getObject(object.getId()).isDoor()) {
+					} else if (objectList.getObjectById(object.getId()).isDoor()) {
 						if (object.getRotation().isPair()) {
 							if (object.getTop() == 0)
 								y -= objectList.getBoard().getBorderDoorsOffset();
@@ -221,9 +221,9 @@ public class ExportEPS {
 						}
 					}
 
-					final float xoffset = objectList.getObject(object.getId())
+					final float xoffset = objectList.getObjectById(object.getId())
 							.getIcon(quest.getRegion()).getXoffset();
-					final float yoffset = objectList.getObject(object.getId())
+					final float yoffset = objectList.getObjectById(object.getId())
 							.getIcon(quest.getRegion()).getYoffset();
 
 					switch (object.getRotation()) {
@@ -313,7 +313,7 @@ public class ExportEPS {
 		// HSE - output the wandering monster
 		out.println("grestore");
 		out.println("gsave 0 ph %s sub translate textbox", 430);
-		final String wanderingMonsterName = objectList.getObject(quest.getWanderingId()).getName();
+		final String wanderingMonsterName = objectList.getObjectById(quest.getWanderingId()).getName();
 		out.println("(Wandering Monster in this Quest: " + sanitize(wanderingMonsterName) + " ) c");
 
 		out.println("170 (" + sanitize(wanderingMonsterName) + ") stringwidth pop 2 div sub 40 translate");
@@ -506,17 +506,17 @@ public class ExportEPS {
 					float x, y, xoffset, yoffset;
 
 					if (object.getRotation().isPair()) {
-						width = objects.getObject(object.getId()).getWidth();
-						height = objects.getObject(object.getId()).getHeight();
+						width = objects.getObjectById(object.getId()).getWidth();
+						height = objects.getObjectById(object.getId()).getHeight();
 					} else {
-						width = objects.getObject(object.getId()).getHeight();
-						height = objects.getObject(object.getId()).getWidth();
+						width = objects.getObjectById(object.getId()).getHeight();
+						height = objects.getObjectById(object.getId()).getWidth();
 					}
 
 					x = object.getLeft() + width / 2.0f;
 					y = object.getTop() + height / 2.0f;
 
-					if (objects.getObject(object.getId()).isTrap()) {
+					if (objects.getObjectById(object.getId()).isTrap()) {
 						out.println(object.getLeft()
 								+ " "
 								+ (board.getHeight() - object.getTop() - height + 2)
@@ -526,7 +526,7 @@ public class ExportEPS {
 								+ height
 								+ " Trap");
 
-					} else if (objects.getObject(object.getId()).isDoor()) {
+					} else if (objects.getObjectById(object.getId()).isDoor()) {
 						if (object.getRotation().isPair()) {
 							if (object.getTop() == 0)
 								y -= objects.getBoard().getBorderDoorsOffset();
@@ -540,9 +540,9 @@ public class ExportEPS {
 						}
 					}
 
-					xoffset = objects.getObject(object.getId())
+					xoffset = objects.getObjectById(object.getId())
 							.getIcon(quest.getRegion()).getXoffset();
-					yoffset = objects.getObject(object.getId())
+					yoffset = objects.getObjectById(object.getId())
 							.getIcon(quest.getRegion()).getYoffset();
 
 					switch (object.getRotation()) {
@@ -622,7 +622,7 @@ public class ExportEPS {
 				out.println("grestore");
 				out.println("gsave 20 ph %d sub translate textbox",
 						paperType.getHeight());
-				final ObjectList.Object wanderingMonster = objects.getObject(quest.getWanderingId());
+				final ObjectList.Object wanderingMonster = objects.getObjectById(quest.getWanderingId());
 				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println("(Wandering Monster in this Quest: %s ) c",
 						sanitize(wanderingMonster.getName()));

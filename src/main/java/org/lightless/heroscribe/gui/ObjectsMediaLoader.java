@@ -18,8 +18,9 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.xml.*;
-import org.slf4j.*;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ObjectsMediaLoader {
 	private static final Logger log = LoggerFactory.getLogger(ObjectsMediaLoader.class);
@@ -47,17 +48,14 @@ public class ObjectsMediaLoader {
 
 		objectList.getObjects().forEach(object -> {
 			/* Icons */
-			objectList.getObject(object.getId())
-					.getIcon("Europe")
+			object.getIcon("Europe")
 					.setImage(imageLoader
 							.addImage(objectList.getObjectRasterPath(object.getId(), "Europe").toString(), 20));
 
-			objectList.getObject(object.getId())
-					.getIcon("USA")
+			object.getIcon("USA")
 					.setImage(imageLoader
 							.addImage(objectList.getObjectRasterPath(object.getId(), "USA").toString(), 20));
 		});
-
 
 		imageLoader.flush();
 

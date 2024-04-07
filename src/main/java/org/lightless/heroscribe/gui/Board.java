@@ -91,7 +91,7 @@ public class Board extends JPanel implements MouseInputListener {
 			newObject = new Quest.Board.Object();
 			newObject.setId(gui.tools.selectorPanel.getSelectedObject());
 
-			final ObjectList.Object obj = gui.getObjectList().getObject(id);
+			final ObjectList.Object obj = gui.getObjectList().getObjectById(id);
 
 			newObject.setZorder(obj.getZorder());
 		}
@@ -196,7 +196,7 @@ public class Board extends JPanel implements MouseInputListener {
 		}
 
 		for (Quest.Board.Object qobj : gui.getQuest().getBoard(lastColumn, lastRow).getObjects()) {
-			final ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
+			final ObjectList.Object lobj = gui.getObjectList().getObjectById(qobj.getId());
 
 			if (qobj.getRotation().getNumber() % 2 == 0) {
 				width = lobj.getWidth();
@@ -327,7 +327,7 @@ public class Board extends JPanel implements MouseInputListener {
 	}
 
 	public boolean isWellPositioned(Quest.Board.Object piece) {
-		final ObjectList.Object obj = gui.getObjectList().getObject(piece.getId());
+		final ObjectList.Object obj = gui.getObjectList().getObjectById(piece.getId());
 
 		int width, height;
 

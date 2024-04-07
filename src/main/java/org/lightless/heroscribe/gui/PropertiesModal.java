@@ -79,7 +79,7 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 				.filter(object -> "monster".equals(object.getKind()))
 				.forEach(wandering::addItem);
 		// HSE - set the default selected monster to Orc
-		wandering.setSelectedItem(gui.getObjectList().getObject("Orc"));
+		wandering.setSelectedItem(gui.getObjectList().getObjectById("Orc"));
 
 		refreshQuestData(quest);
 	}

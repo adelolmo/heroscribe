@@ -17,18 +17,27 @@
 */
 package org.lightless.heroscribe.iconpack;
 
-import org.apache.commons.io.*;
-import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.gui.*;
-import org.lightless.heroscribe.xml.*;
-import org.slf4j.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.lightless.heroscribe.Constants;
+import org.lightless.heroscribe.gui.ImageLoader;
+import org.lightless.heroscribe.xml.Kind;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.ObjectsParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.stream.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.lightless.heroscribe.Constants.*;
+import static org.lightless.heroscribe.Constants.TEMP_DIR;
 
 public class IconPackService {
 
@@ -81,7 +90,7 @@ public class IconPackService {
 							final Path iconPackDirectory = getTempIconPackDirectory(file);
 							final File objectsXmlFile = new File(iconPackDirectory.toFile(), "Objects.xml");
 							final ObjectList objectList = objectsParser.parse(objectsXmlFile);
-							final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(originalObjectList, objectList);
+							final List<Kind> iconPackKinds = getNewKindsFromIconPack(originalObjectList, objectList);
 
 							return new IconPack(file,
 									iconPackKinds);
@@ -104,7 +113,7 @@ public class IconPackService {
 		final ObjectList iconPackObjectList =
 				objectsParser.parse(new File(tempIconPackDirectory.toString(), "Objects.xml"));
 
-		final List<ObjectList.Kind> iconPackKinds = getNewKindsFromIconPack(systemObjectList, iconPackObjectList);
+		final List<Kind> iconPackKinds = getNewKindsFromIconPack(systemObjectList, iconPackObjectList);
 		iconPackKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
 		iconPackObjectList.getObjects()
@@ -132,12 +141,12 @@ public class IconPackService {
 				objectsParser.parse(
 						new File(getTempIconPackDirectory(iconPackFile).toString(), "Objects.xml"));
 
-		final List<String> iconPackKindIds =
-				getNewKindsFromIconPack(
-						objectsParser.parse(objectXmlPath.toFile()), iconPackObjectList)
-						.stream()
-						.map(ObjectList.Kind::getId)
-						.collect(Collectors.toList());
+		final List<Kind> kinds = getNewKindsFromIconPack(
+				objectsParser.parse(objectXmlPath.toFile()), iconPackObjectList);
+		final List<String> iconPackKindIds = kinds
+				.stream()
+				.map(Kind::getId)
+				.collect(Collectors.toList());
 		Arrays.stream(systemObjectList.getObjects().toArray(new ObjectList.Object[]{}))
 				.filter(object -> iconPackKindIds.contains(object.getKind()))
 				.forEach(object -> {
@@ -152,9 +161,9 @@ public class IconPackService {
 					systemObjectList.getObjects().remove(object);
 				});
 
+		kinds.forEach(kind -> systemObjectList.getKinds().remove(kind));
 		FileUtils.deleteDirectory(getTempIconPackDirectory(iconPackFile).toFile());
 		Files.delete(iconPackFile.toPath());
-
 	}
 
 	private Path getTempIconPackDirectory(File iconPackFile) {
@@ -162,8 +171,8 @@ public class IconPackService {
 				FilenameUtils.getBaseName(iconPackFile.getName()));
 	}
 
-	private List<ObjectList.Kind> getNewKindsFromIconPack(final ObjectList referenceObjectList,
-														  final ObjectList iconPackObjectList) {
+	private List<Kind> getNewKindsFromIconPack(final ObjectList referenceObjectList,
+											   final ObjectList iconPackObjectList) {
 		return iconPackObjectList.getKinds().stream()
 				.filter(kind -> !referenceObjectList.getKindIds().contains(kind.getId()))
 				.collect(Collectors.toList());
@@ -181,9 +190,9 @@ public class IconPackService {
 
 	public static class IconPack {
 		private final File zipFile;
-		private final List<ObjectList.Kind> kinds;
+		private final List<Kind> kinds;
 
-		public IconPack(File zipFile, List<ObjectList.Kind> kinds) {
+		public IconPack(File zipFile, List<Kind> kinds) {
 			this.zipFile = zipFile;
 			this.kinds = kinds;
 		}
@@ -192,13 +201,13 @@ public class IconPackService {
 			return zipFile;
 		}
 
-		public List<ObjectList.Kind> getKinds() {
+		public List<Kind> getKinds() {
 			return kinds;
 		}
 
-		public String getKindNames(){
+		public String getKindNames() {
 			return kinds.stream()
-					.map(ObjectList.Kind::getName)
+					.map(Kind::getName)
 					.collect(Collectors.joining(" & "));
 		}
 	}

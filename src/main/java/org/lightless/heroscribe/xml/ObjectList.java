@@ -18,15 +18,17 @@
 
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.dataformat.xml.annotation.*;
-import org.lightless.heroscribe.iconpack.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.lightless.heroscribe.iconpack.IconType;
 
 import java.awt.*;
-import java.nio.file.*;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.*;
-import java.util.stream.*;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ObjectList {
 
@@ -144,7 +146,7 @@ public class ObjectList {
 		this.objects = objects;
 	}
 
-	public ObjectList.Object getObject(String id) {
+	public ObjectList.Object getObjectById(String id) {
 		return getOptionalObject(id)
 				.orElseThrow(IllegalStateException::new);
 	}
@@ -163,7 +165,7 @@ public class ObjectList {
 		return Path.of(
 				basePath.toString(),
 				rasterPrefix,
-				getObject(objectId).getIcon(region).path +
+				getObjectById(objectId).getIcon(region).path +
 						rasterSuffix);
 	}
 
@@ -179,7 +181,7 @@ public class ObjectList {
 		return Path.of(
 				basePath.toString(),
 				vectorPrefix,
-				getObject(objectId).getIcon(region).path +
+				getObjectById(objectId).getIcon(region).path +
 						vectorSuffix);
 	}
 
@@ -193,34 +195,6 @@ public class ObjectList {
 
 	public void setBasePath(Path basePath) {
 		this.basePath = basePath;
-	}
-
-	public static class Kind {
-		@JacksonXmlProperty(isAttribute = true)
-		private String id;
-		@JacksonXmlProperty(isAttribute = true)
-		private String name;
-
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String toString() {
-			return name;
-		}
 	}
 
 	public static class Board {
@@ -455,9 +429,7 @@ public class ObjectList {
 
 		public ObjectList.Icon getIcon(String region) {
 			return icon.stream()
-					.filter(icon1 -> {
-						return icon1.getRegion().equals(region);
-					})
+					.filter(i -> i.getRegion().equals(region))
 					.findFirst()
 					.orElseThrow(IllegalStateException::new);
 		}

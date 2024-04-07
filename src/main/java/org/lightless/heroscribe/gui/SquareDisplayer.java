@@ -98,7 +98,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 				.getBoard(column, row)
 				.getObjects();
 		for (Quest.Board.Object qobj : objectList) {
-			ObjectList.Object lobj = gui.getObjectList().getObject(qobj.getId());
+			ObjectList.Object lobj = gui.getObjectList().getObjectById(qobj.getId());
 
 			if (qobj.getRotation().getNumber() % 2 == 0) {
 				width = lobj.getWidth();

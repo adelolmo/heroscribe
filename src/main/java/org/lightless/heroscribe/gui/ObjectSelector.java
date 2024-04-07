@@ -18,13 +18,16 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.xml.*;
+import org.lightless.heroscribe.xml.Kind;
+import org.lightless.heroscribe.xml.ObjectList;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.TreeMap;
 
 public class ObjectSelector extends JPanel implements ItemListener, ListSelectionListener {
 
@@ -39,7 +42,7 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 	private String selectedObject;
 	private int objectRotation;
 
-	private final JComboBox<ObjectList.Kind> kindsComboBox;
+	private final JComboBox<Kind> kindsComboBox;
 
 	public ObjectSelector(Gui gui) {
 		super();
@@ -123,10 +126,10 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 	@SuppressWarnings("unchecked")
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			ObjectList.Kind selected;
+			Kind selected;
 			JList<ObjectList.Object> list;
 
-			selected = (ObjectList.Kind) ((JComboBox<ObjectList.Kind>) e.getSource()).getSelectedItem();
+			selected = (Kind) ((JComboBox<Kind>) e.getSource()).getSelectedItem();
 			cardLayout.show(objectsPanel, selected.getId());
 			list = kindList.get(selected.getId());
 
