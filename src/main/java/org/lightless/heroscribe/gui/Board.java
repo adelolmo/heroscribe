@@ -21,12 +21,16 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.xml.*;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.Quest;
+import org.lightless.heroscribe.xml.Rotation;
 
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.List;
 
 public class Board extends JPanel implements MouseInputListener {
 
@@ -50,6 +54,10 @@ public class Board extends JPanel implements MouseInputListener {
 		lastRow = lastColumn = -1;
 		lastTop = lastLeft = -1;
 
+		gui.getObjectList()
+				.addModificationListener(() ->
+						removeFromBoardObjectsNotPresentInObjectList(gui));
+
 		setBackground(Color.WHITE);
 
 		setSize();
@@ -57,6 +65,15 @@ public class Board extends JPanel implements MouseInputListener {
 		/* Is it possible to just addMouseInputListener() ? */
 		addMouseListener(this);
 		addMouseMotionListener(this);
+	}
+
+	private static void removeFromBoardObjectsNotPresentInObjectList(Gui gui) {
+		gui.getQuest().getBoards().forEach(board -> {
+			final List<Quest.Board.Object> objectsInBoard = board.getObjects();
+			Arrays.stream(objectsInBoard.toArray(Quest.Board.Object[]::new))
+					.filter(o -> gui.getObjectList().getOptionalObject(o.getId()).isEmpty())
+					.forEach(objectsInBoard::remove);
+		});
 	}
 
 	public void setSize() {
@@ -80,10 +97,6 @@ public class Board extends JPanel implements MouseInputListener {
 		final String id = gui.tools.selectorPanel.getSelectedObject();
 
 		if (floating) {
-//			newObject = new QObject(gui.tools.selectorPanel.getSelectedObject(),
-//					gui.getObjectList(),
-//					0);
-
 			newObject = new Quest.Board.Object();
 			newObject.setId(id);
 			newObject.setZorder(Integer.MAX_VALUE);

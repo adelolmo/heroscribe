@@ -106,6 +106,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		boardPainter = new BoardPainter(this);
 
+		objectList.addModificationListener(() -> {
+			tools.repaint();
+			boardPainter.init(objectList);
+		});
+
 		tools = new ToolsPanel(this, this.quest);
 		board = new Board(this);
 
@@ -436,7 +441,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				updateHint();
 				updateTitle();
 
-				boardPainter.init();
+				boardPainter.init(objectList);
 
 				board.setSize();
 				board.repaint();
@@ -466,7 +471,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				updateHint();
 				updateTitle();
 
-				boardPainter.init();
+				boardPainter.init(objectList);
 
 				board.setSize();
 				board.repaint();
@@ -507,7 +512,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 						tools.refreshQuestData(quest);
 						quest.setModified(false);
 
-						boardPainter.init();
+						boardPainter.init(objectList);
 
 						board.setSize();
 						board.repaint();
@@ -680,17 +685,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		} else if (iconPackImport == source) {
 			final IconPackImportFileChooser modal = new IconPackImportFileChooser(prefs.defaultDir, iconPackService);
 			modal.showModal();
-			tools.refreshData();
 
 		} else if (iconPackDownload == source) {
 			final IconPackDownloadModal modal = new IconPackDownloadModal(iconPackService);
 			modal.showDialog();
-			tools.refreshData();
 
 		} else if (iconPackRemove == source) {
 			final IconPackRemoveModal modal = new IconPackRemoveModal(iconPackService);
 			modal.showDialog();
-			tools.refreshData();
 
 		} else if (quitKey == source) {
 			windowClosing(null);

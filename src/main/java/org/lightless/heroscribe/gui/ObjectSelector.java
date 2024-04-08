@@ -40,7 +40,6 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 	private final TreeMap<String, JList<ObjectList.Object>> kindList;
 
 	private String selectedObject;
-	private int objectRotation;
 
 	private final JComboBox<Kind> kindsComboBox;
 
@@ -62,18 +61,9 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 		add(kindsComboBox);
 		add(objectsPanel);
 
+		gui.getObjectList().addModificationListener(this::refresh);
 
 		refresh();
-/*		Iterator<LObject> objIterator = gui.getObjects().objectsIterator();
-		while (objIterator.hasNext()) {
-			LObject obj = objIterator.next();
-
-			JList<LObject> list = kindList.get(obj.kind);
-			DefaultListModel<LObject> listModel = (DefaultListModel<LObject>) list.getModel();
-
-			listModel.addElement(obj);
-		}*/
-
 		kindsComboBox.addItemListener(this);
 	}
 
@@ -107,10 +97,6 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 
 	public String getSelectedObject() {
 		return selectedObject;
-	}
-
-	public int getSelectedObjectRotation() {
-		return objectRotation;
 	}
 
 	private void setSelectedObject(ObjectList.Object obj) {

@@ -24,8 +24,9 @@ package org.lightless.heroscribe.gui;
 import org.lightless.heroscribe.xml.Quest;
 
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -252,9 +253,5 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		if (e.getSource() == note) {
 			editNote.setEnabled(true);
 		}
-	}
-
-	public void refreshData() {
-		selectorPanel.refresh();
 	}
 }

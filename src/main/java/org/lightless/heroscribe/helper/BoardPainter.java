@@ -44,20 +44,20 @@ public class BoardPainter implements ImageObserver {
 
 	public BoardPainter(Gui gui) {
 		this.gui = gui;
-		init();
+		init(gui.getObjectList());
 	}
 
-	public void init() {
-		boardSize = new Dimension(gui.getObjectList().getBoard().getWidth(),
-				gui.getObjectList().getBoard().getHeight());
+	public void init(ObjectList objectList) {
+		boardSize = new Dimension(objectList.getBoard().getWidth(),
+				objectList.getBoard().getHeight());
 
 		boardPixelSize = new Dimension(getBoardIcon().getWidth(this),
 				getBoardIcon().getHeight(this));
 
 		boxEdge = (getBoardIcon().getWidth(this) * 1.0f)
-				/ (gui.getObjectList().getBoard().getWidth() + 2);
+				/ (objectList.getBoard().getWidth() + 2);
 
-		adjacentBoardsOffset = Math.round(boxEdge * gui.getObjectList().getBoard().getAdjacentBoardsOffset());
+		adjacentBoardsOffset = Math.round(boxEdge * objectList.getBoard().getAdjacentBoardsOffset());
 
 		framePixelSize = new Dimension(boardPixelSize.width * gui.getQuest().getWidth() + adjacentBoardsOffset * (gui.getQuest().getWidth() - 1),
 				boardPixelSize.height * gui.getQuest().getHeight() + adjacentBoardsOffset * (gui.getQuest().getHeight() - 1));
@@ -172,12 +172,6 @@ public class BoardPainter implements ImageObserver {
 				Quest.Board board = gui.getQuest().getBoard(i, j);
 
 				/* Objects */
-		/*		Iterator<QObject> iterator = board.iterator();
-				while (iterator.hasNext()) {
-					QObject obj = iterator.next();
-
-					drawIcon(obj, i, j, g2d);
-				}*/
 				for (Quest.Board.Object obj : board.getObjects()) {
 					drawIcon(obj, i, j, g2d);
 				}
@@ -517,12 +511,6 @@ public class BoardPainter implements ImageObserver {
 	private void drawIcon(Quest.Board.Object piece, int column, int row, Graphics2D g2d) {
 		AffineTransform original = null;
 		final int width, height;
-//		final Optional<ObjectList.Object> optionalObject = gui.getObjectList().getOptionalObject(piece.getId());
-//		if (optionalObject.isEmpty()) {
-//			 the icon pack containing this object was deleted in this session, so we ignore it ¯\_(ツ)_/¯
-//			return;
-//		}
-//		final ObjectList.Object object = optionalObject.get();
 
 		final ObjectList.Object object = gui.getObjectList().getObjectById(piece.getId());
 

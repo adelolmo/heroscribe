@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.lightless.heroscribe.iconpack.IconType;
+import org.lightless.heroscribe.utils.Modifiable;
 
 import java.awt.*;
 import java.nio.file.Path;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ObjectList {
+public class ObjectList extends Modifiable {
 
 	@JacksonXmlProperty(isAttribute = true)
 	private String version;

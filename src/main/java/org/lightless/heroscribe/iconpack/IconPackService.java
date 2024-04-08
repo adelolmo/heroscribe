@@ -132,6 +132,7 @@ public class IconPackService {
 				});
 
 		systemObjectList.getKinds().addAll(iconPackKinds);
+		systemObjectList.notifyMutation();
 
 		imageLoader.flush();
 	}
@@ -162,6 +163,7 @@ public class IconPackService {
 				});
 
 		kinds.forEach(kind -> systemObjectList.getKinds().remove(kind));
+		systemObjectList.notifyMutation();
 		FileUtils.deleteDirectory(getTempIconPackDirectory(iconPackFile).toFile());
 		Files.delete(iconPackFile.toPath());
 	}
