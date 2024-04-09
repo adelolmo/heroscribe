@@ -29,7 +29,7 @@ import org.lightless.heroscribe.gui.Gui;
 import org.lightless.heroscribe.gui.ImageLoader;
 import org.lightless.heroscribe.gui.ObjectsMediaLoader;
 import org.lightless.heroscribe.gui.SplashScreenImageLoader;
-import org.lightless.heroscribe.helper.OS;
+import org.lightless.heroscribe.utils.OS;
 import org.lightless.heroscribe.iconpack.IconPackService;
 import org.lightless.heroscribe.iconpack.ZipExtractor;
 import org.lightless.heroscribe.xml.ObjectList;

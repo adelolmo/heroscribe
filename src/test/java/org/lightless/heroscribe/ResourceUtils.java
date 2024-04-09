@@ -16,24 +16,12 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package org.lightless.heroscribe.helper;
+package org.lightless.heroscribe;
 
-import org.apache.commons.io.*;
-import org.slf4j.*;
+import java.io.File;
 
-import java.io.*;
-import java.net.*;
-
-public class HseFileUtils {
-
-	private static final Logger log = LoggerFactory.getLogger(HseFileUtils.class);
-
-	public static void downloadToFile(String sourceUrl, File targetFile) throws IOException {
-		log.info("Download {} to {}", sourceUrl, targetFile.getAbsolutePath());
-
-		final OutputStream os = new FileOutputStream(targetFile);
-		final InputStream is = new URL(sourceUrl).openStream();
-
-		IOUtils.copy(is, os);
+public class ResourceUtils {
+	public static File getResourceAsFile(String name) {
+		return new File(ClassLoader.getSystemResource(name).getFile());
 	}
 }

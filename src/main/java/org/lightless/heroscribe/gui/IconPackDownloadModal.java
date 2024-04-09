@@ -17,10 +17,9 @@
 */
 package org.lightless.heroscribe.gui;
 
-import org.apache.commons.io.*;
 import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.iconpack.*;
+import org.lightless.heroscribe.utils.FileUtils;
 import org.slf4j.*;
 
 import javax.swing.*;
@@ -157,12 +156,12 @@ public class IconPackDownloadModal extends JPanel {
 				new File(Constants.getIconPackDirectory(), pack.getFilename());
 
 		try {
-			HseFileUtils.downloadToFile(pack.getLink(), iconPackFile);
+			FileUtils.downloadToFile(pack.getLink(), iconPackFile);
 			iconPackService.importIconPack(iconPackFile);
 			return DownloadReport.ofSuccess(pack);
 		} catch (IOException e) {
 			log.warn("Cannot install icon pack: {}", pack.getName(), e);
-			FileUtils.deleteQuietly(iconPackFile);
+			org.apache.commons.io.FileUtils.deleteQuietly(iconPackFile);
 			return DownloadReport.ofFailure(pack, e.getMessage());
 		}
 	}

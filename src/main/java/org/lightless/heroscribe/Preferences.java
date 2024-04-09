@@ -22,7 +22,7 @@
 package org.lightless.heroscribe;
 
 import org.lightless.heroscribe.export.*;
-import org.lightless.heroscribe.helper.*;
+import org.lightless.heroscribe.utils.OS;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 

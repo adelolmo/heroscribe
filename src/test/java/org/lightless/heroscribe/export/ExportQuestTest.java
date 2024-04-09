@@ -17,13 +17,19 @@
 */
 package org.lightless.heroscribe.export;
 
-import com.fasterxml.jackson.dataformat.xml.*;
-import org.junit.jupiter.api.*;
-import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.xml.*;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.ObjectsParser;
+import org.lightless.heroscribe.xml.Quest;
+import org.lightless.heroscribe.xml.Rotation;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
 class ExportQuestTest {
 
@@ -47,7 +53,7 @@ class ExportQuestTest {
 	@BeforeEach
 	void setUp() throws IOException {
 		final ObjectsParser parser = new ObjectsParser(new XmlMapper(), Path.of("."));
-		final String currentPath = ResourceHelper.getResourceAsFile(".").getAbsolutePath();
+		final String currentPath = getResourceAsFile(".").getAbsolutePath();
 		objectList = parser.parse(
 				new File(currentPath.substring(0, currentPath.indexOf("/target")),
 						"Objects.xml"));

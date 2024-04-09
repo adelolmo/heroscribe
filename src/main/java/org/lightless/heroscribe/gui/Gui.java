@@ -27,6 +27,7 @@ import org.lightless.heroscribe.*;
 import org.lightless.heroscribe.export.*;
 import org.lightless.heroscribe.helper.*;
 import org.lightless.heroscribe.iconpack.*;
+import org.lightless.heroscribe.utils.OS;
 import org.lightless.heroscribe.xml.*;
 import org.slf4j.*;
 

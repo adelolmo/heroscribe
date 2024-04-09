@@ -19,7 +19,7 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package org.lightless.heroscribe.helper;
+package org.lightless.heroscribe.utils;
 
 public class OS {
 

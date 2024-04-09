@@ -19,7 +19,6 @@
 package org.lightless.heroscribe.gui;
 
 import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.helper.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +39,7 @@ public class ImageLoader extends JWindow {
 	}
 
 	public Image addImageAndFlush(String path, int id) {
-		final Image image = tk.createImage(ResourceHelper.getResourceUrl(path));
+		final Image image = tk.createImage(ClassLoader.getSystemResource(path));
 		mt.addImage(image, id);
 
 		try {

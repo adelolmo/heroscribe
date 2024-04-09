@@ -17,13 +17,14 @@
 */
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.dataformat.xml.*;
-import org.junit.jupiter.api.*;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.lightless.heroscribe.helper.ResourceHelper.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
 public class QuestParserTest {
 
@@ -38,6 +39,8 @@ public class QuestParserTest {
 				.extracting("name", "region", "version", "width", "height")
 				.containsExactly("The Trial", "USA", "1.0", 1, 2);
 	}
+
+
 
 	@Test
 	void shouldFindTwoBoards() throws IOException {

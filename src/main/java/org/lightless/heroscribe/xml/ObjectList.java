@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 public class ObjectList extends Modifiable {
 
 	@JacksonXmlProperty(isAttribute = true)
@@ -149,7 +151,7 @@ public class ObjectList extends Modifiable {
 
 	public ObjectList.Object getObjectById(String id) {
 		return getOptionalObject(id)
-				.orElseThrow(IllegalStateException::new);
+				.orElseThrow(() -> new IllegalStateException(format("Unknown object '%s'", id)));
 	}
 
 	public boolean containsObjectById(String id) {

@@ -1,5 +1,8 @@
 build:
-	mvn clean package -DskipTests
+	mvn package -DskipTests
 
 test:
 	mvn test
+
+clean:
+	rm -rf target
