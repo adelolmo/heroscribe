@@ -1,3 +1,11 @@
+heroscribe-enhanced-skull (1.8) unstable; urgency=medium
+
+  * Fix to delete kind when removing icon pack
+  * Fix to delete objects from board when removing icon pack
+  * Show modal with error if the quest contains objects for Icon Packs not yet installed
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Tue, 09 Apr 2024 21:39:25 +0200
+
 heroscribe-enhanced-skull (1.7) unstable; urgency=medium
 
   * Add correct copyright to files
