@@ -72,7 +72,7 @@ public class Board extends JPanel implements MouseInputListener {
 			final List<Quest.Board.Object> objectsInBoard = board.getObjects();
 			Arrays.stream(objectsInBoard.toArray(Quest.Board.Object[]::new))
 					.filter(o -> gui.getObjectList().getOptionalObject(o.getId()).isEmpty())
-					.forEach(objectsInBoard::remove);
+					.forEach(board::removeObject);
 		});
 	}
 
@@ -93,26 +93,15 @@ public class Board extends JPanel implements MouseInputListener {
 	}
 
 	private Quest.Board.Object getNewObject(boolean floating) {
-		Quest.Board.Object newObject;
 		final String id = gui.tools.selectorPanel.getSelectedObject();
-
-		if (floating) {
-			newObject = new Quest.Board.Object();
-			newObject.setId(id);
-			newObject.setZorder(Integer.MAX_VALUE);
-		} else {
-			newObject = new Quest.Board.Object();
-			newObject.setId(gui.tools.selectorPanel.getSelectedObject());
-
-			final ObjectList.Object obj = gui.getObjectList().getObjectById(id);
-
-			newObject.setZorder(obj.getZorder());
-		}
-
+		final ObjectList.Object obj = gui.getObjectList().getObjectById(id);
+		final Quest.Board.Object newObject = new Quest.Board.Object();
+		newObject.setId(id);
+		newObject.setZorder(floating ? Integer.MAX_VALUE : obj.getZorder());
 		newObject.setRotation(Rotation.fromNumber(rotation));
 		newObject.setLeft(lastLeft);
 		newObject.setTop(lastTop);
-
+		newObject.setKind(gui.getObjectList().getKind(obj.getKind()));
 		return newObject;
 	}
 
@@ -263,8 +252,9 @@ public class Board extends JPanel implements MouseInputListener {
 				Quest.Board.Object obj = getNewObject(false);
 
 				if (isWellPositioned(obj))
-					if (gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj)) {
+					if (gui.getQuest().getBoard(lastColumn, lastRow).addObjectIfNotPresentInCell(obj)) {
 						hasAdded = true;
+//						gui.getQuest().getKinds().add(gui.getObjectList().getKind(obj.getId()));
 						gui.getQuest().setModified(true);
 					}
 			}

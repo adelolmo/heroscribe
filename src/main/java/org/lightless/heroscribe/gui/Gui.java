@@ -23,23 +23,33 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.export.*;
-import org.lightless.heroscribe.helper.*;
-import org.lightless.heroscribe.iconpack.*;
+import org.lightless.heroscribe.Constants;
+import org.lightless.heroscribe.Preferences;
+import org.lightless.heroscribe.export.ExportEPS;
+import org.lightless.heroscribe.export.ExportIPDF;
+import org.lightless.heroscribe.export.ExportPDF;
+import org.lightless.heroscribe.export.ExportRaster;
+import org.lightless.heroscribe.helper.BoardPainter;
+import org.lightless.heroscribe.iconpack.IconPackService;
 import org.lightless.heroscribe.utils.OS;
-import org.lightless.heroscribe.xml.*;
-import org.slf4j.*;
+import org.lightless.heroscribe.xml.Kind;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.Quest;
+import org.lightless.heroscribe.xml.QuestParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
-import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.*;
+import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.PNG;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
@@ -504,6 +514,20 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 										objectList.getBoard().getHeight());
 
 						tools.none.doClick();
+
+						final Set<Kind> unsupportedKinds = findUnsupportedKinds(newXmlQuest, objectList.getKinds());
+						if(!unsupportedKinds.isEmpty()) {
+							JOptionPane.showMessageDialog(this,
+									"The Quest contains objects not supported.\n\n" +
+											"Please import the following Icon Pack(s) and try again:\n"
+											+ unsupportedKinds.stream()
+													.map(Kind::getName)
+													.collect(Collectors.joining("\n", "• ", "")),
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+
 						quest = newXmlQuest;
 						setMenuRegion();
 
@@ -534,7 +558,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 						quest.setFile(file);
 					}
 
-					questParser.saveToDisk(quest, quest.getFile());
+					questParser.saveToDisk(objectList, quest, quest.getFile());
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -549,9 +573,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 			if ((file = askPath("xml")) != null) {
 				try {
-					quest.setFile(file);
-					questParser.saveToDisk(quest, file);
-
+					questParser.saveToDisk(objectList, quest, file);
 					updateTitle();
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(this,
@@ -723,6 +745,19 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					"About", JOptionPane.PLAIN_MESSAGE);
 		}
 
+	}
+
+	private Set<Kind> findUnsupportedKinds(Quest newXmlQuest, List<Kind> kinds) {
+		final Set<Kind> unsupportedKinds = new HashSet<>();
+		final List<String> supportedKindIds = kinds.stream()
+				.map(Kind::getId)
+				.collect(Collectors.toList());
+		for (Kind questKind : newXmlQuest.getKinds()) {
+			if (!supportedKindIds.contains(questKind.getId())) {
+				unsupportedKinds.add(questKind);
+			}
+		}
+		return unsupportedKinds;
 	}
 
 	private File askPath(String extension) {

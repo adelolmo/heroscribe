@@ -18,12 +18,26 @@
 
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.dataformat.xml.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 @JsonRootName("quest")
 public class Quest {
@@ -51,6 +65,10 @@ public class Quest {
 	@JsonProperty("note")
 	@JacksonXmlElementWrapper(useWrapping = false)
 	private List<String> notes = new ArrayList<>();
+
+	@JsonProperty("kind")
+	@JacksonXmlElementWrapper(useWrapping = false)
+	private Set<Kind> kinds = new HashSet<>();
 
 	@JsonIgnore
 	private File file;
@@ -164,6 +182,14 @@ public class Quest {
 		this.speech = speech;
 	}
 
+	public Set<Kind> getKinds() {
+		return kinds;
+	}
+
+	public void setKinds(Set<Kind> kinds) {
+		this.kinds = kinds;
+	}
+
 	@JsonIgnore
 	public List<String> getNotesForUI() {
 		return notes.stream()
@@ -191,7 +217,7 @@ public class Quest {
 	}
 
 	public void setNote(int index, String text) {
-		notes.set(index,text);
+		notes.set(index, text);
 		/*int wanderingMonsterNoteIndex = -1;
 		for (int i = 0; i < notes.size(); i++) {
 			final String note = notes.get(i);
@@ -255,7 +281,7 @@ public class Quest {
 				.orElse(DEFAULT_WANDERING_MONSTER);
 	}
 
-	public void setWandering(String name, String id) {
+	public void setWandering(String id) {
 		final Optional<String> wanderingMonsterNote = findWanderingMonsterNote();
 		if (wanderingMonsterNote.isEmpty()) {
 			notes.add(WANDERING_MONSTER_NOTE_MESSAGE + id);
@@ -302,7 +328,7 @@ public class Quest {
 		}
 
 		public List<Object> getObjects() {
-			return objects;
+			return Collections.unmodifiableList(objects);
 		}
 
 		public void setObjects(List<Object> objects) {
@@ -347,7 +373,7 @@ public class Quest {
 			return Optional.empty();
 		}
 
-		public boolean addObject(Quest.Board.Object newObj) {
+		public boolean addObjectIfNotPresentInCell(Quest.Board.Object newObj) {
 			for (Object obj : objects) {
 				if (obj.left == newObj.left
 						&& obj.top == newObj.top
@@ -356,9 +382,13 @@ public class Quest {
 					return false;
 			}
 
-			objects.add(newObj);
+			addObject(newObj);
 
 			return true;
+		}
+
+		public void addObject(Object object) {
+			objects.add(object);
 		}
 
 		public int getWidth() {
@@ -375,6 +405,10 @@ public class Quest {
 
 		public void setHeight(int height) {
 			this.height = height;
+		}
+
+		public void removeObject(Object object) {
+			objects.remove(object);
 		}
 
 		private static class Dark {
@@ -446,6 +480,11 @@ public class Quest {
 			@JacksonXmlProperty(isAttribute = true)
 			private float zorder;
 
+			@JacksonXmlProperty(isAttribute = true)
+			@JsonSerialize(using = KindToIdString.class)
+			@JsonDeserialize(using = KindIdToObject.class)
+			private Kind kind;
+
 			@JsonIgnore
 			private int order;
 			@JsonIgnore
@@ -499,6 +538,14 @@ public class Quest {
 				this.zorder = zorder;
 			}
 
+			public Kind getKind() {
+				return kind;
+			}
+
+			public void setKind(Kind kind) {
+				this.kind = kind;
+			}
+
 			@Override
 			public int compareTo(Object o) {
 				if (this.zorder < o.zorder)
@@ -516,6 +563,23 @@ public class Quest {
 			@Override
 			public String toString() {
 				return id;
+			}
+
+			public static class KindToIdString extends JsonSerializer<Kind> {
+
+				@Override
+				public void serialize(Kind value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+					gen.writeString(value.getId());
+				}
+			}
+
+			public static class KindIdToObject extends JsonDeserializer<Kind> {
+				@Override
+				public Kind deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+					return new Kind() {{
+						setId(((TextNode) p.readValueAsTree()).asText());
+					}};
+				}
 			}
 		}
 	}

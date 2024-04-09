@@ -154,10 +154,6 @@ public class ObjectList extends Modifiable {
 				.orElseThrow(() -> new IllegalStateException(format("Unknown object '%s'", id)));
 	}
 
-	public boolean containsObjectById(String id) {
-		return getOptionalObject(id).isPresent();
-	}
-
 	public Optional<Object> getOptionalObject(String id) {
 		return objects.stream()
 				.filter(object -> object.getId().equals(id))
@@ -198,6 +194,13 @@ public class ObjectList extends Modifiable {
 
 	public void setBasePath(Path basePath) {
 		this.basePath = basePath;
+	}
+
+	public Kind getKind(String id) {
+		return kinds.stream()
+				.filter(kind -> id.equals(kind.getId()))
+				.findFirst()
+				.orElseThrow(() -> new IllegalStateException(format("Unknown kind '%s'", id)));
 	}
 
 	public static class Board {

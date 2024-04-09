@@ -177,6 +177,7 @@ public class IconPackService {
 											   final ObjectList iconPackObjectList) {
 		return iconPackObjectList.getKinds().stream()
 				.filter(kind -> !referenceObjectList.getKindIds().contains(kind.getId()))
+				.peek(kind -> kind.setOriginal(false))
 				.collect(Collectors.toList());
 	}
 

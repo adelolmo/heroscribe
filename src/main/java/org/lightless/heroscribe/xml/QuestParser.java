@@ -18,9 +18,13 @@
 
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestParser {
 	private final ObjectMapper xmlMapper;
@@ -36,8 +40,37 @@ public class QuestParser {
 		return quest;
 	}
 
-	public void saveToDisk(Quest quest, File outputFile) throws IOException {
+	public void saveToDisk(ObjectList objectList, Quest quest, File outputFile) throws IOException {
+		final List<Kind> originalKinds = objectList.getKinds().stream()
+				.filter(Kind::isOriginal)
+				.collect(Collectors.toList());
+		quest.setKinds(new HashSet<>(originalKinds));
+
+		if (questContainsKindsFromIconPacks(quest.getBoards(), objectList.getKinds())) {
+			for (Quest.Board board : quest.getBoards()) {
+				for (Quest.Board.Object object : board.getObjects()) {
+					if (object.getKind() != null && !object.getKind().isOriginal()) {
+						quest.getKinds().add(object.getKind());
+					}
+				}
+			}
+		}
+
+		quest.setFile(outputFile);
 		xmlMapper.writeValue(outputFile, quest);
 		quest.setModified(false);
+	}
+
+	private boolean questContainsKindsFromIconPacks(List<Quest.Board> questBoards, List<Kind> kinds) {
+		for (Quest.Board questBoard : questBoards) {
+			for (Quest.Board.Object object : questBoard.getObjects()) {
+				if (object.getKind() != null) {
+					if (!object.getKind().isOriginal()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

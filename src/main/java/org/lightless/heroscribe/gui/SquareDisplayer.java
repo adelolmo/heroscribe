@@ -165,7 +165,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 		JButton button = (JButton) e.getSource();
 
 		if (obj != null) {
-			gui.getQuest().getBoard(lastColumn, lastRow).getObjects().remove(obj);
+			gui.getQuest().getBoard(lastColumn, lastRow).removeObject(obj);
 			selected.remove(obj);
 		}
 
@@ -180,7 +180,7 @@ public class SquareDisplayer extends JPanel implements ListSelectionListener, Ac
 		}
 
 		if (obj != null) {
-			gui.getQuest().getBoard(lastColumn, lastRow).getObjects().add(obj);
+			gui.getQuest().getBoard(lastColumn, lastRow).addObject(obj);
 			selected.add(obj);
 		}
 

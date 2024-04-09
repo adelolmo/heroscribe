@@ -101,11 +101,11 @@ public class PropertiesModal extends JPanel implements AncestorListener {
 
 			final ObjectList.Object selectedItem = (ObjectList.Object) wandering.getSelectedItem();
 			if (!quest.hasWanderingMonster()) {
-				quest.setWandering(selectedItem.getName(), selectedItem.getId());
+				quest.setWandering(selectedItem.getId());
 				quest.setModified(true);
 			}
 			if (!selectedItem.getId().equals(quest.getWanderingId())) {
-				quest.setWandering(selectedItem.getName(), selectedItem.getId());
+				quest.setWandering(selectedItem.getId());
 				quest.setModified(true);
 			}
 
