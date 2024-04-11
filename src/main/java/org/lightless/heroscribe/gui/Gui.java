@@ -62,7 +62,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private final IconPackService iconPackService;
 	private final ObjectList objectList;
 	private final QuestParser questParser;
+	private final IconPackImportFileChooser iconPackImportFileChooser;
 
+	private final IconPackDownloadModal iconPackDownloadModal;
+	private final IconPackRemoveModal iconPackRemoveModal;
 	private Quest quest;
 	private final Path objectHtmlPath;
 	private final Preferences prefs;
@@ -147,6 +150,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		setLocation((tk.getScreenSize().width - this.getWidth()) / 2,
 				(tk.getScreenSize().height - this.getHeight()) / 2);
+
+		iconPackImportFileChooser = new IconPackImportFileChooser(prefs.defaultDir, iconPackService);
+		iconPackDownloadModal = new IconPackDownloadModal(iconPackService);
+		iconPackRemoveModal = new IconPackRemoveModal(iconPackService);
 
 		setVisible(true);
 	}
@@ -707,16 +714,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			});
 
 		} else if (iconPackImport == source) {
-			final IconPackImportFileChooser modal = new IconPackImportFileChooser(prefs.defaultDir, iconPackService);
-			modal.showModal();
+			iconPackImportFileChooser.showModal();
 
 		} else if (iconPackDownload == source) {
-			final IconPackDownloadModal modal = new IconPackDownloadModal(iconPackService);
-			modal.showDialog();
+			iconPackDownloadModal.showDialog();
 
 		} else if (iconPackRemove == source) {
-			final IconPackRemoveModal modal = new IconPackRemoveModal(iconPackService);
-			modal.showDialog();
+			iconPackRemoveModal.showDialog();
 
 		} else if (quitKey == source) {
 			windowClosing(null);

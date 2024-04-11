@@ -18,15 +18,21 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.apache.commons.io.*;
-import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.iconpack.*;
+import org.apache.commons.io.FileUtils;
+import org.lightless.heroscribe.Constants;
+import org.lightless.heroscribe.iconpack.IconPackService;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
+import static java.lang.String.format;
+import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
 
 public class IconPackImportFileChooser extends JFileChooser {
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
@@ -85,10 +91,25 @@ public class IconPackImportFileChooser extends JFileChooser {
 
 	private void handleException(File importedIconPackFile, IOException e) {
 		JOptionPane.showMessageDialog(this,
-				"Can't import Icon Pack\nReason is: " + e.getMessage(),
+				errorMessage(e),
 				"Error",
 				JOptionPane.ERROR_MESSAGE);
 		FileUtils.deleteQuietly(importedIconPackFile);
+	}
+
+	private static JPanel errorMessage(IOException e) {
+		final JTextArea textArea = new JTextArea(4, 80);
+		textArea.setWrapStyleWord(true);
+		textArea.setAutoscrolls(false);
+		textArea.setLineWrap(true);
+		textArea.setText(e.getMessage());
+
+		final JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panel.add(new Label(format("The Icon Pack is not compatible with %s.", APPLICATION_NAME)));
+		panel.add(new Label("Technical reason:"));
+		panel.add(new JScrollPane(textArea), BorderLayout.PAGE_START);
+		return panel;
 	}
 
 	static class ZipFileFilter extends FileFilter {
