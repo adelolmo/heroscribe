@@ -128,12 +128,10 @@ public class IconPackService {
 					loadObjectIcons(object, "USA", tempIconPackDirectory);
 
 					// update system objects
-					systemObjectList.getObjects().add(object);
+					systemObjectList.addObject(object);
 				});
 
-		systemObjectList.getKinds().addAll(iconPackKinds);
-		systemObjectList.notifyMutation();
-
+		iconPackKinds.forEach(systemObjectList::addKind);
 		imageLoader.flush();
 	}
 
@@ -159,11 +157,10 @@ public class IconPackService {
 					imageLoader.removeImage(object.getIcon("USA").getImage());
 
 					// update system objects
-					systemObjectList.getObjects().remove(object);
+					systemObjectList.removeObject(object);
 				});
 
-		kinds.forEach(kind -> systemObjectList.getKinds().remove(kind));
-		systemObjectList.notifyMutation();
+		kinds.forEach(systemObjectList::removeKind);
 		FileUtils.deleteDirectory(getTempIconPackDirectory(iconPackFile).toFile());
 		Files.delete(iconPackFile.toPath());
 	}

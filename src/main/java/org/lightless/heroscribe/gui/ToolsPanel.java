@@ -28,13 +28,17 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
-public class ToolsPanel extends JPanel implements ItemListener, KeyListener, ActionListener, ListSelectionListener {
-
-	private static final long serialVersionUID = 1L;
+public class ToolsPanel extends JPanel implements ItemListener, ListSelectionListener {
 
 	private final Gui gui;
+	private final TextAreaModal noteModal = new TextAreaModal("Enter Note",
+			"Enter the QuestMaster Note:");
+	private Quest xmlQuest;
+
 	ObjectSelector selectorPanel;
 	SquareDisplayer displayerPanel;
 
@@ -50,7 +54,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 	JPanel extraPanel;
 
 	String selected;
-	private Quest xmlQuest;
 
 	public ToolsPanel(Gui gui, Quest xmlQuest) {
 		this.gui = gui;
@@ -141,17 +144,11 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		select.addItemListener(this);
 		dark.addItemListener(this);
 
-		newNote.addActionListener(this);
-		editNote.addActionListener(this);
-		delNote.addActionListener(this);
+		newNote.addActionListener(newNoteActionListener());
+		editNote.addActionListener(editNoteActionListener());
+		delNote.addActionListener(deleteNoteActionListener());
 
 		note.addListSelectionListener(this);
-	}
-
-	public void deselectAll() {
-		add.setSelected(false);
-		select.setSelected(false);
-		dark.setSelected(false);
 	}
 
 	public void clearQuestForm() {
@@ -170,11 +167,6 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 
 	public String getCommand() {
 		return selected;
-	}
-
-	// HSE - Add key listeners for text fields
-	public void keyReleased(KeyEvent e) {
-
 	}
 
 	public void itemStateChanged(ItemEvent e) {
@@ -201,39 +193,30 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 		}
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// noop
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// noop
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (newNote == e.getSource()) {
-			// HSE - listener for new note click
-			final TextAreaModal modal = new TextAreaModal("Enter Note",
-					"Enter the QuestMaster Note:");
-			modal.showDialog().ifPresent(text -> {
+	private ActionListener newNoteActionListener() {
+		return e -> {
+			noteModal.clear();
+			noteModal.showDialog().ifPresent(text -> {
 				noteData.addElement(text);
 				xmlQuest.addNote(text);
 				xmlQuest.setModified(true);
 			});
-		} else if (editNote == e.getSource()) {
-			// HSE - listener for edit note click
-			final TextAreaModal modal = new TextAreaModal("Enter Note",
-					"Enter the QuestMaster Note:");
-			modal.setInitialText(note.getSelectedValue());
-			modal.showDialog().ifPresent(text -> {
+		};
+	}
+
+	private ActionListener editNoteActionListener() {
+		return e -> {
+			noteModal.setInitialText(note.getSelectedValue());
+			noteModal.showDialog().ifPresent(text -> {
 				noteData.setElementAt(text, note.getLeadSelectionIndex());
 				xmlQuest.setNote(note.getLeadSelectionIndex(), text);
 				xmlQuest.setModified(true);
 			});
-		} else if (delNote == e.getSource()) {
-			// HSE - listener for del note click
+		};
+	}
+
+	private ActionListener deleteNoteActionListener() {
+		return e -> {
 			if (note.getSelectedValue() != null) {
 				int response = JOptionPane.showConfirmDialog(null,
 						"Are you sure you want to delete this note?",
@@ -245,7 +228,7 @@ public class ToolsPanel extends JPanel implements ItemListener, KeyListener, Act
 					xmlQuest.setModified(true);
 				}
 			}
-		}
+		};
 	}
 
 	@Override

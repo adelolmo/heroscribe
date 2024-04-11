@@ -46,7 +46,7 @@ public class QuestParser {
 				.collect(Collectors.toList());
 		quest.setKinds(new HashSet<>(originalKinds));
 
-		if (questContainsKindsFromIconPacks(quest.getBoards(), objectList.getKinds())) {
+		if (questContainsKindsFromIconPacks(quest.getBoards())) {
 			for (Quest.Board board : quest.getBoards()) {
 				for (Quest.Board.Object object : board.getObjects()) {
 					if (object.getKind() != null && !object.getKind().isOriginal()) {
@@ -61,7 +61,7 @@ public class QuestParser {
 		quest.setModified(false);
 	}
 
-	private boolean questContainsKindsFromIconPacks(List<Quest.Board> questBoards, List<Kind> kinds) {
+	private boolean questContainsKindsFromIconPacks(List<Quest.Board> questBoards) {
 		for (Quest.Board questBoard : questBoards) {
 			for (Quest.Board.Object object : questBoard.getObjects()) {
 				if (object.getKind() != null) {

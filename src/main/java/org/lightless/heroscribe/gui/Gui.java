@@ -116,10 +116,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		filters.put("xml", new ActualFileFilter("xml", "HeroScribe Quests (*.xml)"));
 
 		boardPainter = new BoardPainter(this);
-
-		objectList.addModificationListener(() -> {
-			tools.repaint();
-			boardPainter.init(objectList);
+		objectList.addModificationListener(modificationType -> {
+			if (ObjectList.Type.OBJECTS.equals(modificationType)) {
+				tools.repaint();
+				boardPainter.init(objectList);
+			}
 		});
 
 		tools = new ToolsPanel(this, this.quest);
@@ -516,13 +517,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 						tools.none.doClick();
 
 						final Set<Kind> unsupportedKinds = findUnsupportedKinds(newXmlQuest, objectList.getKinds());
-						if(!unsupportedKinds.isEmpty()) {
+						if (!unsupportedKinds.isEmpty()) {
 							JOptionPane.showMessageDialog(this,
 									"The Quest contains objects not supported.\n\n" +
 											"Please import the following Icon Pack(s) and try again:\n"
 											+ unsupportedKinds.stream()
-													.map(Kind::getName)
-													.collect(Collectors.joining("\n", "• ", "")),
+											.map(Kind::getName)
+											.collect(Collectors.joining("\n", "• ", "")),
 									"Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;

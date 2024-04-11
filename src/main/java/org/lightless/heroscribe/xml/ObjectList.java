@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-public class ObjectList extends Modifiable {
+public class ObjectList extends Modifiable<ObjectList.Type> {
 
 	@JacksonXmlProperty(isAttribute = true)
 	private String version;
@@ -133,6 +133,11 @@ public class ObjectList extends Modifiable {
 		this.kinds = kinds;
 	}
 
+	public void addKind(Kind kind) {
+		kinds.add(kind);
+		notifyMutation(Type.KINDS);
+	}
+
 	public Board getBoard() {
 		return board;
 	}
@@ -147,6 +152,16 @@ public class ObjectList extends Modifiable {
 
 	public void setObjects(List<Object> objects) {
 		this.objects = objects;
+	}
+
+	public void addObject(Object object) {
+		objects.add(object);
+		notifyMutation(Type.OBJECTS);
+	}
+
+	public void removeObject(Object object) {
+		objects.remove(object);
+		notifyMutation(Type.OBJECTS);
 	}
 
 	public ObjectList.Object getObjectById(String id) {
@@ -201,6 +216,11 @@ public class ObjectList extends Modifiable {
 				.filter(kind -> id.equals(kind.getId()))
 				.findFirst()
 				.orElseThrow(() -> new IllegalStateException(format("Unknown kind '%s'", id)));
+	}
+
+	public void removeKind(Kind kind) {
+		kinds.remove(kind);
+		notifyMutation(Type.KINDS);
 	}
 
 	public static class Board {
@@ -525,5 +545,10 @@ public class ObjectList extends Modifiable {
 		public void setImage(Image image) {
 			this.image = image;
 		}
+	}
+
+	public enum Type {
+		OBJECTS,
+		KINDS
 	}
 }

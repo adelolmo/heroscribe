@@ -18,6 +18,6 @@
 
 package org.lightless.heroscribe.utils;
 
-public interface ModificationListener {
-	void onChange();
+public interface ModificationListener<T extends Enum> {
+	void onChange(T modificationType);
 }

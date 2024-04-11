@@ -30,7 +30,6 @@ import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.List;
 
 public class Board extends JPanel implements MouseInputListener {
 
@@ -55,8 +54,11 @@ public class Board extends JPanel implements MouseInputListener {
 		lastTop = lastLeft = -1;
 
 		gui.getObjectList()
-				.addModificationListener(() ->
-						removeFromBoardObjectsNotPresentInObjectList(gui));
+				.addModificationListener(modificationType -> {
+					if (ObjectList.Type.OBJECTS.equals(modificationType)) {
+						removeFromBoardObjectsNotPresentInObjectList(gui.getObjectList(), gui.getQuest());
+					}
+				});
 
 		setBackground(Color.WHITE);
 
@@ -67,13 +69,11 @@ public class Board extends JPanel implements MouseInputListener {
 		addMouseMotionListener(this);
 	}
 
-	private static void removeFromBoardObjectsNotPresentInObjectList(Gui gui) {
-		gui.getQuest().getBoards().forEach(board -> {
-			final List<Quest.Board.Object> objectsInBoard = board.getObjects();
-			Arrays.stream(objectsInBoard.toArray(Quest.Board.Object[]::new))
-					.filter(o -> gui.getObjectList().getOptionalObject(o.getId()).isEmpty())
-					.forEach(board::removeObject);
-		});
+	private static void removeFromBoardObjectsNotPresentInObjectList(ObjectList objectList, Quest quest) {
+		quest.getBoards()
+				.forEach(board -> Arrays.stream(board.getObjects().toArray(Quest.Board.Object[]::new))
+						.filter(o -> objectList.getOptionalObject(o.getId()).isEmpty())
+						.forEach(board::removeObject));
 	}
 
 	public void setSize() {

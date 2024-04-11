@@ -18,20 +18,28 @@
 
 package org.lightless.heroscribe.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Modifiable {
+public class Modifiable<T extends Enum<?>> {
 
-	private final List<ModificationListener> listeners = new ArrayList<>();
+	private static final Logger logger = LoggerFactory.getLogger(Modifiable.class);
+	private final List<ModificationListener<T>> listeners = new ArrayList<>();
 
-	public void addModificationListener(ModificationListener listener) {
+	public void addModificationListener(ModificationListener<T> listener) {
 		listeners.add(listener);
 	}
 
-	public void notifyMutation() {
-		for (ModificationListener listener : listeners) {
-			listener.onChange();
+	public void notifyMutation(T type) {
+		for (ModificationListener<T> listener : listeners) {
+			try {
+				listener.onChange(type);
+			} catch (Exception e) {
+				logger.error("Unable to notify change", e);
+			}
 		}
 	}
 
