@@ -17,19 +17,21 @@
 */
 package org.lightless.heroscribe.iconpack;
 
-import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.Constants;
 import org.lightless.heroscribe.utils.FileUtils;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 public class IconPackDownloadModal extends JPanel {
 
@@ -41,6 +43,7 @@ public class IconPackDownloadModal extends JPanel {
 	private final Box box;
 
 	private final List<WebsiteParser.IconPackDetails> iconPackDetails = new ArrayList<>();
+	private final List<WebsiteParser.IconPackDetails> iconPackDetailsCache = new ArrayList<>();
 	private final IconPackService iconPackService;
 
 
@@ -68,7 +71,8 @@ public class IconPackDownloadModal extends JPanel {
 		iconPackCheckBoxes.clear();
 		box.removeAll();
 		try {
-			iconPackDetails.addAll(websiteParser.parse());
+			final List<WebsiteParser.IconPackDetails> parse = downloadIconPackDetailsAndCache();
+			iconPackDetails.addAll(parse);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this,
 					format("Can't read Icon Packs remote content.\nDetailed Error: %s",
@@ -132,6 +136,13 @@ public class IconPackDownloadModal extends JPanel {
 			};
 			worker.execute();
 		}
+	}
+
+	private List<WebsiteParser.IconPackDetails> downloadIconPackDetailsAndCache() throws IOException {
+		if (iconPackDetailsCache.isEmpty()) {
+			iconPackDetailsCache.addAll(websiteParser.parse());
+		}
+		return iconPackDetailsCache;
 	}
 
 	private void showReportDialog(List<DownloadReport> downloadReports) {
