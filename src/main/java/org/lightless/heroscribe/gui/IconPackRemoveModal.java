@@ -18,26 +18,22 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.iconpack.*;
+import org.lightless.heroscribe.iconpack.IconPackService;
 
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
-public class IconPackRemoveModal extends JPanel implements ItemListener {
-
+public class IconPackRemoveModal extends JPanel {
 
 	private final IconPackService iconPackService;
-	private final List<JCheckBox> iconPackCheckBoxes = new ArrayList<>();
 	private final Box box;
-	private final List<IconPackService.IconPack> installedIconPacks = new ArrayList<>();
 
 	public IconPackRemoveModal(IconPackService iconPackService) {
 		super();
@@ -59,12 +55,12 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 	}
 
 	public void showDialog() {
-		installedIconPacks.addAll(iconPackService.getInstalledIconPackDetails());
-		for (IconPackService.IconPack iconPack : installedIconPacks) {
+		box.removeAll();
 
+		final List<JCheckBox> iconPackCheckBoxes = new ArrayList<>();
+		for (IconPackService.IconPack iconPack : iconPackService.getInstalledIconPackDetails()) {
 			final JCheckBox checkBox = new JCheckBox(iconPack.getKindNames());
 			iconPackCheckBoxes.add(checkBox);
-			checkBox.addItemListener(this);
 			box.add(checkBox);
 		}
 
@@ -81,8 +77,18 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 					continue;
 				}
 
-				for (IconPackService.IconPack iconPackFile : getSelectedIconPacks(checkBox)) {
-					deleteIconPack(iconPackFile.getZipFile());
+				for (IconPackService.IconPack iconPackFile :
+						getSelectedIconPacks(iconPackService.getInstalledIconPackDetails(), checkBox)) {
+					try {
+						iconPackService.removePack(iconPackFile.getZipFile());
+					} catch (IOException e) {
+						JOptionPane.showMessageDialog(this,
+								format("Can't remove Icon Pack %s.\nDetailed Error: %s",
+										iconPackFile.getZipFile().getName(), e.getMessage()),
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 				}
 			}
 			JOptionPane.showMessageDialog(this,
@@ -92,26 +98,9 @@ public class IconPackRemoveModal extends JPanel implements ItemListener {
 		}
 	}
 
-	private void deleteIconPack(File iconPackFile) {
-		try {
-			iconPackService.removePack(iconPackFile);
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(this,
-					format("Can't remove Icon Pack %s.\nDetailed Error: %s",
-							iconPackFile.getName(), e.getMessage()),
-					"Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private List<IconPackService.IconPack> getSelectedIconPacks(JCheckBox checkBox) {
+	private List<IconPackService.IconPack> getSelectedIconPacks(List<IconPackService.IconPack> installedIconPacks, JCheckBox checkBox) {
 		return installedIconPacks.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getKindNames()))
 				.collect(Collectors.toList());
-	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-
 	}
 }

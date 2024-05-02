@@ -87,17 +87,12 @@ public class ObjectSelector extends JPanel implements ItemListener, ListSelectio
 				}
 		);
 
-		objectList.getObjects().forEach(object -> {
-			kindList.computeIfPresent(object.getKind(), (String s, JList<ObjectList.Object> objectJList) -> {
-				final DefaultListModel<ObjectList.Object> listModel = (DefaultListModel<ObjectList.Object>) objectJList.getModel();
-				listModel.addElement(object);
-				return objectJList;
-			});
-//			final JList<ObjectList.Object> list = kindList.get(object.getKind());
-//			final DefaultListModel<ObjectList.Object> listModel = (DefaultListModel<ObjectList.Object>) list.getModel();
-//
-//			listModel.addElement(object);
-		});
+		objectList.getObjects().forEach(object ->
+				kindList.computeIfPresent(object.getKind(), (String s, JList<ObjectList.Object> objectJList) -> {
+					final DefaultListModel<ObjectList.Object> listModel = (DefaultListModel<ObjectList.Object>) objectJList.getModel();
+					listModel.addElement(object);
+					return objectJList;
+				}));
 	}
 
 	public String getSelectedObject() {

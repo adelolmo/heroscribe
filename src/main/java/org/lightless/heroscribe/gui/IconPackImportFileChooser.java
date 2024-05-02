@@ -35,9 +35,10 @@ import static java.lang.String.format;
 import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
 
 public class IconPackImportFileChooser extends JFileChooser {
-	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
-	private final IconPackService iconPackService;
 
+	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
+
+	private final IconPackService iconPackService;
 
 	public IconPackImportFileChooser(File defaultDir, IconPackService iconPackService) {
 		super(defaultDir);

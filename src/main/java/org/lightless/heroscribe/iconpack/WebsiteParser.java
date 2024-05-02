@@ -18,14 +18,16 @@
 
 package org.lightless.heroscribe.iconpack;
 
-import org.jsoup.*;
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import java.io.*;
-import java.net.*;
-import java.time.*;
-import java.util.*;
+import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebsiteParser {
 

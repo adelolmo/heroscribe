@@ -53,41 +53,34 @@ import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.PNG;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
 
-	private static final long serialVersionUID = 1L;
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
 	private static final Dimension DIRECTORY_CHOOSER_DIMENSION = new Dimension(600, 700);
 
+	private final JFileChooser fileChooser = new FileChooser();
+	private final JFileChooser ghostscriptChooser = new JFileChooser();
+	private final TreeMap<String, FileFilter> filters = new TreeMap<>();
+
 	private final ImageLoader imageLoader;
-	private final IconPackService iconPackService;
 	private final ObjectList objectList;
 	private final QuestParser questParser;
 	private final IconPackImportFileChooser iconPackImportFileChooser;
-
 	private final IconPackDownloadModal iconPackDownloadModal;
 	private final IconPackRemoveModal iconPackRemoveModal;
-	private Quest quest;
 	private final Path objectHtmlPath;
 	private final Preferences prefs;
-
-	ToolsPanel tools;
-	Board board;
-
-	BoardPainter boardPainter;
-
-	private final JFileChooser fileChooser = new FileChooser();
-	private final JFileChooser ghostscriptChooser = new JFileChooser();
-
-	private final TreeMap<String, FileFilter> filters = new TreeMap<>();
+	private final Vector<JMenuItem> newSpecialKeys;
 
 	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
 			quitKey, listKey, aboutKey, dirKey, exportPdf2Key, exportThumbNail, propertiesKey, paperKey;
 	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
+	private Quest quest;
 
-	private final Vector<JMenuItem> newSpecialKeys;
-
+	ToolsPanel tools;
+	Board board;
 	JLabel hint, status;
+	BoardPainter boardPainter;
 
 	public Gui(ImageLoader imageLoader,
 			   IconPackService iconPackService,
@@ -98,7 +91,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			   Path objectHtmlPath) {
 		super();
 		this.imageLoader = imageLoader;
-		this.iconPackService = iconPackService;
 		this.objectList = objectList;
 		this.questParser = questParser;
 		this.prefs = preferences;
@@ -121,7 +113,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		boardPainter = new BoardPainter(this);
 		objectList.addModificationListener(modificationType -> {
 			if (ObjectList.Type.OBJECTS.equals(modificationType)) {
-				tools.repaint();
 				boardPainter.init(objectList);
 			}
 		});

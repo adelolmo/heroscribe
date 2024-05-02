@@ -65,7 +65,9 @@ public class IconPackDownloadModal extends JPanel {
 	}
 
 	public void showDialog() {
-
+		iconPackDetails.clear();
+		iconPackCheckBoxes.clear();
+		box.removeAll();
 		try {
 			iconPackDetails.addAll(websiteParser.parse());
 		} catch (IOException e) {
