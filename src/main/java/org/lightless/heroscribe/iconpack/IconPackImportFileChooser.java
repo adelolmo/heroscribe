@@ -16,11 +16,10 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package org.lightless.heroscribe.gui;
+package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.io.FileUtils;
 import org.lightless.heroscribe.Constants;
-import org.lightless.heroscribe.iconpack.IconPackService;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;

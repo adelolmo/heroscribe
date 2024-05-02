@@ -15,10 +15,9 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-package org.lightless.heroscribe.gui;
+package org.lightless.heroscribe.iconpack;
 
 import org.lightless.heroscribe.*;
-import org.lightless.heroscribe.iconpack.*;
 import org.lightless.heroscribe.utils.FileUtils;
 import org.slf4j.*;
 

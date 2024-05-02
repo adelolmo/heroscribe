@@ -42,7 +42,7 @@ public class WebsiteParser {
 		return downloadIconPacksMetadata(document);
 	}
 
-	public List<IconPackDetails> downloadIconPacksMetadata(Document document) {
+	private List<IconPackDetails> downloadIconPacksMetadata(Document document) {
 		final List<IconPackDetails> iconPackMetadata = new ArrayList<>();
 
 		final Elements iconPackElements =
