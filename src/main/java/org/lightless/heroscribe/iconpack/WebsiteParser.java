@@ -24,6 +24,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class WebsiteParser {
 		return downloadIconPacksMetadata(document);
 	}
 
-	private List<IconPackDetails> downloadIconPacksMetadata(Document document) {
+	private List<IconPackDetails> downloadIconPacksMetadata(Document document) throws MalformedURLException {
 		final List<IconPackDetails> iconPackMetadata = new ArrayList<>();
 
 		final Elements iconPackElements =
@@ -61,22 +62,22 @@ public class WebsiteParser {
 		return iconPackMetadata;
 	}
 
-	private IconPackDetails extractIconPack(Elements elements) {
+	private IconPackDetails extractIconPack(Elements elements) throws MalformedURLException {
 		final String name = elements.get(0).text();
 		final String link = elements.get(0).attr("href");
 		final String href = elements.get(1).attr("href");
 		final String filename = href.substring(href.lastIndexOf('/') + 1);
 		final String id = filename.split("\\.")[0];
 
-		return new IconPackDetails(name, link, id);
+		return new IconPackDetails(name, new URL(link), id);
 	}
 
 	public static class IconPackDetails {
 		private final String name;
-		private final String link;
+		private final URL link;
 		private final String id;
 
-		public IconPackDetails(String name, String link, String id) {
+		public IconPackDetails(String name, URL link, String id) {
 			this.name = name;
 			this.link = link;
 			this.id = id;
@@ -90,7 +91,7 @@ public class WebsiteParser {
 			return name;
 		}
 
-		public String getLink() {
+		public URL getLink() {
 			return link;
 		}
 

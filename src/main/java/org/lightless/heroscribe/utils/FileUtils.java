@@ -28,11 +28,11 @@ public class FileUtils {
 
 	private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
-	public static void downloadToFile(String sourceUrl, File targetFile) throws IOException {
+	public static void downloadToFile(URL sourceUrl, File targetFile) throws IOException {
 		log.info("Download {} to {}", sourceUrl, targetFile.getAbsolutePath());
 
 		final OutputStream os = new FileOutputStream(targetFile);
-		final InputStream is = new URL(sourceUrl).openStream();
+		final InputStream is = sourceUrl.openStream();
 
 		IOUtils.copy(is, os);
 	}
