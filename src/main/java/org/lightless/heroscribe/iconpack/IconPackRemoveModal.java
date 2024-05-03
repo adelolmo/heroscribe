@@ -45,6 +45,7 @@ public class IconPackRemoveModal extends JPanel {
 		box = new Box(BoxLayout.Y_AXIS);
 		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
+		jScrollPane.setVerticalScrollBar(createVerticalScrollBar(jScrollPane));
 
 		panel.add(new JLabel("Select the Icon Packs to remove:"));
 		panel.add(jScrollPane, BorderLayout.PAGE_START);
@@ -100,5 +101,11 @@ public class IconPackRemoveModal extends JPanel {
 		return installedIconPacks.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getKindNames()))
 				.collect(Collectors.toList());
+	}
+
+	private static JScrollBar createVerticalScrollBar(JScrollPane jScrollPane) {
+		final JScrollBar scrollBar = jScrollPane.createVerticalScrollBar();
+		scrollBar.setUnitIncrement(16);
+		return scrollBar;
 	}
 }

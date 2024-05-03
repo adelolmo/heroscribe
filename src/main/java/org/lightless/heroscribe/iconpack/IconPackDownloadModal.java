@@ -38,14 +38,12 @@ public class IconPackDownloadModal extends JPanel {
 	private static final Logger log = LoggerFactory.getLogger(IconPackDownloadModal.class);
 
 	private final WebsiteParser websiteParser = new WebsiteParser();
-
 	private final List<JCheckBox> iconPackCheckBoxes = new ArrayList<>();
-	private final Box box;
-
 	private final List<WebsiteParser.IconPackDetails> iconPackDetails = new ArrayList<>();
 	private final List<WebsiteParser.IconPackDetails> iconPackDetailsCache = new ArrayList<>();
-	private final IconPackService iconPackService;
 
+	private final IconPackService iconPackService;
+	private final Box box;
 
 	public IconPackDownloadModal(IconPackService iconPackService) {
 		super();
@@ -59,6 +57,7 @@ public class IconPackDownloadModal extends JPanel {
 		box = new Box(BoxLayout.Y_AXIS);
 		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
+		jScrollPane.setVerticalScrollBar(createVerticalScrollBar(jScrollPane));
 
 		panel.add(new JLabel("Select the Icon Packs to install from www.heroscribe.org:"));
 		panel.add(jScrollPane, BorderLayout.PAGE_START);
@@ -71,8 +70,7 @@ public class IconPackDownloadModal extends JPanel {
 		iconPackCheckBoxes.clear();
 		box.removeAll();
 		try {
-			final List<WebsiteParser.IconPackDetails> parse = downloadIconPackDetailsAndCache();
-			iconPackDetails.addAll(parse);
+			iconPackDetails.addAll(downloadIconPackDetailsAndCache());
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(this,
 					format("Can't read Icon Packs remote content.\nDetailed Error: %s",
@@ -182,6 +180,12 @@ public class IconPackDownloadModal extends JPanel {
 		return iconPackDetails.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getName()))
 				.collect(Collectors.toList());
+	}
+
+	private static JScrollBar createVerticalScrollBar(JScrollPane jScrollPane) {
+		final JScrollBar scrollBar = jScrollPane.createVerticalScrollBar();
+		scrollBar.setUnitIncrement(16);
+		return scrollBar;
 	}
 
 	private static class DownloadReport {
