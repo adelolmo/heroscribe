@@ -605,25 +605,12 @@ public class ExportEPS {
 				out.println("0 0 0 setrgbcolor");
 
 				int numberOfLinePage = 0;
+				final int speechLines = GhostscriptUtils.numberOfLines(quest.getSpeech(), 12);
+				log.info("Speech. number of lines: {}", speechLines);
+				numberOfLinePage += speechLines;
 				for (String linefeed : quest.getSpeech().split("\n")) {
-					final int lines = Strings.numberOfLines(linefeed, 12);
-					log.info("Speech. number of lines: {}", lines);
-					numberOfLinePage += lines;
 					out.println("(%s ) S L",
 							sanitize(linefeed));
-					if (numberOfLinePage > 50) {
-						numberOfLinePage = 0;
-						printWanderingMonster(paperType, quest, objects, out);
-
-						out.println("grestore");
-
-						out.println("sysshowpage");
-						out.println("%%EndPage");
-
-						out.println("%%Page: %s %s",
-								++pageCount,
-								pageCount);
-					}
 				}
 
 				// HSE - output the notes in regular black font, smaller line spacing
@@ -631,9 +618,8 @@ public class ExportEPS {
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
 				for (String note : quest.getNotesForUI()) {
-
 					for (String noteLine : note.split("\n")) {
-						final int lines = Strings.numberOfLines(noteLine, 10);
+						final int lines = GhostscriptUtils.numberOfLines(noteLine, 10);
 						log.info("number of lines: {}", lines);
 						numberOfLinePage += lines;
 						if (numberOfLinePage > pageMaxNumberOfLines) {

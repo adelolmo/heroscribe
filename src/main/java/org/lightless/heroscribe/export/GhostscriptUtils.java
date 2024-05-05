@@ -2,18 +2,10 @@ package org.lightless.heroscribe.export;
 
 import java.util.Arrays;
 
-public class Strings {
+public class GhostscriptUtils {
 
-	private static int maxLineLength(int fontSize) {
-		switch (fontSize) {
-			case 12:
-				return 112;
-			case 10:
-				return 124;
-			default:
-				throw new IllegalStateException("Font size not supported");
-		}
-	}
+	private static final int LINE_LEN_WITH_FONT_1 = 178;
+	private static final int CHAR_INCREASE = 6;
 
 	public static int numberOfLines(String note, int fontSize) {
 		final int maxLineLength = maxLineLength(fontSize);
@@ -46,8 +38,20 @@ public class Strings {
 		return lines;
 	}
 
+	public static int maxLineLength(int fontSize) {
+		int minimumFontSize = 1;
+		int lineLen = LINE_LEN_WITH_FONT_1;
+
+		while (fontSize != minimumFontSize) {
+			minimumFontSize++;
+			lineLen -= CHAR_INCREASE;
+		}
+
+		return lineLen;
+	}
+
 	public static String nextWord(char[] chars) {
-		if(chars.length==0){
+		if (chars.length == 0) {
 			return "";
 		}
 		int size = 0;
