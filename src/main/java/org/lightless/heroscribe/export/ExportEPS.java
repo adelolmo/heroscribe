@@ -25,18 +25,25 @@
 package org.lightless.heroscribe.export;
 
 
-import org.lightless.heroscribe.xml.*;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.Quest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.zip.*;
+import java.nio.file.Path;
+import java.util.TreeSet;
+import java.util.zip.GZIPInputStream;
 
-import static org.lightless.heroscribe.Constants.*;
+import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
+import static org.lightless.heroscribe.Constants.VERSION;
 
 public class ExportEPS {
 
 	private static final int LINES_PER_BLOCK = 500;
+	private static final Logger log = LoggerFactory.getLogger(ExportEPS.class);
+	private static final int HALF_PAGE_MAX_LINES = 25;
+	private static final int FULL_PAGE_MAX_LINES = 70;
 
 	private ExportEPS() {
 	}
@@ -342,8 +349,8 @@ public class ExportEPS {
 		out.println("%%Title: %s", quest.getName());
 		out.println("%%LanguageLevel: 2");
 		out.println("%%BoundingBox: 0 0 %s %s",
-				Math.round(Math.ceil(paperType.getWidth())), // 528
-				Math.round(Math.ceil(paperType.getHeight()))); // 794
+				Math.round((double) paperType.getWidth()), // 528
+				Math.round((double) paperType.getHeight())); // 794
 		out.println("%%HiResBoundingBox: 0 0 %s %s",
 				paperType.getWidth(),
 				paperType.getHeight());  // 528.0 793.6
@@ -445,6 +452,7 @@ public class ExportEPS {
 			for (int row = 0; row < quest.getHeight(); row++) {
 				final Quest.Board board = quest.getBoard(column, row);
 
+				int pageMaxNumberOfLines = HALF_PAGE_MAX_LINES;
 				out.println("%%Page: %s %s",
 						pageCount,
 						pageCount);
@@ -595,9 +603,27 @@ public class ExportEPS {
 				// HSE - output the quest speech including line feeds
 				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println("0 0 0 setrgbcolor");
+
+				int numberOfLinePage = 0;
 				for (String linefeed : quest.getSpeech().split("\n")) {
+					final int lines = Strings.numberOfLines(linefeed, 12);
+					log.info("Speech. number of lines: {}", lines);
+					numberOfLinePage += lines;
 					out.println("(%s ) S L",
 							sanitize(linefeed));
+					if (numberOfLinePage > 50) {
+						numberOfLinePage = 0;
+						printWanderingMonster(paperType, quest, objects, out);
+
+						out.println("grestore");
+
+						out.println("sysshowpage");
+						out.println("%%EndPage");
+
+						out.println("%%Page: %s %s",
+								++pageCount,
+								pageCount);
+					}
 				}
 
 				// HSE - output the notes in regular black font, smaller line spacing
@@ -605,7 +631,37 @@ public class ExportEPS {
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
 				for (String note : quest.getNotesForUI()) {
+
 					for (String noteLine : note.split("\n")) {
+						final int lines = Strings.numberOfLines(noteLine, 10);
+						log.info("number of lines: {}", lines);
+						numberOfLinePage += lines;
+						if (numberOfLinePage > pageMaxNumberOfLines) {
+							pageMaxNumberOfLines = FULL_PAGE_MAX_LINES;
+							numberOfLinePage = 0;
+							printWanderingMonster(paperType, quest, objects, out);
+
+//							out.println("grestore");
+
+							out.println("sysshowpage");
+							out.println("%%EndPage");
+
+							out.println("%%Page: %s %s",
+									++pageCount,
+									pageCount);
+
+//							out.println("grestore");
+							out.println("/LG { /lg exch def } def 10 LG");
+							out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
+							out.println("/Times-Roman findfont 10 scalefont setfont");
+
+							// HSE - create the text bounding box in PS
+//							out.println("gsave 20 ph %d sub translate textbox",
+//									paperType.getHeight());
+							out.println("gsave 0 ph %d sub translate textbox",
+											roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
+						}
+
 						out.println("newline (%s ) S",
 								sanitize(noteLine));
 					}
@@ -619,19 +675,7 @@ public class ExportEPS {
 				}
 
 				// HSE - output the wandering monster
-				out.println("grestore");
-				out.println("gsave 20 ph %d sub translate textbox",
-						paperType.getHeight());
-				final ObjectList.Object wanderingMonster = objects.getObjectById(quest.getWanderingId());
-				out.println("/Times-Roman findfont 12 scalefont setfont");
-				out.println("(Wandering Monster in this Quest: %s ) c",
-						sanitize(wanderingMonster.getName()));
-
-				out.println("%d (%s) stringwidth pop 2 div sub 40 translate",
-						paperType.getWidth() / 2 - 90,
-						sanitize(wanderingMonster.getName()));
-				out.println("Icon%s execform",
-						wanderingMonster.getId());
+				printWanderingMonster(paperType, quest, objects, out);
 
 				// HSE - restore the coords
 				out.println("grestore");
@@ -648,6 +692,23 @@ public class ExportEPS {
 
 		out.close();
 	}
+
+	private static void printWanderingMonster(PaperType paperType, Quest quest, ObjectList objects, FormatterWriter out) {
+		out.println("grestore");
+		out.println("gsave 20 ph %d sub translate textbox",
+				paperType.getHeight());
+		final ObjectList.Object wanderingMonster = objects.getObjectById(quest.getWanderingId());
+		out.println("/Times-Roman findfont 12 scalefont setfont");
+		out.println("(Wandering Monster in this Quest: %s ) c",
+				sanitize(wanderingMonster.getName()));
+
+		out.println("%d (%s) stringwidth pop 2 div sub 40 translate",
+				paperType.getWidth() / 2 - 90,
+				sanitize(wanderingMonster.getName()));
+		out.println("Icon%s execform",
+				wanderingMonster.getId());
+	}
+
 
 	private static float calculateBoardXPosition(PaperType paperType) {
 		// TODO calculate dynamically
