@@ -618,35 +618,36 @@ public class ExportEPS {
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
 				for (String note : quest.getNotesForUI()) {
-					for (String noteLine : note.split("\n")) {
-						final int lines = GhostscriptUtils.numberOfLines(noteLine, 10);
-						log.info("number of lines: {}", lines);
-						numberOfLinePage += lines;
-						if (numberOfLinePage > pageMaxNumberOfLines) {
-							pageMaxNumberOfLines = FULL_PAGE_MAX_LINES;
-							numberOfLinePage = 0;
-							printWanderingMonster(paperType, quest, objects, out);
+					final int lines = GhostscriptUtils.numberOfLines(note, 10);
+					log.info("number of lines: {}", lines);
+					numberOfLinePage += lines;
+					if (numberOfLinePage > pageMaxNumberOfLines) {
+						pageMaxNumberOfLines = FULL_PAGE_MAX_LINES;
+						numberOfLinePage = 0;
+						printWanderingMonster(paperType, quest, objects, out);
 
 //							out.println("grestore");
 
-							out.println("sysshowpage");
-							out.println("%%EndPage");
+						out.println("sysshowpage");
+						out.println("%%EndPage");
 
-							out.println("%%Page: %s %s",
-									++pageCount,
-									pageCount);
+						out.println("%%Page: %s %s",
+								++pageCount,
+								pageCount);
 
 //							out.println("grestore");
-							out.println("/LG { /lg exch def } def 10 LG");
-							out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
-							out.println("/Times-Roman findfont 10 scalefont setfont");
+						out.println("/LG { /lg exch def } def 10 LG");
+						out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
+						out.println("/Times-Roman findfont 10 scalefont setfont");
 
-							// HSE - create the text bounding box in PS
+						// HSE - create the text bounding box in PS
 //							out.println("gsave 20 ph %d sub translate textbox",
 //									paperType.getHeight());
-							out.println("gsave 0 ph %d sub translate textbox",
-											roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
-						}
+						out.println("gsave 0 ph %d sub translate textbox",
+								roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
+					}
+					for (String noteLine : note.split("\n")) {
+
 
 						out.println("newline (%s ) S",
 								sanitize(noteLine));
