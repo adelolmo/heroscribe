@@ -57,21 +57,21 @@ gasping for air. He has taken a knife in the shoulder. This must end now!"
 
 	@Test
 	void shouldCalculateLineLengths() {
-//		assertThat(GhostscriptUtils.maxLineLength(1)).isEqualTo(178);
-//		assertThat(GhostscriptUtils.maxLineLength(2)).isEqualTo(172);
-//		assertThat(GhostscriptUtils.maxLineLength(3)).isEqualTo(166);
-//		assertThat(GhostscriptUtils.maxLineLength(4)).isEqualTo(160);
-//		assertThat(GhostscriptUtils.maxLineLength(5)).isEqualTo(154);
-//		assertThat(GhostscriptUtils.maxLineLength(6)).isEqualTo(148);
-//		assertThat(GhostscriptUtils.maxLineLength(7)).isEqualTo(142);
-//		assertThat(GhostscriptUtils.maxLineLength(8)).isEqualTo(136);
-//		assertThat(GhostscriptUtils.maxLineLength(9)).isEqualTo(130);
+		assertThat(GhostscriptUtils.maxLineLength(1)).isEqualTo(227);
+		assertThat(GhostscriptUtils.maxLineLength(2)).isEqualTo(217);
+		assertThat(GhostscriptUtils.maxLineLength(3)).isEqualTo(206);
+		assertThat(GhostscriptUtils.maxLineLength(4)).isEqualTo(196);
+		assertThat(GhostscriptUtils.maxLineLength(5)).isEqualTo(185);
+		assertThat(GhostscriptUtils.maxLineLength(6)).isEqualTo(175);
+		assertThat(GhostscriptUtils.maxLineLength(7)).isEqualTo(164);
+		assertThat(GhostscriptUtils.maxLineLength(8)).isEqualTo(154);
+		assertThat(GhostscriptUtils.maxLineLength(9)).isEqualTo(143);
 		assertThat(GhostscriptUtils.maxLineLength(10)).isEqualTo(133);
-//		assertThat(GhostscriptUtils.maxLineLength(11)).isEqualTo(118);
+		assertThat(GhostscriptUtils.maxLineLength(11)).isEqualTo(122);
 		assertThat(GhostscriptUtils.maxLineLength(12)).isEqualTo(112);
-//		assertThat(GhostscriptUtils.maxLineLength(13)).isEqualTo(106);
-//		assertThat(GhostscriptUtils.maxLineLength(14)).isEqualTo(100);
-//		assertThat(GhostscriptUtils.maxLineLength(15)).isEqualTo(94);
-//		assertThat(GhostscriptUtils.maxLineLength(16)).isEqualTo(88);
+		assertThat(GhostscriptUtils.maxLineLength(13)).isEqualTo(101);
+		assertThat(GhostscriptUtils.maxLineLength(14)).isEqualTo(91);
+		assertThat(GhostscriptUtils.maxLineLength(15)).isEqualTo(80);
+		assertThat(GhostscriptUtils.maxLineLength(16)).isEqualTo(70);
 	}
 }

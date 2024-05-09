@@ -43,7 +43,7 @@ public class ExportEPS {
 	private static final int LINES_PER_BLOCK = 500;
 	private static final Logger log = LoggerFactory.getLogger(ExportEPS.class);
 	private static final int HALF_PAGE_MAX_LINES = 25;
-	private static final int FULL_PAGE_MAX_LINES = 70;
+	private static final int FULL_PAGE_MAX_LINES = 60;
 
 	private ExportEPS() {
 	}
@@ -617,37 +617,33 @@ public class ExportEPS {
 				out.println("/LG { /lg exch def } def 10 LG");
 				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 10 scalefont setfont");
+				out.println("newline (NOTES ) S");
+				out.println("newline");
 				for (String note : quest.getNotesForUI()) {
-					final int lines = GhostscriptUtils.numberOfLines(note, 10);
-					log.info("number of lines: {}", lines);
-					numberOfLinePage += lines;
-					if (numberOfLinePage > pageMaxNumberOfLines) {
-						pageMaxNumberOfLines = FULL_PAGE_MAX_LINES;
-						numberOfLinePage = 0;
-						printWanderingMonster(paperType, quest, objects, out);
 
-//							out.println("grestore");
+					for (String noteLine : note.split("\n")) {
+						final int lines = GhostscriptUtils.numberOfLines(noteLine, 10);
+						log.info("number of lines: {}", lines);
+						numberOfLinePage += lines;
+						if (numberOfLinePage > pageMaxNumberOfLines) {
+							pageMaxNumberOfLines = FULL_PAGE_MAX_LINES;
+							numberOfLinePage = 0;
+							printWanderingMonster(paperType, quest, objects, out);
+							out.println("sysshowpage");
+							out.println("%%EndPage");
+							out.println("%%Page: %s %s",
+									++pageCount,
+									pageCount);
+							out.println("/LG { /lg exch def } def 10 LG");
+							out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
+							out.println("/Times-Roman findfont 10 scalefont setfont");
 
-						out.println("sysshowpage");
-						out.println("%%EndPage");
-
-						out.println("%%Page: %s %s",
-								++pageCount,
-								pageCount);
-
-//							out.println("grestore");
-						out.println("/LG { /lg exch def } def 10 LG");
-						out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
-						out.println("/Times-Roman findfont 10 scalefont setfont");
-
-						// HSE - create the text bounding box in PS
+							// HSE - create the text bounding box in PS
 //							out.println("gsave 20 ph %d sub translate textbox",
 //									paperType.getHeight());
-						out.println("gsave 0 ph %d sub translate textbox",
-								roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
-					}
-					for (String noteLine : note.split("\n")) {
-
+							out.println("gsave 0 ph %d sub translate textbox",
+									roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
+						}
 
 						out.println("newline (%s ) S",
 								sanitize(noteLine));
