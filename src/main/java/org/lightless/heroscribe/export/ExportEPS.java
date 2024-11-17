@@ -580,6 +580,21 @@ public class ExportEPS {
 				out.println("EndBoard");
 
 				// HSE - text area
+				out.println("/Times-Roman findfont 10 scalefont setfont");
+
+				// HSE - create the text bounding box in PS
+				out.println("gsave 0 ph %d sub translate textbox",
+						(paperType.getHeight() / 2) +10); // 440  2.256f%
+
+				// HSE - output board location if multi board quest
+				if (quest.getWidth() > 1 || quest.getHeight() > 1) {
+					out.println("newline newline (   Board Location: \\(%d,%d\\) ) S",
+							column,
+							row);
+				}
+				out.println("grestore");
+
+				// HSE - text area
 				out.println("/Times-Roman findfont 16 scalefont setfont");
 
 				// HSE - create the text bounding box in PS
@@ -641,12 +656,7 @@ public class ExportEPS {
 					}
 					out.println("newline");
 				}
-				// HSE - output board location if multi board quest
-				if (quest.getWidth() > 1 || quest.getHeight() > 1) {
-					out.println("newline newline (Board Location: \\(%d,%d\\) ) S",
-							column,
-							row);
-				}
+
 
 				// HSE - output the wandering monster
 				printWanderingMonster(paperType, quest, objects, out);

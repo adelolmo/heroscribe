@@ -169,6 +169,28 @@ class ExportQuestTest {
 				objectList,
 				PaperType.A4);
 	}
+	@Test
+	void shouldExportLetterPdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.setWidth(1);
+		quest.setHeight(2);
+		quest.setBoards(List.of(
+				createBoard(
+						createObject("Barbarian", 4.0f),
+						createObject("Wizard", 2.0f)),
+				createBoard(
+						createObject("Barbarian", 18.0f),
+						createObject("Wizard", 14.0f))));
+		for (String character : ABC) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/multiboard-one-page-notes-usletter.pdf"),
+				quest,
+				objectList,
+				PaperType.LETTER);
+	}
 
 	@Test
 	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
@@ -267,18 +289,9 @@ class ExportQuestTest {
 
 
 	private Quest.Board createBoard(Quest.Board.Object... objects) {
-
-
 		return new Quest.Board() {{
-//			final List<Object> object = new ArrayList<>() {{
-//				add(createObject("Barbarian", 4.0f));
-//				add(createObject("Wizard", 2.0f));
-//			}};
-
-			final List<Object> collect = Arrays.stream(objects)
-					.collect(Collectors.toList());
-
-			setObjects(collect);
+			setObjects(Arrays.stream(objects)
+					.collect(Collectors.toList()));
 		}};
 	}
 
