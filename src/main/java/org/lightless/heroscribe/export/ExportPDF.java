@@ -24,64 +24,71 @@
 
 package org.lightless.heroscribe.export;
 
-import org.apache.commons.io.*;
-import org.lightless.heroscribe.xml.*;
-import org.slf4j.*;
+import org.apache.commons.io.IOUtils;
+import org.lightless.heroscribe.xml.ObjectList;
+import org.lightless.heroscribe.xml.Quest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.nio.file.*;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
-import static java.lang.String.*;
+import static java.lang.String.format;
 
 public class ExportPDF {
 
 	private static final Logger log = LoggerFactory.getLogger(ExportPDF.class);
 
+	public static void writeThumbNail(File ghostscript,
+									  File file,
+									  Quest quest,
+									  ObjectList objects,
+									  PaperType paperType) throws Exception {
+		final File eps = File.createTempFile("hsb", ".ps");
+		final File pdf = File.createTempFile("hsb", ".pdf");
+		ExportEPS.write(paperType, eps, quest, objects);
+		final String[] ghostscriptCommand = {
+				ghostscript.getAbsoluteFile().toString(),
+				"-dBATCH",
+				"-dNOPAUSE",
+				"-sDEVICE=pdfwrite",
+				"-sDEFAULTPAPERSIZE=" + paperType.getId(),
+				"-sPAPERSIZE=" + paperType.getId(),
+				"-sOutputFile=" + pdf.getAbsolutePath(),
+				eps.getAbsoluteFile().toString()
+		};
+		log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
+		final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
+
+		executeAndEvaluateProcessOutput(process, file, eps, pdf);
+	}
+
 	public static void write(File ghostscript,
 							 File file,
 							 Quest quest,
 							 ObjectList objects,
-							 PaperType paperType,
-							 boolean isMultiPage) throws Exception {
+							 PaperType paperType) throws Exception {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
 
-		// HSE - check for single page render or multi page render
-		if (isMultiPage) {
-			ExportEPS.writeMultiPage(paperType, eps, quest, objects);
-			final String[] ghostscriptCommand = {
-					ghostscript.getAbsoluteFile().toString(),
-					"-dBATCH",
-					"-dNOPAUSE",
-					"-sDEVICE=pdfwrite",
-					"-dFIXEDMEDIA",
-					"-sDEFAULTPAPERSIZE=" + paperType.getId(),
-					"-sPAPERSIZE=" + paperType.getId(),
-					"-sOutputFile=" + pdf.getAbsolutePath(),
-					eps.getAbsoluteFile().toString()
-			};
-			log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
-			final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
+		ExportEPS.writeMultiPage(paperType, eps, quest, objects);
+		final String[] ghostscriptCommand = {
+				ghostscript.getAbsoluteFile().toString(),
+				"-dBATCH",
+				"-dNOPAUSE",
+				"-sDEVICE=pdfwrite",
+				"-dFIXEDMEDIA",
+				"-sDEFAULTPAPERSIZE=" + paperType.getId(),
+				"-sPAPERSIZE=" + paperType.getId(),
+				"-sOutputFile=" + pdf.getAbsolutePath(),
+				eps.getAbsoluteFile().toString()
+		};
+		log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
+		final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
 
-			executeAndEvaluateProcessOutput(process, file, eps, pdf);
-
-		} else {
-			ExportEPS.write(eps, quest, objects);
-			final String[] ghostscriptCommand = {
-					ghostscript.getAbsoluteFile().toString(),
-					"-dBATCH",
-					"-dNOPAUSE",
-					"-sDEVICE=pdfwrite",
-					"-sOutputFile=" + pdf.getAbsolutePath(),
-					eps.getAbsoluteFile().toString()
-			};
-			log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
-			final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
-
-			executeAndEvaluateProcessOutput(process, file, eps, pdf);
-		}
-
+		executeAndEvaluateProcessOutput(process, file, eps, pdf);
 	}
 
 	private static void executeAndEvaluateProcessOutput(Process process, File file, File eps, File pdf) throws Exception {
@@ -101,5 +108,4 @@ public class ExportPDF {
 					exitValue, errorMessage));
 		}
 	}
-
 }

@@ -26,7 +26,6 @@ package org.lightless.heroscribe.gui;
 import org.lightless.heroscribe.Constants;
 import org.lightless.heroscribe.Preferences;
 import org.lightless.heroscribe.export.ExportEPS;
-import org.lightless.heroscribe.export.ExportIPDF;
 import org.lightless.heroscribe.export.ExportPDF;
 import org.lightless.heroscribe.export.ExportRaster;
 import org.lightless.heroscribe.helper.BoardPainter;
@@ -205,7 +204,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* Export Menu */
 
-		exportPdfKey = new JMenuItem("PDF (high quality, requires GhostScript) ...",
+		exportPdfKey = new JMenuItem("PDF…",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png", 2)));
 		// HSE - add menu modifier 'Ctrl-P'
 		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
@@ -214,15 +213,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportPdfKey.addActionListener(this);
 		exportMenu.add(exportPdfKey);
 
-		exportPdf2Key = new JMenuItem("PDF (low quality, no GhostScript required) ...");
-		// HSE - add menu modifier 'Ctrl+Shift-P'
-		exportPdf2Key.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-				InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK,
-				false));
-		exportPdf2Key.addActionListener(this);
-		exportMenu.add(exportPdf2Key);
-
-		exportThumbNail = new JMenuItem("PDF Thumbnail (high quality, requires GhostScript) ...");
+		exportThumbNail = new JMenuItem("PDF Thumbnail…");
 		// HSE - add menu modifier 'Ctrl-T'
 		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -231,7 +222,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportMenu.add(exportThumbNail);
 		exportMenu.addSeparator();
 
-		exportEpsKey = new JMenuItem("EPS (high quality) ...");
+		exportEpsKey = new JMenuItem("EPS…");
 		// HSE - add menu modifier 'Ctrl-E'
 		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -240,7 +231,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportMenu.add(exportEpsKey);
 		exportMenu.addSeparator();
 
-		exportPngKey = new JMenuItem("PNG (low quality) ...");
+		exportPngKey = new JMenuItem("PNG…");
 		// HSE - add menu modifier 'Ctrl+G'
 		exportPngKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -553,119 +544,103 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				}
 			}
 		} else if (saveKey == source) {
-			File file = null;
-			if (quest.getFile() != null || (file = askPath("xml")) != null) {
-				try {
-					if (file != null) {
-						quest.setFile(file);
-					}
 
-					questParser.saveToDisk(objectList, quest, quest.getFile());
-					updateTitle();
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file.",
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("xml")
+					.ifPresent(file -> {
+						try {
+							quest.setFile(file);
+							questParser.saveToDisk(objectList, quest, quest.getFile());
+							updateTitle();
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file.",
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file.", ex);
+						}
+					});
 		} else if (saveAsKey == source) {
-			File file;
 
-			if ((file = askPath("xml")) != null) {
-				try {
-					questParser.saveToDisk(objectList, quest, file);
-					updateTitle();
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file.",
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("xml")
+					.ifPresent(file -> {
+						try {
+							questParser.saveToDisk(objectList, quest, file);
+							updateTitle();
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file.",
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file.", ex);
+						}
+					});
+
 		} else if (exportPdfKey == source) {
-			File file;
-			if ((file = askPath("pdf")) != null) {
-				try {
-					ExportPDF.write(prefs.ghostscriptExec,
-							file,
-							quest,
-							objectList,
-							prefs.getPaperSize(),
-							true);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(),
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file. Check your ghostscript path", ex);
-				}
-			}
-		} else if (exportPdf2Key == source) {
-			// HSE - export to PDF without using Ghostscript or EPS
-			File file;
-			if ((file = askPath("pdf")) != null) {
-				try {
-					ExportIPDF.write(file, boardPainter);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file. Detailed Error: " + ex.getMessage(),
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("pdf")
+					.ifPresent(file -> {
+						try {
+							ExportPDF.write(prefs.ghostscriptExec,
+									file,
+									quest,
+									objectList,
+									prefs.getPaperSize());
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(),
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file. Check your ghostscript path", ex);
+						}
+					});
+
 		} else if (exportThumbNail == source) {
 			// HSE - export to PDF all boards on one letter sized sheet
-			File file;
-			if ((file = askPath("pdf")) != null) {
-				try {
-					ExportPDF.write(prefs.ghostscriptExec,
-							file,
-							quest,
-							objectList,
-							prefs.getPaperSize(),
-							false);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file. Detailed Error: " + ex.getMessage(),
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("pdf")
+					.ifPresent(file -> {
+						try {
+							ExportPDF.writeThumbNail(prefs.ghostscriptExec,
+									file,
+									quest,
+									objectList,
+									prefs.getPaperSize());
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file. Detailed Error: " + ex.getMessage(),
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file.", ex);
+						}
+					});
 		} else if (exportEpsKey == source) {
-			File file;
-			if ((file = askPath("eps")) != null) {
-				try {
-					ExportEPS.writeMultiPage(prefs.getPaperSize(),
-							file,
-							quest,
-							objectList
-					);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file.  Detailed Error: " + ex.getMessage(),
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("eps")
+					.ifPresent(file -> {
+						try {
+							ExportEPS.writeMultiPage(prefs.getPaperSize(),
+									file,
+									quest,
+									objectList
+							);
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file.  Detailed Error: " + ex.getMessage(),
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file.", ex);
+						}
+					});
 		} else if (exportPngKey == source) {
-			File file;
-			if ((file = askPath("png")) != null) {
-				try {
-					ExportRaster.write(file, PNG, boardPainter);
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(this,
-							"Can't save file.  Detailed Error: " + ex.getMessage(),
-							"Error",
-							JOptionPane.ERROR_MESSAGE);
-					log.error("Can't save file.", ex);
-				}
-			}
+			askPath("png")
+					.ifPresent(file -> {
+						try {
+							ExportRaster.write(file, PNG, boardPainter);
+						} catch (Exception ex) {
+							JOptionPane.showMessageDialog(this,
+									"Can't save file.  Detailed Error: " + ex.getMessage(),
+									"Error",
+									JOptionPane.ERROR_MESSAGE);
+							log.error("Can't save file.", ex);
+						}
+					});
 		} else if (ghostscriptKey == source) {
 			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
 
@@ -759,7 +734,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		return unsupportedKinds;
 	}
 
-	private File askPath(String extension) {
+	private Optional<File> askPath(String extension) {
 		fileChooser.resetChoosableFileFilters();
 
 		if (fileChooser.getSelectedFile() != null) {
@@ -778,9 +753,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				fileChooser.setSelectedFile(saveFile);
 			}
 
-			return saveFile;
+			return Optional.of(saveFile);
 		} else {
-			return null;
+			return Optional.empty();
 		}
 	}
 
