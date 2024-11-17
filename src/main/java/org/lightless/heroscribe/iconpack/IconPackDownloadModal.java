@@ -17,6 +17,7 @@
 */
 package org.lightless.heroscribe.iconpack;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import org.lightless.heroscribe.Constants;
 import org.lightless.heroscribe.utils.FileUtils;
 import org.slf4j.Logger;
@@ -150,13 +151,15 @@ public class IconPackDownloadModal extends JPanel {
 						return format("\"%s\" installed.",
 								downloadReport.getIconPackDetails().getName());
 					}
-					return format("\"%s\" not installed.\n   Reason is: %s",
+					return format("\"%s\" not installed.\nIcon pack link: %s\n   Reason is: %s",
 							downloadReport.getIconPackDetails().getName(),
-							downloadReport.getMessage().substring(0, 100));
-				}).collect(Collectors.toList());
+							downloadReport.getIconPackDetails().getLink(),
+							downloadReport.message());
+				})
+				.collect(Collectors.toList());
 
 		JOptionPane.showMessageDialog(this,
-				String.join("\n", reportEntries),
+				String.join("\n\n", reportEntries),
 				"Download Results",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -172,7 +175,7 @@ public class IconPackDownloadModal extends JPanel {
 		} catch (IOException e) {
 			log.warn("Cannot install icon pack: {}", pack.getName(), e);
 			org.apache.commons.io.FileUtils.deleteQuietly(iconPackFile);
-			return DownloadReport.ofFailure(pack, e.getMessage());
+			return DownloadReport.ofFailure(pack, e);
 		}
 	}
 
@@ -210,6 +213,15 @@ public class IconPackDownloadModal extends JPanel {
 			return new DownloadReport(false, iconPackDetails, message);
 		}
 
+		public static DownloadReport ofFailure(WebsiteParser.IconPackDetails iconPackDetails, IOException exception) {
+			if (exception instanceof UnrecognizedPropertyException) {
+				return new DownloadReport(false, iconPackDetails,
+						format("The pack is not compatible with %s\n   Error: %s",
+								Constants.APPLICATION_NAME, exception.getMessage().split("\n")[0]));
+			}
+			return new DownloadReport(false, iconPackDetails, exception.getMessage());
+		}
+
 		public boolean isSuccessful() {
 			return successful;
 		}
@@ -218,8 +230,8 @@ public class IconPackDownloadModal extends JPanel {
 			return iconPackDetails;
 		}
 
-		public String getMessage() {
-			return message;
+		public String message() {
+			return message == null ? "" : message;
 		}
 	}
 
