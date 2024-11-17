@@ -51,7 +51,6 @@ public class ExportEPS {
 		final FormatterWriter out = new FormatterWriter(new PrintWriter(new BufferedWriter(new FileWriter(file))));
 
 
-
 		out.println("%!PS-Adobe-3.0");
 		out.println("%%Creator: %s %s", APPLICATION_NAME, VERSION);
 		out.println("%%Title: %s", quest.getName());
@@ -158,7 +157,7 @@ public class ExportEPS {
 		// loop through each board, generating every two boards
 		for (int column = 0; column < quest.getWidth(); column++) {
 			for (int row = 0; row < quest.getHeight(); row++) {
-				if ((column+row+1 % 2) == 0){
+				if ((column + row + 1 % 2) == 0) {
 					pageCount++;
 				}
 				final float boardXPosition = calculateBoardXPosition(paperType);
@@ -315,7 +314,7 @@ public class ExportEPS {
 				out.println("sysshowpage");
 				out.println("%%EndPage");
 
-				if ((column+row+1 % 2) == 0){
+				if ((column + row + 1 % 2) == 0) {
 					pageCount++;
 				}
 			}
@@ -444,7 +443,7 @@ public class ExportEPS {
 			for (int row = 0; row < quest.getHeight(); row++) {
 				final Quest.Board board = quest.getBoard(column, row);
 
-				int pageMaxNumberOfLines = getHalfPageMaxLines(paperType);
+				int pageMaxNumberOfLines = paperType.getNumberLinesHalfPage();
 				out.println("%%Page: %s %s",
 						pageCount,
 						pageCount);
@@ -618,7 +617,7 @@ public class ExportEPS {
 						log.info("number of lines: {}", lines);
 						numberOfLinePage += lines;
 						if (numberOfLinePage > pageMaxNumberOfLines) {
-							pageMaxNumberOfLines = fullPageMaxLines(paperType);
+							pageMaxNumberOfLines = paperType.getNumberLinesFullPage();
 							numberOfLinePage = 0;
 							printWanderingMonster(paperType, quest, objects, out);
 							out.println("sysshowpage");
@@ -666,22 +665,6 @@ public class ExportEPS {
 		out.println("%%EOF");
 
 		out.close();
-	}
-
-	private static int getHalfPageMaxLines(PaperType paperType) {
-		switch (paperType){
-			case A4: return 24;
-			case LETTER: return 22;
-		}
-		return 0;
-	}
-
-	private static int fullPageMaxLines(PaperType paperType) {
-		switch (paperType){
-			case A4: return 58;
-			case LETTER: return 57;
-		}
-		return 0;
 	}
 
 	private static void printWanderingMonster(PaperType paperType, Quest quest, ObjectList objects, FormatterWriter out) {

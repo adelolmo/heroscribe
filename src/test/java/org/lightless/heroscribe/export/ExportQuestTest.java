@@ -28,7 +28,9 @@ import org.lightless.heroscribe.xml.Rotation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
@@ -67,7 +69,9 @@ class ExportQuestTest {
 		final Quest quest = createEmptyQuest();
 		quest.setWidth(1);
 		quest.setHeight(2);
-		quest.setBoards(List.of(createBoard(), createBoard()));
+		final Quest.Board.Object barbarian = createObject("Barbarian", 4.0f);
+		final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
+		quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
 		ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
 				new File("/tmp/multiboard.pdf"),
 				quest,
@@ -77,7 +81,8 @@ class ExportQuestTest {
 
 	@Test
 	void shouldExportEpsEmptyQuest() throws Exception {
-		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
+		ExportEPS.writeMultiPage(PaperType.A4,
+				new File("/tmp/empty.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -96,7 +101,8 @@ class ExportQuestTest {
 	void shouldExportEpsQuestWithSpeech() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
+		ExportEPS.writeMultiPage(PaperType.A4,
+				new File("/tmp/speech-only-dina4.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -107,7 +113,7 @@ class ExportQuestTest {
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/empty.pdf"),
+				new File("/tmp/speech-only-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -120,7 +126,8 @@ class ExportQuestTest {
 		for (String character : ABC) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
-		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
+		ExportEPS.writeMultiPage(PaperType.A4,
+				new File("/tmp/one-page-notes-dina4.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -141,16 +148,26 @@ class ExportQuestTest {
 	}
 
 	@Test
-	void shouldExportEpsQuestWithSpeechAndManyNotes() throws Exception {
+	void shouldExportA4PdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHI) {
+		quest.setWidth(1);
+		quest.setHeight(2);
+		quest.setBoards(List.of(
+				createBoard(
+						createObject("Barbarian", 4.0f),
+						createObject("Wizard", 2.0f)),
+				createBoard(
+						createObject("Barbarian", 18.0f),
+						createObject("Wizard", 14.0f))));
+		for (String character : ABC) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
-		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
-				createEmptyQuest(),
-				objectList);
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/multiboard-one-page-notes-dina4.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
 	}
 
 	@Test
@@ -228,6 +245,19 @@ class ExportQuestTest {
 				PaperType.LETTER);
 	}
 
+	@Test
+	void shouldExportEpsQuestWithSpeechAndManyNotes() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		for (String character : ABCDEFGHI) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
+				createEmptyQuest(),
+				objectList);
+	}
+
 	private Quest createEmptyQuest() {
 		return new Quest() {{
 			setName("Lorem ipsum dolor sit amet");
@@ -236,18 +266,26 @@ class ExportQuestTest {
 	}
 
 
-	private Quest.Board createBoard() {
+	private Quest.Board createBoard(Quest.Board.Object... objects) {
+
+
 		return new Quest.Board() {{
-			setObjects(List.of(
-					createObject("Barbarian"),
-					createObject("Wizard")));
+//			final List<Object> object = new ArrayList<>() {{
+//				add(createObject("Barbarian", 4.0f));
+//				add(createObject("Wizard", 2.0f));
+//			}};
+
+			final List<Object> collect = Arrays.stream(objects)
+					.collect(Collectors.toList());
+
+			setObjects(collect);
 		}};
 	}
 
-	private static Quest.Board.Object createObject(String id) {
+	private static Quest.Board.Object createObject(String id, final float left) {
 		return new Quest.Board.Object() {{
 			setId(id);
-			setLeft(2.0f);
+			setLeft(left);
 			setTop(2.0f);
 			setRotation(Rotation.DOWNWARD);
 		}};
