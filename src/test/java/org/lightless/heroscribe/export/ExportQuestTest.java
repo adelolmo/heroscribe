@@ -28,6 +28,7 @@ import org.lightless.heroscribe.xml.Rotation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 
 import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
@@ -35,12 +36,14 @@ class ExportQuestTest {
 
 	private static final String LOREM_IPSUM =
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
-			"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" +
-			"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+					"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" +
+					"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 	private static final File GHOSTSCRIPT_BIN = new File("/usr/bin/gs");
 	private static final String[] ABC = new String[]{"A", "B", "C"};
 	private static final String[] ABCDEFGHI =
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I"};
+	private static final String[] ABCDEFGHIJKLMNOPQRSTUVWXYZ =
+			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 	private static final Quest.Board.Object TREASURE_CHEST = new Quest.Board.Object() {{
 		setId("TreasureChest");
 		setLeft(2.0f);
@@ -60,6 +63,19 @@ class ExportQuestTest {
 	}
 
 	@Test
+	void shouldExportThumbnail() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setWidth(1);
+		quest.setHeight(2);
+		quest.setBoards(List.of(createBoard(), createBoard()));
+		ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
+				new File("/tmp/multiboard.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
+	}
+
+	@Test
 	void shouldExportEpsEmptyQuest() throws Exception {
 		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
 				createEmptyQuest(),
@@ -68,7 +84,12 @@ class ExportQuestTest {
 
 	@Test
 	void shouldExportPdfEmptyQuest() throws Exception {
-		writePDF(PaperType.A4, createEmptyQuest(), new File("/tmp/empty.pdf"));
+		Quest quest = createEmptyQuest();
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/empty.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
 	}
 
 	@Test
@@ -84,8 +105,12 @@ class ExportQuestTest {
 	void shouldExportPDFQuestWithSpeech() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
-		writePDF(PaperType.A4, quest, new File("/tmp/empty.pdf"));
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/empty.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
 	}
 
 	@Test
@@ -104,29 +129,22 @@ class ExportQuestTest {
 	void shouldExportA4PdfQuestWithSpeechAndFewNotes() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		for (String character : ABC) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
-		writePDF(PaperType.A4, quest, new File("/tmp/empty.pdf"));
-	}
-
-	@Test
-	void shouldExportLetterPdfQuestWithSpeechAndFewNotes() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
-		writePDF(PaperType.LETTER, quest, new File("/tmp/empty.pdf"));
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/one-page-notes-dina4.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
 	}
 
 	@Test
 	void shouldExportEpsQuestWithSpeechAndManyNotes() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		for (String character : ABCDEFGHI) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
@@ -136,29 +154,103 @@ class ExportQuestTest {
 	}
 
 	@Test
-	void shouldExportPdfQuestWithSpeechAndManyNotes() throws Exception {
+	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).getObjects().add(TREASURE_CHEST);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		for (String character : ABCDEFGHI) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
-		writePDF(PaperType.A4, quest, new File("/tmp/empty.pdf"));
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/two-pages-notes-dina4.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
+	}
+
+	@Test
+	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		for (String character : ABCDEFGHIJKLMNOPQRSTUVWXYZ) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/three-pages-notes-dina4.pdf"),
+				quest,
+				objectList,
+				PaperType.A4);
+	}
+
+	@Test
+	void shouldExportLetterPdfQuestWithSpeechAndFewNotes() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		for (String character : ABC) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/one-page-notes-usletter.pdf"),
+				quest,
+				objectList,
+				PaperType.LETTER);
+	}
+
+	@Test
+	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		for (String character : ABCDEFGHI) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/two-pages-notes-usletter.pdf"),
+				quest,
+				objectList,
+				PaperType.LETTER);
+	}
+
+	@Test
+	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
+		final Quest quest = createEmptyQuest();
+		quest.setSpeech(LOREM_IPSUM);
+		quest.getBoards().get(0).addObject(TREASURE_CHEST);
+		for (String character : ABCDEFGHIJKLMNOPQRSTUVWXYZ) {
+			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		}
+		ExportPDF.write(GHOSTSCRIPT_BIN,
+				new File("/tmp/three-pages-notes-usletter.pdf"),
+				quest,
+				objectList,
+				PaperType.LETTER);
 	}
 
 	private Quest createEmptyQuest() {
-		final Quest quest = new Quest();
-		quest.setName("Lorem ipsum dolor sit amet");
-		quest.updateDimensions(objectList.getBoard().getWidth(), objectList.getBoard().getHeight());
-		return quest;
+		return new Quest() {{
+			setName("Lorem ipsum dolor sit amet");
+			updateDimensions(objectList.getBoard().getWidth(), objectList.getBoard().getHeight());
+		}};
 	}
 
-	private void writePDF(PaperType paperType, Quest quest, File output) throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				output,
-				quest,
-				objectList,
-				paperType,
-				true);
+
+	private Quest.Board createBoard() {
+		return new Quest.Board() {{
+			setObjects(List.of(
+					createObject("Barbarian"),
+					createObject("Wizard")));
+		}};
 	}
+
+	private static Quest.Board.Object createObject(String id) {
+		return new Quest.Board.Object() {{
+			setId(id);
+			setLeft(2.0f);
+			setTop(2.0f);
+			setRotation(Rotation.DOWNWARD);
+		}};
+	}
+
 }
