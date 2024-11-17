@@ -28,6 +28,7 @@ import org.lightless.heroscribe.xml.Rotation;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,9 @@ import java.util.stream.Collectors;
 import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
 class ExportQuestTest {
+
+	private static final Path TMP_DIR =
+			Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe-test");
 
 	private static final String LOREM_IPSUM =
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
@@ -57,6 +61,7 @@ class ExportQuestTest {
 
 	@BeforeEach
 	void setUp() throws IOException {
+		TMP_DIR.toFile().mkdirs();
 		final ObjectsParser parser = new ObjectsParser(new XmlMapper(), Path.of("."));
 		final String currentPath = getResourceAsFile(".").getAbsolutePath();
 		objectList = parser.parse(
@@ -73,7 +78,7 @@ class ExportQuestTest {
 		final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
 		quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
 		ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
-				new File("/tmp/multiboard.pdf"),
+				new File(TMP_DIR.toFile(),"multiboard.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -82,7 +87,7 @@ class ExportQuestTest {
 	@Test
 	void shouldExportEpsEmptyQuest() throws Exception {
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File("/tmp/empty.eps"),
+				new File(TMP_DIR.toFile(),"empty.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -91,7 +96,7 @@ class ExportQuestTest {
 	void shouldExportPdfEmptyQuest() throws Exception {
 		Quest quest = createEmptyQuest();
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/empty.pdf"),
+				new File(TMP_DIR.toFile(),"empty.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -102,7 +107,7 @@ class ExportQuestTest {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File("/tmp/speech-only-dina4.eps"),
+				new File(TMP_DIR.toFile(),"speech-only-dina4.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -113,7 +118,7 @@ class ExportQuestTest {
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/speech-only-dina4.pdf"),
+				new File(TMP_DIR.toFile(),"speech-only-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -127,7 +132,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File("/tmp/one-page-notes-dina4.eps"),
+				new File(TMP_DIR.toFile(),"one-page-notes-dina4.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -141,7 +146,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/one-page-notes-dina4.pdf"),
+				new File(TMP_DIR.toFile(),"one-page-notes-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -164,11 +169,12 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/multiboard-one-page-notes-dina4.pdf"),
+				new File(TMP_DIR.toFile(),"multiboard-one-page-notes-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
 	}
+
 	@Test
 	void shouldExportLetterPdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
 		final Quest quest = createEmptyQuest();
@@ -186,7 +192,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/multiboard-one-page-notes-usletter.pdf"),
+				new File(TMP_DIR.toFile(),"multiboard-one-page-notes-usletter.pdf"),
 				quest,
 				objectList,
 				PaperType.LETTER);
@@ -201,7 +207,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/two-pages-notes-dina4.pdf"),
+				new File(TMP_DIR.toFile(),"two-pages-notes-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -216,7 +222,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/three-pages-notes-dina4.pdf"),
+				new File(TMP_DIR.toFile(),"three-pages-notes-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -231,7 +237,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/one-page-notes-usletter.pdf"),
+				new File(TMP_DIR.toFile(),"one-page-notes-usletter.pdf"),
 				quest,
 				objectList,
 				PaperType.LETTER);
@@ -246,7 +252,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/two-pages-notes-usletter.pdf"),
+				new File(TMP_DIR.toFile(),"two-pages-notes-usletter.pdf"),
 				quest,
 				objectList,
 				PaperType.LETTER);
@@ -261,7 +267,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File("/tmp/three-pages-notes-usletter.pdf"),
+				new File(TMP_DIR.toFile(),"three-pages-notes-usletter.pdf"),
 				quest,
 				objectList,
 				PaperType.LETTER);
@@ -275,7 +281,7 @@ class ExportQuestTest {
 		for (String character : ABCDEFGHI) {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
-		ExportEPS.writeMultiPage(PaperType.A4, new File("/tmp/empty.eps"),
+		ExportEPS.writeMultiPage(PaperType.A4, new File(TMP_DIR.toFile(),"empty.eps"),
 				createEmptyQuest(),
 				objectList);
 	}

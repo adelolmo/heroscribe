@@ -53,7 +53,7 @@ Paper Size                      Dimension (in points)
    B10                             91 x 127
  */
 public enum PaperType {
-	LETTER("letter", "Letter", 612, 792, "8.5\" x 11.0\"", 57, 22),
+	LETTER("letter", "Letter", 612, 792, "8.5\" x 11.0\"", 55, 21),
 //	LEGAL("legal", "Legal", 612, 1008, "8.5\" x 14.0\""),
 //	A3("a3", "A3", 595, 842, "297mm x 420mm"),
 	A4("a4", "A4", 595, 842, "210mm x 297mm", 58, 24),

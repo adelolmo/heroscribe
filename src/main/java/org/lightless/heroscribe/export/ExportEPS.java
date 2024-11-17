@@ -42,7 +42,6 @@ public class ExportEPS {
 
 	private static final Logger log = LoggerFactory.getLogger(ExportEPS.class);
 	private static final int LINES_PER_BLOCK = 500;
-	//	final int FULL_PAGE_MAX_LINES = 58;
 
 	public static void write(PaperType paperType,
 							 File file,
@@ -579,34 +578,37 @@ public class ExportEPS {
 
 				out.println("EndBoard");
 
-				// HSE - text area
-				out.println("/Times-Roman findfont 10 scalefont setfont");
-
-				// HSE - create the text bounding box in PS
-				out.println("gsave 0 ph %d sub translate textbox",
-						(paperType.getHeight() / 2) +10); // 440  2.256f%
-
 				// HSE - output board location if multi board quest
 				if (quest.getWidth() > 1 || quest.getHeight() > 1) {
+					// HSE - text area
+					out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
+					out.println("/Times-Roman findfont 10 scalefont setfont");
+
+					// HSE - create the text bounding box in PS
+					out.println("gsave 0 ph %d sub translate textbox",
+							(paperType.getHeight() / 2) +
+									roundPercentage(150, percentageProportion(paperType)));
 					out.println("newline newline (   Board Location: \\(%d,%d\\) ) S",
 							column,
 							row);
+					out.println("grestore");
 				}
-				out.println("grestore");
 
 				// HSE - text area
+				out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 16 scalefont setfont");
 
 				// HSE - create the text bounding box in PS
 				out.println("gsave 0 ph %d sub translate textbox",
 						paperType.getHeight() / 2 +
-								roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
+								roundPercentage(paperType.getHeight(), percentageProportion(paperType))); // 440  2.256f%
 
 				// HSE - output the quest name in dark red
 				out.println("0.50 0 0.20 setrgbcolor (%s) c newline",
 						sanitize(quest.getName()));
 
 				// HSE - output the quest speech including line feeds
+				out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
 				out.println("/Times-Roman findfont 12 scalefont setfont");
 				out.println("0 0 0 setrgbcolor");
 
@@ -648,7 +650,7 @@ public class ExportEPS {
 //							out.println("gsave 20 ph %d sub translate textbox",
 //									paperType.getHeight());
 							out.println("gsave 0 ph %d sub translate textbox",
-									roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
+									roundPercentage(paperType.getHeight(), percentageProportion(paperType))); // 440  2.256f%
 						}
 
 						out.println("newline (%s ) S",
@@ -693,6 +695,15 @@ public class ExportEPS {
 				wanderingMonster.getId());
 	}
 
+	private static float percentageProportion(PaperType paperType) {
+		switch (paperType) {
+			case A4:
+				return 7.9f;
+			case LETTER:
+				return 8.7f;
+		}
+		return 0;
+	}
 
 	private static float calculateBoardXPosition(PaperType paperType) {
 		// TODO calculate dynamically
