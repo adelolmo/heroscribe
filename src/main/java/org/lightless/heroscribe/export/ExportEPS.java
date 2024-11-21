@@ -331,9 +331,6 @@ public class ExportEPS {
 									  ObjectList objects) throws Exception {
 		final FormatterWriter out = new FormatterWriter(new PrintWriter(new BufferedWriter(new FileWriter(file))));
 
-		final float boardXPosition = calculateBoardXPosition(paperType);
-		final float boardYPosition = calculateBoardYPosition(paperType);
-
 		out.println("%!PS-Adobe-3.0");
 		out.println("%%Creator: %s %s", APPLICATION_NAME, VERSION);
 		out.println("%%Title: %s", quest.getName());
@@ -435,17 +432,20 @@ public class ExportEPS {
 				boundingBox[3]);
 		// END wandering monster object
 
-		int pageCount = 1;
+		final PageSection pageSection = new PageSection();
 
-		// loop through each board, generating a new page for each one
+		// loop through each board
 		for (int column = 0; column < quest.getWidth(); column++) {
 			for (int row = 0; row < quest.getHeight(); row++) {
 				final Quest.Board board = quest.getBoard(column, row);
 
-				int pageMaxNumberOfLines = paperType.getNumberLinesHalfPage();
-				out.println("%%Page: %s %s",
-						pageCount,
-						pageCount);
+				if (pageSection.isTopSection()) {
+					out.println("%%Page: %s %s",
+							pageSection.count(),
+							pageSection.count());
+				}
+				final float boardXPosition = calculateBoardXPosition(paperType);
+				final float boardYPosition = calculateBoardYPosition(paperType, pageSection);
 				out.println("%s %s StartBoard",
 						boardXPosition, boardYPosition);
 
@@ -586,97 +586,122 @@ public class ExportEPS {
 
 					// HSE - create the text bounding box in PS
 					out.println("gsave 0 ph %d sub translate textbox",
-							(paperType.getHeight() / 2) +
-									roundPercentage(150, percentageProportion(paperType)));
+							pageSection.isTopSection() ?
+									paperType.getHalfHeight()
+											+ roundPercentage(120, percentageProportion(paperType))
+									: paperType.getHeight()
+									);
 					out.println("newline newline (   Board Location: \\(%d,%d\\) ) S",
 							column,
 							row);
 					out.println("grestore");
 				}
 
-				// HSE - text area
-				out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
-				out.println("/Times-Roman findfont 16 scalefont setfont");
-
-				// HSE - create the text bounding box in PS
-				out.println("gsave 0 ph %d sub translate textbox",
-						paperType.getHeight() / 2 +
-								roundPercentage(paperType.getHeight(), percentageProportion(paperType))); // 440  2.256f%
-
-				// HSE - output the quest name in dark red
-				out.println("0.50 0 0.20 setrgbcolor (%s) c newline",
-						sanitize(quest.getName()));
-
-				// HSE - output the quest speech including line feeds
-				out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
-				out.println("/Times-Roman findfont 12 scalefont setfont");
-				out.println("0 0 0 setrgbcolor");
-
-				int numberOfLinePage = 0;
-				final int speechLines = GhostscriptUtils.numberOfLines(quest.getSpeech(), 12);
-				log.info("Speech. number of lines: {}", speechLines);
-				numberOfLinePage += speechLines;
-				for (String linefeed : quest.getSpeech().split("\n")) {
-					out.println("(%s ) S L",
-							sanitize(linefeed));
+				if (pageSection.isBottomSection()) {
+					out.println("sysshowpage");
+					out.println("%%EndPage");
 				}
 
-				// HSE - output the notes in regular black font, smaller line spacing
-				out.println("/LG { /lg exch def } def 10 LG");
-				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
-				out.println("/Times-Roman findfont 10 scalefont setfont");
-				out.println("newline (NOTES ) S");
-				out.println("newline");
-				for (String note : quest.getNotesForUI()) {
-
-					for (String noteLine : note.split("\n")) {
-						final int lines = GhostscriptUtils.numberOfLines(noteLine, 10);
-						log.info("number of lines: {}", lines);
-						numberOfLinePage += lines;
-						if (numberOfLinePage > pageMaxNumberOfLines) {
-							pageMaxNumberOfLines = paperType.getNumberLinesFullPage();
-							numberOfLinePage = 0;
-							printWanderingMonster(paperType, quest, objects, out);
-							out.println("sysshowpage");
-							out.println("%%EndPage");
-							out.println("%%Page: %s %s",
-									++pageCount,
-									pageCount);
-							out.println("/LG { /lg exch def } def 10 LG");
-							out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
-							out.println("/Times-Roman findfont 10 scalefont setfont");
-
-							// HSE - create the text bounding box in PS
-//							out.println("gsave 20 ph %d sub translate textbox",
-//									paperType.getHeight());
-							out.println("gsave 0 ph %d sub translate textbox",
-									roundPercentage(paperType.getHeight(), percentageProportion(paperType))); // 440  2.256f%
-						}
-
-						out.println("newline (%s ) S",
-								sanitize(noteLine));
-					}
-					out.println("newline");
-				}
-
-
-				// HSE - output the wandering monster
-				printWanderingMonster(paperType, quest, objects, out);
-
-				// HSE - restore the coords
-				out.println("grestore");
-
-				out.println("sysshowpage");
-				out.println("%%EndPage");
-
-				pageCount++;
+				log.info("Page sections: {}", pageSection.count());
+				pageSection.increase();
 			}
 		}
 
+		// HSE - text area
+		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
+		out.println("/Times-Roman findfont 16 scalefont setfont");
+
+		// HSE - create the text bounding box in PS
+		out.println("gsave 0 ph %d sub translate textbox",
+				pageSection.isBottomSection() ?
+						paperType.getHalfHeight() + 70 :
+						roundPercentage(paperType.getHeight(), percentageProportion(paperType))); // 440  2.256f%
+
+		// HSE - output the quest name in dark red
+		out.println("0.50 0 0.20 setrgbcolor (%s) c newline",
+				sanitize(quest.getName()));
+
+		// HSE - output the quest speech including line feeds
+		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
+		out.println("/Times-Roman findfont 12 scalefont setfont");
+		out.println("0 0 0 setrgbcolor");
+
+		int numberOfLinesInPage = 0;
+		final int speechLines = GhostscriptUtils.numberOfLines(quest.getSpeech(), 12);
+		log.info("Speech. number of lines: {}", speechLines);
+		numberOfLinesInPage += speechLines;
+		for (String linefeed : quest.getSpeech().split("\n")) {
+			out.println("(%s ) S L",
+					sanitize(linefeed));
+		}
+
+		// HSE - output the notes in regular black font, smaller line spacing
+		out.println("/LG { /lg exch def } def 10 LG");
+		out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
+		out.println("/Times-Roman findfont 10 scalefont setfont");
+		out.println("newline (NOTES ) S");
+		out.println("newline");
+
+		int pageMaxNumberOfLines = 0;
+		for (String note : quest.getNotesForUI()) {
+			for (String noteLine : note.split("\n")) {
+				final int lines = GhostscriptUtils.numberOfLines(noteLine, 10);
+				log.info("number of lines: {}", lines);
+				numberOfLinesInPage += lines;
+				pageMaxNumberOfLines = paperType.getNumberLinesHalfPage();
+				if (pageSection.isTopSection()) {
+					pageMaxNumberOfLines = paperType.getNumberLinesFullPage();
+				}
+				if (numberOfLinesInPage > pageMaxNumberOfLines) {
+					log.info("resetting numberOfLinesInPage: {}", numberOfLinesInPage);
+					numberOfLinesInPage = 0;
+					printWanderingMonster(paperType, quest, objects, out);
+
+					out.println("sysshowpage");
+					out.println("%%EndPage");
+					out.println("%%Page: %s %s",
+							pageSection.count(),
+							pageSection.count() + 1);
+
+					out.println("/Times-Roman findfont 10 scalefont setfont");
+					out.println("gsave 0 ph %d sub translate textbox",
+							70);
+
+					log.info("Page sections: {}", pageSection.count());
+					pageSection.increase();
+					if (pageMaxNumberOfLines == paperType.getNumberLinesFullPage()) {
+						pageSection.increase();
+					}
+				}
+
+				out.println("newline (%s ) S",
+						sanitize(noteLine));
+			}
+			out.println("newline");
+		}
+
+		if (numberOfLinesInPage >= pageMaxNumberOfLines) {
+			pageSection.increase();
+
+			out.println("%%EndPage");
+			out.println("%%Page: %s %s",
+					pageSection.count(),
+					pageSection.count() + 1);
+		}
+		// HSE - output the wandering monster
+		printWanderingMonster(paperType, quest, objects, out);
+
+		// HSE - restore the coords
+		out.println("grestore");
+//		out.println("gsave 10 ph %d sub translate textbox",
+//				150);
+		out.println("sysshowpage");
 		out.println("end");
 		out.println("%%EOF");
 
 		out.close();
+
+		System.out.println("Number of sections: " + pageSection.count());
 	}
 
 	private static void printWanderingMonster(PaperType paperType, Quest quest, ObjectList objects, FormatterWriter out) {
@@ -689,7 +714,7 @@ public class ExportEPS {
 				sanitize(wanderingMonster.getName()));
 
 		out.println("%d (%s) stringwidth pop 2 div sub 40 translate",
-				paperType.getWidth() / 2 - 90,
+				paperType.getHalfWidth() - 90,
 				sanitize(wanderingMonster.getName()));
 		out.println("Icon%s execform",
 				wanderingMonster.getId());
@@ -717,12 +742,26 @@ public class ExportEPS {
 	}
 
 	private static float calculateBoardYPosition(PaperType paperType) {
-		// TODO calculate dynamically
 		switch (paperType) {
 			case A4:
 				return 1.07f;
 			case LETTER:
 				return 1.0f;
+		}
+		return 0;
+	}
+
+	private static float calculateBoardYPosition(PaperType paperType, PageSection pageSection) {
+		// TODO calculate dynamically
+		switch (paperType) {
+			case A4:
+				if (pageSection.isTopSection()) {
+					return 1.07f;
+				} else {
+					return 0.07f;
+				}
+			case LETTER:
+				return pageSection.isTopSection() ? 1.0f : 0.02f;
 		}
 		return 0;
 	}

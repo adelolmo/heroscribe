@@ -78,7 +78,7 @@ class ExportQuestTest {
 		final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
 		quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
 		ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"multiboard.pdf"),
+				new File(TMP_DIR.toFile(), "multiboard.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -87,17 +87,16 @@ class ExportQuestTest {
 	@Test
 	void shouldExportEpsEmptyQuest() throws Exception {
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(),"empty.eps"),
+				new File(TMP_DIR.toFile(), "empty.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
 
 	@Test
 	void shouldExportPdfEmptyQuest() throws Exception {
-		Quest quest = createEmptyQuest();
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"empty.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "empty.pdf"),
+				createEmptyQuest(),
 				objectList,
 				PaperType.A4);
 	}
@@ -107,7 +106,7 @@ class ExportQuestTest {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(),"speech-only-dina4.eps"),
+				new File(TMP_DIR.toFile(), "speech-only-dina4.eps"),
 				createEmptyQuest(),
 				objectList);
 	}
@@ -118,7 +117,7 @@ class ExportQuestTest {
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).addObject(TREASURE_CHEST);
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"speech-only-dina4.pdf"),
+				new File(TMP_DIR.toFile(), "speech-only-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -126,28 +125,17 @@ class ExportQuestTest {
 
 	@Test
 	void shouldExportEpsQuestWithSpeechAndFewNotes() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(),"one-page-notes-dina4.eps"),
-				createEmptyQuest(),
+				new File(TMP_DIR.toFile(), "one-page-notes-dina4.eps"),
+				createQuestWithNotes(ABC),
 				objectList);
 	}
 
 	@Test
 	void shouldExportA4PdfQuestWithSpeechAndFewNotes() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"one-page-notes-dina4.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "one-page-notes-dina4.pdf"),
+				createQuestWithNotes(ABC),
 				objectList,
 				PaperType.A4);
 	}
@@ -169,7 +157,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"multiboard-one-page-notes-dina4.pdf"),
+				new File(TMP_DIR.toFile(), "multiboard-one-page-notes-dina4.pdf"),
 				quest,
 				objectList,
 				PaperType.A4);
@@ -192,7 +180,7 @@ class ExportQuestTest {
 			quest.getNotes().add(character + " " + LOREM_IPSUM);
 		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"multiboard-one-page-notes-usletter.pdf"),
+				new File(TMP_DIR.toFile(), "multiboard-one-page-notes-usletter.pdf"),
 				quest,
 				objectList,
 				PaperType.LETTER);
@@ -200,90 +188,75 @@ class ExportQuestTest {
 
 	@Test
 	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHI) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"two-pages-notes-dina4.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "two-pages-notes-dina4.pdf"),
+				createQuestWithNotes(ABCDEFGHI),
 				objectList,
 				PaperType.A4);
 	}
 
 	@Test
 	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHIJKLMNOPQRSTUVWXYZ) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"three-pages-notes-dina4.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "three-pages-notes-dina4.pdf"),
+				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
 				objectList,
 				PaperType.A4);
 	}
 
 	@Test
+	void shouldExportDinA4EpsQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
+		ExportEPS.write(
+				PaperType.A4,
+				new File(TMP_DIR.toFile(), "three-pages-notes-dina4.eps"),
+				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+				objectList);
+	}
+
+	@Test
 	void shouldExportLetterPdfQuestWithSpeechAndFewNotes() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"one-page-notes-usletter.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "one-page-notes-usletter.pdf"),
+				createQuestWithNotes(ABC),
 				objectList,
 				PaperType.LETTER);
 	}
 
 	@Test
 	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHI) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"two-pages-notes-usletter.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "two-pages-notes-usletter.pdf"),
+				createQuestWithNotes(ABCDEFGHI),
 				objectList,
 				PaperType.LETTER);
 	}
 
 	@Test
 	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHIJKLMNOPQRSTUVWXYZ) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
-		}
 		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(),"three-pages-notes-usletter.pdf"),
-				quest,
+				new File(TMP_DIR.toFile(), "three-pages-notes-usletter.pdf"),
+				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
 				objectList,
 				PaperType.LETTER);
 	}
 
 	@Test
 	void shouldExportEpsQuestWithSpeechAndManyNotes() throws Exception {
+		ExportEPS.writeMultiPage(
+				PaperType.A4,
+				new File(TMP_DIR.toFile(), "two-pages-notes-dina4.eps"),
+				createQuestWithNotes(ABCDEFGHI),
+				objectList);
+	}
+
+	private Quest createQuestWithNotes(String[] noteLetters) {
 		final Quest quest = createEmptyQuest();
 		quest.setSpeech(LOREM_IPSUM);
 		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		for (String character : ABCDEFGHI) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		for (String noteLetter : noteLetters) {
+			quest.getNotes().add(noteLetter + " " + LOREM_IPSUM);
 		}
-		ExportEPS.writeMultiPage(PaperType.A4, new File(TMP_DIR.toFile(),"empty.eps"),
-				createEmptyQuest(),
-				objectList);
+		return quest;
 	}
 
 	private Quest createEmptyQuest() {
