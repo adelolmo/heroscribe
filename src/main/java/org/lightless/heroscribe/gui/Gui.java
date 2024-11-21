@@ -75,7 +75,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private JRadioButtonMenuItem europeItem, usaItem;
 	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
-			quitKey, listKey, aboutKey, dirKey, exportPdf2Key, exportThumbNail, propertiesKey, paperKey;
+			quitKey, listKey, aboutKey, dirKey, exportThumbNail, propertiesKey, paperKey;
 	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
 	private Quest quest;
 
