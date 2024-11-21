@@ -71,182 +71,178 @@ class ExportQuestTest {
 
 	@Test
 	void shouldExportThumbnail() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setWidth(1);
-		quest.setHeight(2);
-		final Quest.Board.Object barbarian = createObject("Barbarian", 4.0f);
-		final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
-		quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
-		ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "multiboard.pdf"),
-				quest,
-				objectList,
-				PaperType.A4);
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
+					createFile("thumbnail-board.pdf", paperType),
+					createEmptyQuest(),
+					objectList,
+					paperType);
+		}
+	}
+
+	@Test
+	void shouldExportMultiboardThumbnail() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setWidth(1);
+			quest.setHeight(2);
+			final Quest.Board.Object barbarian = createObject("Barbarian", 4.0f);
+			final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
+			quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
+			ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
+					createFile("thumbnail-multiboard.pdf", paperType),
+					quest,
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
 	void shouldExportEpsEmptyQuest() throws Exception {
-		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(), "empty.eps"),
-				createEmptyQuest(),
-				objectList);
+		for (PaperType paperType : PaperType.values()) {
+			ExportEPS.writeMultiPage(paperType,
+					createFile("empty.eps", paperType),
+					createEmptyQuest(),
+					objectList);
+		}
 	}
 
 	@Test
 	void shouldExportPdfEmptyQuest() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "empty.pdf"),
-				createEmptyQuest(),
-				objectList,
-				PaperType.A4);
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("empty.pdf", paperType),
+					createEmptyQuest(),
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
 	void shouldExportEpsQuestWithSpeech() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(), "speech-only-dina4.eps"),
-				createEmptyQuest(),
-				objectList);
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setSpeech(LOREM_IPSUM);
+			ExportEPS.writeMultiPage(paperType,
+					createFile("speech-only.eps", paperType),
+					createEmptyQuest(),
+					objectList);
+		}
 	}
 
 	@Test
 	void shouldExportPDFQuestWithSpeech() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.getBoards().get(0).addObject(TREASURE_CHEST);
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "speech-only-dina4.pdf"),
-				quest,
-				objectList,
-				PaperType.A4);
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setSpeech(LOREM_IPSUM);
+			quest.getBoards().get(0).addObject(TREASURE_CHEST);
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("speech-only.pdf", paperType),
+					quest,
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
 	void shouldExportEpsQuestWithSpeechAndFewNotes() throws Exception {
-		ExportEPS.writeMultiPage(PaperType.A4,
-				new File(TMP_DIR.toFile(), "one-page-notes-dina4.eps"),
-				createQuestWithNotes(ABC),
-				objectList);
-	}
-
-	@Test
-	void shouldExportA4PdfQuestWithSpeechAndFewNotes() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "one-page-notes-dina4.pdf"),
-				createQuestWithNotes(ABC),
-				objectList,
-				PaperType.A4);
-	}
-
-	@Test
-	void shouldExportA4PdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.setWidth(1);
-		quest.setHeight(2);
-		quest.setBoards(List.of(
-				createBoard(
-						createObject("Barbarian", 4.0f),
-						createObject("Wizard", 2.0f)),
-				createBoard(
-						createObject("Barbarian", 18.0f),
-						createObject("Wizard", 14.0f))));
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
+		for (PaperType paperType : PaperType.values()) {
+			ExportEPS.writeMultiPage(paperType,
+					createFile("one-page-notes.eps", paperType),
+					createQuestWithNotes(ABC),
+					objectList);
 		}
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "multiboard-one-page-notes-dina4.pdf"),
-				quest,
-				objectList,
-				PaperType.A4);
 	}
 
 	@Test
-	void shouldExportLetterPdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
-		final Quest quest = createEmptyQuest();
-		quest.setSpeech(LOREM_IPSUM);
-		quest.setWidth(1);
-		quest.setHeight(2);
-		quest.setBoards(List.of(
-				createBoard(
-						createObject("Barbarian", 4.0f),
-						createObject("Wizard", 2.0f)),
-				createBoard(
-						createObject("Barbarian", 18.0f),
-						createObject("Wizard", 14.0f))));
-		for (String character : ABC) {
-			quest.getNotes().add(character + " " + LOREM_IPSUM);
+	void shouldExportPdfQuestWithSpeechAndFewNotes() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("one-page-notes.pdf", paperType),
+					createQuestWithNotes(ABC),
+					objectList,
+					paperType);
 		}
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "multiboard-one-page-notes-usletter.pdf"),
-				quest,
-				objectList,
-				PaperType.LETTER);
 	}
 
 	@Test
-	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "two-pages-notes-dina4.pdf"),
-				createQuestWithNotes(ABCDEFGHI),
-				objectList,
-				PaperType.A4);
+	void shouldExportPdfQuestWithSpeechAndFewNotes_TwoBoards() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setSpeech(LOREM_IPSUM);
+			quest.setWidth(1);
+			quest.setHeight(2);
+			quest.setBoards(List.of(
+					createBoard(
+							createObject("Barbarian", 4.0f),
+							createObject("Wizard", 2.0f)),
+					createBoard(
+							createObject("Barbarian", 18.0f),
+							createObject("Wizard", 14.0f))));
+			for (String character : ABC) {
+				quest.getNotes().add(character + " " + LOREM_IPSUM);
+			}
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("multiboard-one-page-notes.pdf", paperType),
+					quest,
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
-	void shouldExportDinA4PdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "three-pages-notes-dina4.pdf"),
-				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
-				objectList,
-				PaperType.A4);
+	void shouldExportDinPdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("two-pages-notes.pdf", paperType),
+					createQuestWithNotes(ABCDEFGHI),
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
-	void shouldExportDinA4EpsQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
-		ExportEPS.write(
-				PaperType.A4,
-				new File(TMP_DIR.toFile(), "three-pages-notes-dina4.eps"),
-				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
-				objectList);
+	void shouldExportPdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("three-pages-notes.pdf", paperType),
+					createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
-	void shouldExportLetterPdfQuestWithSpeechAndFewNotes() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "one-page-notes-usletter.pdf"),
-				createQuestWithNotes(ABC),
-				objectList,
-				PaperType.LETTER);
+	void shouldExportEpsQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			ExportEPS.write(
+					paperType,
+					createFile("three-pages-notes.eps", paperType),
+					createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+					objectList);
+		}
 	}
 
 	@Test
-	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "two-pages-notes-usletter.pdf"),
-				createQuestWithNotes(ABCDEFGHI),
-				objectList,
-				PaperType.LETTER);
-	}
-
-	@Test
-	void shouldExportLetterPdfQuestWithSpeechAndManyNotes_ThreePages() throws Exception {
-		ExportPDF.write(GHOSTSCRIPT_BIN,
-				new File(TMP_DIR.toFile(), "three-pages-notes-usletter.pdf"),
-				createQuestWithNotes(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
-				objectList,
-				PaperType.LETTER);
+	void shouldExportPdfQuestWithSpeechAndManyNotes_TwoPages() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("two-pages-notes.pdf", paperType),
+					createQuestWithNotes(ABCDEFGHI),
+					objectList,
+					paperType);
+		}
 	}
 
 	@Test
 	void shouldExportEpsQuestWithSpeechAndManyNotes() throws Exception {
-		ExportEPS.writeMultiPage(
-				PaperType.A4,
-				new File(TMP_DIR.toFile(), "two-pages-notes-dina4.eps"),
-				createQuestWithNotes(ABCDEFGHI),
-				objectList);
+		for (PaperType paperType : PaperType.values()) {
+			ExportEPS.writeMultiPage(
+					paperType,
+					createFile("two-pages-notes.eps", paperType),
+					createQuestWithNotes(ABCDEFGHI),
+					objectList);
+		}
 	}
 
 	private Quest createQuestWithNotes(String[] noteLetters) {
@@ -281,6 +277,16 @@ class ExportQuestTest {
 			setTop(2.0f);
 			setRotation(Rotation.DOWNWARD);
 		}};
+	}
+
+	private static File file(String filename) {
+		return new File(TMP_DIR.toFile(), filename);
+	}
+
+	private File createFile(String filename, PaperType paperType) {
+		final String name = filename.split("\\.")[0];
+		final String extension = filename.split("\\.")[1];
+		return file(String.format("%s.%s.%s", name, paperType.getId(), extension));
 	}
 
 }
