@@ -86,9 +86,13 @@ class ExportQuestTest {
 			final Quest quest = createEmptyQuest();
 			quest.setWidth(1);
 			quest.setHeight(2);
-			final Quest.Board.Object barbarian = createObject("Barbarian", 4.0f);
-			final Quest.Board.Object wizard = createObject("Wizard", 2.0f);
-			quest.setBoards(List.of(createBoard(barbarian, wizard), createBoard()));
+			quest.setBoards(List.of(
+					createBoard(
+							createObject("Barbarian", 4.0f),
+							createObject("Wizard", 2.0f)),
+					createBoard(
+							createObject("Barbarian", 18.0f),
+							createObject("Wizard", 14.0f))));
 			ExportPDF.writeThumbNail(GHOSTSCRIPT_BIN,
 					createFile("thumbnail-multiboard.pdf", paperType),
 					quest,
@@ -279,14 +283,10 @@ class ExportQuestTest {
 		}};
 	}
 
-	private static File file(String filename) {
-		return new File(TMP_DIR.toFile(), filename);
-	}
-
 	private File createFile(String filename, PaperType paperType) {
 		final String name = filename.split("\\.")[0];
 		final String extension = filename.split("\\.")[1];
-		return file(String.format("%s.%s.%s", name, paperType.getId(), extension));
+		return new File(TMP_DIR.toFile(), String.format("%s.%s.%s", name, paperType.getId(), extension));
 	}
 
 }
