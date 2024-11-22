@@ -15,6 +15,29 @@ Made for home use.
 - Add your notes to the quest
 - Install and remove `Icon Packs` from `https://www.heroscribe.org/icons.html` with a single click
 
+## How to download
+
+Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package depending on you OS (for _Linux_ the `.deb` and for _Win_ and _Mac_ the `.zip`)
+
+## Running HeroScribe
+
+### Zip bundle
+
+Unzip the bundle and run
+
+    java -jar heroscribe-enhanced-skull.jar
+
+Postscript is required for PDF generation.
+
+### Debian package
+
+Install the debian package in your system
+
+    # apt-get install default-jre-headless ghostscript
+    # dpkg -i ../heroscribe-enhanced-skull_1.9_all.deb
+
+In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
+
 ## Building
 
 ### Requirements
@@ -40,26 +63,9 @@ This will create a `target` folder with a file called `heroscribe-enhanced-skull
 
     gbp buildpackage --no-sign --git-ignore-branch --git-ignore-new
 
-This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.7_all.deb`
+This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.9_all.deb`
 
-## Running HeroScribe
 
-### Zip bundle
-
-Unzip the bundle and run
-
-    java -jar heroscribe-enhanced-skull.jar
-
-Postscript is required for high quality PDF generation.
-
-### Debian package
-
-Install the debian package in your system
-
-    # apt-get install default-jre-headless ghostscript
-    # dpkg -i ../heroscribe-enhanced-skull_1.7_all.deb
-
-In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
 ## Links
 
