@@ -1,3 +1,16 @@
+heroscribe-enhanced-skull (1.9) unstable; urgency=medium
+
+  * Show user friendly error in modal if the Icon Pack cannot be loaded
+  * Increase speed of scroll bar in download modal
+  * Add a page break on multi page quest notes in pdf export
+  * Use Palatino font for the quest title in pdf export
+
+  * Fix multi board thumbnail pdf export
+
+  * Remove option for low quality pdf generation
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Fri, 22 Nov 2024 19:18:03 +0100
+
 heroscribe-enhanced-skull (1.8) unstable; urgency=medium
 
   * Fix to delete kind when removing icon pack
