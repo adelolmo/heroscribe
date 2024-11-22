@@ -10,6 +10,11 @@ Using OpenJDK 11 and maven.
 
 Made for home use.
 
+## What's new in this version of Heroscribe?
+
+- Add your notes to the quest
+- Install and remove `Icon Packs` from `https://www.heroscribe.org/icons.html` with a single click
+
 ## Building
 
 ### Requirements
