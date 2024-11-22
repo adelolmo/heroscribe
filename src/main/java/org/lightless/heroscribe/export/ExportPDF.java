@@ -49,18 +49,8 @@ public class ExportPDF {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
 		ExportEPS.write(paperType, eps, quest, objects);
-		final String[] ghostscriptCommand = {
-				ghostscript.getAbsoluteFile().toString(),
-				"-dBATCH",
-				"-dNOPAUSE",
-				"-sDEVICE=pdfwrite",
-				"-sDEFAULTPAPERSIZE=" + paperType.getId(),
-				"-sPAPERSIZE=" + paperType.getId(),
-				"-sOutputFile=" + pdf.getAbsolutePath(),
-				eps.getAbsoluteFile().toString()
-		};
-		log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
-		final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
+		final Process process = Runtime.getRuntime()
+				.exec(ghostscriptCommand(ghostscript, paperType, pdf, eps));
 
 		executeAndEvaluateProcessOutput(process, file, eps, pdf);
 	}
@@ -72,9 +62,15 @@ public class ExportPDF {
 							 PaperType paperType) throws Exception {
 		final File eps = File.createTempFile("hsb", ".ps");
 		final File pdf = File.createTempFile("hsb", ".pdf");
-
 		ExportEPS.writeMultiPage(paperType, eps, quest, objects);
-		final String[] ghostscriptCommand = {
+		final Process process = Runtime.getRuntime()
+				.exec(ghostscriptCommand(ghostscript, paperType, pdf, eps));
+
+		executeAndEvaluateProcessOutput(process, file, eps, pdf);
+	}
+
+	private static String[] ghostscriptCommand(File ghostscript, PaperType paperType, File pdf, File eps) {
+		final String[] command = {
 				ghostscript.getAbsoluteFile().toString(),
 				"-dBATCH",
 				"-dNOPAUSE",
@@ -85,10 +81,8 @@ public class ExportPDF {
 				"-sOutputFile=" + pdf.getAbsolutePath(),
 				eps.getAbsoluteFile().toString()
 		};
-		log.info("Ghostscript command: {}", String.join(" ", ghostscriptCommand));
-		final Process process = Runtime.getRuntime().exec(ghostscriptCommand);
-
-		executeAndEvaluateProcessOutput(process, file, eps, pdf);
+		log.info("Ghostscript command: {}", String.join(" ", command));
+		return command;
 	}
 
 	private static void executeAndEvaluateProcessOutput(Process process, File file, File eps, File pdf) throws Exception {

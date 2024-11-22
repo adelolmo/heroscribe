@@ -151,22 +151,20 @@ public class ExportEPS {
 				boundingBox[3]);
 		// END wandering monster object
 
-		int pageCount = 1;
+		final PageSection pageSection = new PageSection();
 
 		// loop through each board, generating every two boards
 		for (int column = 0; column < quest.getWidth(); column++) {
 			for (int row = 0; row < quest.getHeight(); row++) {
-				if ((column + row + 1 % 2) == 0) {
-					pageCount++;
-				}
-				final float boardXPosition = calculateBoardXPosition(paperType);
-				final float boardYPosition = calculateBoardYPosition(paperType);
-
 				final Quest.Board board = quest.getBoard(column, row);
 
-				out.println("%%Page: %s %s",
-						pageCount,
-						pageCount);
+				if (pageSection.isTopSection()) {
+					out.println("%%Page: %s %s",
+							pageSection.count(),
+							pageSection.count());
+				}
+				final float boardXPosition = calculateBoardXPosition(paperType);
+				final float boardYPosition = calculateBoardYPosition(paperType, pageSection);
 				out.println("%s %s StartBoard",
 						boardXPosition, boardYPosition);
 
@@ -294,28 +292,16 @@ public class ExportEPS {
 					out.println("Icon" + object.getId() + " execform");
 					out.println("grestore");
 					out.println();
-
 				}
 
 				out.println("EndBoard");
 
-				// HSE - text area
-//				out.println("/Times-Roman findfont 16 scalefont setfont");
-
-				// HSE - create the text bounding box in PS
-				out.println("gsave 0 ph %d sub translate textbox",
-						paperType.getHeight() / 2 +
-								roundPercentage(paperType.getHeight(), 7.9f)); // 440  2.256f%
-
-				// HSE - restore the coords
-//				out.println("grestore");
-
-				out.println("sysshowpage");
-				out.println("%%EndPage");
-
-				if ((column + row + 1 % 2) == 0) {
-					pageCount++;
+				if (pageSection.isBottomSection()) {
+					out.println("sysshowpage");
+					out.println("%%EndPage");
 				}
+
+				pageSection.increase();
 			}
 		}
 
@@ -573,7 +559,6 @@ public class ExportEPS {
 					out.println("Icon" + object.getId() + " execform");
 					out.println("grestore");
 					out.println();
-
 				}
 
 				out.println("EndBoard");
@@ -590,7 +575,7 @@ public class ExportEPS {
 									paperType.getHalfHeight()
 											+ roundPercentage(120, percentageProportion(paperType))
 									: paperType.getHeight()
-									);
+					);
 					out.println("newline newline (   Board Location: \\(%d,%d\\) ) S",
 							column,
 							row);
@@ -737,16 +722,6 @@ public class ExportEPS {
 				return 0.055f;
 			case LETTER:
 				return 0.07f;
-		}
-		return 0;
-	}
-
-	private static float calculateBoardYPosition(PaperType paperType) {
-		switch (paperType) {
-			case A4:
-				return 1.07f;
-			case LETTER:
-				return 1.0f;
 		}
 		return 0;
 	}
