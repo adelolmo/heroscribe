@@ -594,7 +594,7 @@ public class ExportEPS {
 
 		// HSE - text area
 		out.println("/newline { tm 12 sub /tm exch def lm tm moveto } def");
-		out.println("/Palatino findfont 18 scalefont setfont");
+		out.println("/CaslonAntique findfont 24 scalefont setfont");
 
 		// HSE - create the text bounding box in PS
 		out.println("gsave 0 ph %d sub translate textbox",

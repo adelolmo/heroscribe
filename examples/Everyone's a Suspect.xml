@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<quest name="Everyone's a Suspect" region="Europe" version="1.0" width="1" height="1">
+  <speech>"The Quest was simple enough, find the treasure of the long dead wizard Azmar; unfortunately, three of your close comrades already lay dead in this dungeon. Now, with only four of you left, you decide that their deaths will not be in vain.
+To make matters worse, all the evidence points to one of you as the killer. As terrible as it sounds, the search for riches has become a search for answers as well. One of you is a murderer! It is up to you to find the truth and get out alive."</speech>
+  <board>
+    <dark left="6" top="2" width="1" height="1"/>
+    <dark left="6" top="3" width="1" height="1"/>
+    <dark left="6" top="4" width="1" height="1"/>
+    <dark left="6" top="11" width="1" height="1"/>
+    <dark left="6" top="12" width="1" height="1"/>
+    <dark left="6" top="13" width="1" height="1"/>
+    <dark left="7" top="2" width="1" height="1"/>
+    <dark left="7" top="3" width="1" height="1"/>
+    <dark left="7" top="4" width="1" height="1"/>
+    <dark left="7" top="11" width="1" height="1"/>
+    <dark left="7" top="12" width="1" height="1"/>
+    <dark left="7" top="13" width="1" height="1"/>
+    <dark left="8" top="2" width="1" height="1"/>
+    <dark left="8" top="3" width="1" height="1"/>
+    <dark left="8" top="4" width="1" height="1"/>
+    <dark left="9" top="2" width="1" height="1"/>
+    <dark left="9" top="3" width="1" height="1"/>
+    <dark left="9" top="4" width="1" height="1"/>
+    <dark left="18" top="2" width="1" height="1"/>
+    <dark left="18" top="3" width="1" height="1"/>
+    <dark left="18" top="4" width="1" height="1"/>
+    <dark left="18" top="5" width="1" height="1"/>
+    <dark left="18" top="6" width="1" height="1"/>
+    <dark left="18" top="7" width="1" height="1"/>
+    <dark left="18" top="8" width="1" height="1"/>
+    <dark left="18" top="9" width="1" height="1"/>
+    <dark left="19" top="2" width="1" height="1"/>
+    <dark left="19" top="3" width="1" height="1"/>
+    <dark left="19" top="4" width="1" height="1"/>
+    <dark left="19" top="5" width="1" height="1"/>
+    <dark left="19" top="6" width="1" height="1"/>
+    <dark left="19" top="7" width="1" height="1"/>
+    <dark left="19" top="8" width="1" height="1"/>
+    <dark left="19" top="9" width="1" height="1"/>
+    <dark left="20" top="2" width="1" height="1"/>
+    <dark left="20" top="3" width="1" height="1"/>
+    <dark left="20" top="4" width="1" height="1"/>
+    <dark left="20" top="5" width="1" height="1"/>
+    <dark left="20" top="6" width="1" height="1"/>
+    <dark left="20" top="7" width="1" height="1"/>
+    <dark left="20" top="8" width="1" height="1"/>
+    <dark left="20" top="9" width="1" height="1"/>
+    <dark left="21" top="2" width="1" height="1"/>
+    <dark left="21" top="3" width="1" height="1"/>
+    <dark left="21" top="4" width="1" height="1"/>
+    <dark left="21" top="5" width="1" height="1"/>
+    <dark left="21" top="6" width="1" height="1"/>
+    <dark left="21" top="7" width="1" height="1"/>
+    <dark left="21" top="8" width="1" height="1"/>
+    <dark left="21" top="9" width="1" height="1"/>
+    <object id="SingleBlockedSquare" left="1.0" top="11.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="5.0" top="10.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="10.0" top="10.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="1.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="15.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="17.0" top="9.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="17.0" top="11.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="25.0" top="10.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="26.0" top="19.0" rotation="downward" zorder="-5.0"/>
+    <object id="SecretDoor" left="4.0" top="14.0" rotation="upward" zorder="-5.0"/>
+    <object id="SecretDoor" left="3.0" top="2.0" rotation="downward" zorder="-5.0"/>
+    <object id="SecretDoor" left="11.0" top="9.0" rotation="rightward" zorder="-5.0"/>
+    <object id="SecretDoor" left="16.0" top="2.0" rotation="downward" zorder="-5.0"/>
+    <object id="SecretDoor" left="21.0" top="12.0" rotation="leftward" zorder="-5.0"/>
+    <object id="Stairway" left="4.0" top="3.0" rotation="rightward" zorder="-5.0"/>
+    <object id="Table" left="8.0" top="6.0" rotation="rightward" zorder="-5.0"/>
+    <object id="Cupboard" left="10.0" top="6.0" rotation="downward" zorder="-5.0"/>
+    <object id="Fireplace" left="10.0" top="14.0" rotation="downward" zorder="-5.0"/>
+    <object id="SorcerersTable" left="16.0" top="17.0" rotation="upward" zorder="-5.0"/>
+    <object id="WeaponsRack" left="19.0" top="15.0" rotation="downward" zorder="-5.0"/>
+    <object id="Throne" left="22.0" top="12.0" rotation="rightward" zorder="-5.0"/>
+    <object id="Bookcase" left="22.0" top="7.0" rotation="leftward" zorder="-5.0"/>
+    <object id="Bookcase" left="25.0" top="6.0" rotation="leftward" zorder="-5.0"/>
+    <object id="TreasureChestTrap" left="11.0" top="10.0" rotation="upward" zorder="-5.0"/>
+    <object id="TreasureChest" left="2.0" top="12.0" rotation="upward" zorder="-5.0"/>
+    <object id="TreasureChest" left="16.0" top="6.0" rotation="downward" zorder="-5.0"/>
+    <object id="SpearTrap" left="2.0" top="8.0" rotation="downward" zorder="-5.0"/>
+    <object id="SpearTrap" left="5.0" top="5.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="3.0" top="7.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="4.0" top="6.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="9.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="18.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="Door" left="7.0" top="9.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="4.0" top="9.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="9.0" top="10.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="8.0" top="13.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="11.0" top="18.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="20.0" top="18.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="24.0" top="14.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="24.0" top="9.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="22.0" top="5.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="24.0" top="1.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="9.0" top="5.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="5.0" top="8.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="1.0" top="3.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="1.0" top="6.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="1.0" top="16.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="5.0" top="15.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="14.0" top="15.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="21.0" top="16.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="25.0" top="11.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Door" left="16.0" top="10.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Goblin" left="12.0" top="3.0" rotation="downward" zorder="0.0"/>
+    <object id="Goblin" left="11.0" top="5.0" rotation="downward" zorder="0.0"/>
+    <object id="Goblin" left="9.0" top="15.0" rotation="downward" zorder="0.0"/>
+    <object id="Goblin" left="8.0" top="15.0" rotation="downward" zorder="0.0"/>
+    <object id="Fimir" left="4.0" top="12.0" rotation="downward" zorder="0.0"/>
+    <object id="Fimir" left="16.0" top="4.0" rotation="downward" zorder="0.0"/>
+    <object id="Fimir" left="16.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="ChaosWarrior" left="19.0" top="12.0" rotation="downward" zorder="0.0"/>
+    <object id="Orc" left="24.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Orc" left="23.0" top="17.0" rotation="downward" zorder="0.0"/>
+    <object id="Orc" left="9.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Orc" left="7.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Orc" left="11.0" top="15.0" rotation="downward" zorder="0.0"/>
+    <object id="LetterA" left="3.0" top="1.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterB" left="2.0" top="18.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterC" left="2.0" top="13.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterD" left="19.0" top="16.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterE" left="22.0" top="14.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterF" left="25.0" top="5.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterG" left="15.0" top="6.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterH" left="11.0" top="11.0" rotation="downward" zorder="5.0"/>
+  </board>
+  <note>A  This secret door can only be opened from the hallway.</note>
+  <note>B  Once the Heroes enter this room, they should not be permitted to leave the room until all the Heroes are in the room. When all the Heroes are in the room, Zargon should read the following:
+
+"Suddenly the lights go out. The darkness is impenetrable even for those who can see in the dark. There is a loud groan and the lights return. You all are surprised to find the Elf lying on the floor with a slash to the ribs! The killer narrowly missed this time!"
+
+The Elf loses 1 Body Point.</note>
+  <note>C  This treasure chest contains 150 gold coins.</note>
+  <note>D  The first Hero who searches for treasure will find a staff weapon that he may add to his character sheet or may give to another Hero. This staff is exactly like the one described in the Armory.</note>
+  <note>E  Once the Heroes enter this room, they should not be permitted to leave the room until all the Heroes are in the room. When all the Heroes are in the room, Zargon should read the following:
+
+"The torches seem to fade almost immediately upon entering, until the room is as dark as the lowest levels of the Abyss. A low scream fills the silence. When the lights return to normal, you are angered to find the Barbarian bleeding from what looks to be a knife slash to the leg. Apparently, the killer values riches more than friends." 
+
+The Barbarian loses 1 Body Point.
+
+The first Hero to search for secret doors will find a switch under the chair that when triggered, the chair slides over and reveals the secret door behind it.</note>
+  <note>F  The first Hero to search for treasure in this room will find a Potion of Healing, which will restore up to 4 lost Body Points.</note>
+  <note>G  Once the Heroes enter this room, they should not be permitted to leave the room until all the Heroes are in the room. When all the Heroes are in the room, Zargon should read the following:
+
+To your horror, the light vanishes as if it never existed. Before your weapons are even drawn, the returning light reveals the Dwarf gasping for air. He has taken a knife in the shoulder. This must end now!"
+
+The Dwarf loses 1 Body Point.</note>
+  <note>H  Once all the Heroes enter this room, the door they entered through slams shut and cannot be opened again. The Barbarian begins to laugh sinisterly. He immediately attacks the nearest Hero. During this time the Barbarian is controlled by Zargon. He can attack once on Zargon's turn and again on the Barbarian's turn. He can use all items he already owns as normal. When the Barbarian reaches 0 Body Points, he is knocked unconscious. The Chaos Wizard should be placed near the unconscious Hero.
+
+Zargon should then read the following:
+
+"Suddenly, a cloud of foul smoke envelops the room. Crazed laughter fills the air bringing with it a new threat. As the smoke clears, what appears to be the ghost of a wizard stands before you. Even as the laughter still rings in your ears, he begins to speak.
+
+'You pathetic fools! So easily fooled. It was all too easy to possess your friend. He is strong as an ox and dumb as one too. He never even knew I was there; watching, waiting for the exact moment to strike. No matter; now you all know the truth. It is I, Azmar!
+
+Do not feel bad. You are not the first group to fall victim to my powers and you will not be the last! I'm sure your life forces will last me a long, long time. Ha, Ha, Ha!'"
+
+At this point, the wizard attacks. Play begins with Zargon and continues normally; however, Zargon may not attack on the Barbarians turn now.
+
+The Barbarian can be revived at any time during the fight if given a potion or magical cure, otherwise, he will regain consciousness with 1 Body Point when the wizard is defeated.
+
+Azmar
+-------------   ------------    ------------   ----------     ----------
+Movement     Attack         Defend        Body         Mind
+        6                2                   4                5                 6
+-------------   ------------    ------------   ----------     ----------
+Azmar knows the following spells: Ball of Flame, Fear, Lightning Bolt and Tempest
+
+The chest in this room has a trap with poisonous gas. If a Hero searches for treasure before the trap is disarmed, he will lose 3 Body Points. Inside the chest are 500 gold coins and the artifact called the Elixir of Life. Its use is explained on the matching Artifact Card.</note>
+  <note>Wandering Monster in this quest: Orc</note>
+  <kind id="furniture" name="Furniture" original="true"/>
+  <kind id="mark" name="Marks" original="true"/>
+  <kind id="man-at-arms" name="Men-at-Arms" original="true"/>
+  <kind id="trap" name="Traps" original="true"/>
+  <kind id="room" name="Rooms" original="true"/>
+  <kind id="monster" name="Monsters" original="true"/>
+  <kind id="door" name="Doors" original="true"/>
+  <kind id="various" name="Various" original="true"/>
+  <kind id="hero" name="Heroes" original="true"/>
+</quest>

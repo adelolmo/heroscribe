@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<quest name="Enter the Crypt" region="Europe" version="1.0" width="1" height="1">
+  <speech>Zargon's forces have always been found swarming everywhere, but never like this. This time, word has come to the Emperor that Zargon has been recently rallying his forces in the Emprire's Sacred Catacombs. This ancient crypt houses the remains of all members of the Royal Family of the Empire. The most skilled mages in the Empire have gathered above the crypts, holding seances to find the root of the gathered evil. they have found out that it is concentrated into one object, be it itme or creature. These mages theorize that if this thing can be destroyed, then peace will reign again amongst the living and the dead. The Emperor is now offering a reward of 200 gold and the choice of one weapon from his Armory to any hero that can enter the Catacombs and destroy the source of this evil.</speech>
+  <board>
+    <dark left="1" top="1" width="1" height="1"/>
+    <dark left="1" top="2" width="1" height="1"/>
+    <dark left="1" top="3" width="1" height="1"/>
+    <dark left="1" top="4" width="1" height="1"/>
+    <dark left="1" top="5" width="1" height="1"/>
+    <dark left="1" top="6" width="1" height="1"/>
+    <dark left="1" top="7" width="1" height="1"/>
+    <dark left="1" top="8" width="1" height="1"/>
+    <dark left="1" top="9" width="1" height="1"/>
+    <dark left="1" top="10" width="1" height="1"/>
+    <dark left="1" top="11" width="1" height="1"/>
+    <dark left="1" top="12" width="1" height="1"/>
+    <dark left="1" top="13" width="1" height="1"/>
+    <dark left="1" top="14" width="1" height="1"/>
+    <dark left="1" top="15" width="1" height="1"/>
+    <dark left="1" top="16" width="1" height="1"/>
+    <dark left="1" top="17" width="1" height="1"/>
+    <dark left="1" top="18" width="1" height="1"/>
+    <dark left="1" top="19" width="1" height="1"/>
+    <dark left="2" top="5" width="1" height="1"/>
+    <dark left="2" top="6" width="1" height="1"/>
+    <dark left="2" top="7" width="1" height="1"/>
+    <dark left="2" top="8" width="1" height="1"/>
+    <dark left="2" top="9" width="1" height="1"/>
+    <dark left="2" top="10" width="1" height="1"/>
+    <dark left="2" top="11" width="1" height="1"/>
+    <dark left="2" top="12" width="1" height="1"/>
+    <dark left="2" top="13" width="1" height="1"/>
+    <dark left="2" top="14" width="1" height="1"/>
+    <dark left="2" top="19" width="1" height="1"/>
+    <dark left="3" top="5" width="1" height="1"/>
+    <dark left="3" top="6" width="1" height="1"/>
+    <dark left="3" top="7" width="1" height="1"/>
+    <dark left="3" top="8" width="1" height="1"/>
+    <dark left="3" top="9" width="1" height="1"/>
+    <dark left="3" top="10" width="1" height="1"/>
+    <dark left="3" top="11" width="1" height="1"/>
+    <dark left="3" top="12" width="1" height="1"/>
+    <dark left="3" top="13" width="1" height="1"/>
+    <dark left="3" top="14" width="1" height="1"/>
+    <dark left="3" top="19" width="1" height="1"/>
+    <dark left="4" top="5" width="1" height="1"/>
+    <dark left="4" top="6" width="1" height="1"/>
+    <dark left="4" top="7" width="1" height="1"/>
+    <dark left="4" top="8" width="1" height="1"/>
+    <dark left="4" top="9" width="1" height="1"/>
+    <dark left="4" top="10" width="1" height="1"/>
+    <dark left="4" top="11" width="1" height="1"/>
+    <dark left="4" top="12" width="1" height="1"/>
+    <dark left="4" top="13" width="1" height="1"/>
+    <dark left="4" top="14" width="1" height="1"/>
+    <dark left="4" top="19" width="1" height="1"/>
+    <dark left="5" top="5" width="1" height="1"/>
+    <dark left="5" top="6" width="1" height="1"/>
+    <dark left="5" top="7" width="1" height="1"/>
+    <dark left="5" top="8" width="1" height="1"/>
+    <dark left="5" top="9" width="1" height="1"/>
+    <dark left="5" top="10" width="1" height="1"/>
+    <dark left="5" top="11" width="1" height="1"/>
+    <dark left="5" top="12" width="1" height="1"/>
+    <dark left="5" top="13" width="1" height="1"/>
+    <dark left="5" top="14" width="1" height="1"/>
+    <dark left="5" top="19" width="1" height="1"/>
+    <dark left="6" top="5" width="1" height="1"/>
+    <dark left="6" top="6" width="1" height="1"/>
+    <dark left="6" top="7" width="1" height="1"/>
+    <dark left="6" top="8" width="1" height="1"/>
+    <dark left="6" top="9" width="1" height="1"/>
+    <dark left="6" top="10" width="1" height="1"/>
+    <dark left="6" top="11" width="1" height="1"/>
+    <dark left="6" top="12" width="1" height="1"/>
+    <dark left="6" top="13" width="1" height="1"/>
+    <dark left="6" top="14" width="1" height="1"/>
+    <dark left="6" top="15" width="1" height="1"/>
+    <dark left="6" top="16" width="1" height="1"/>
+    <dark left="6" top="17" width="1" height="1"/>
+    <dark left="6" top="18" width="1" height="1"/>
+    <dark left="6" top="19" width="1" height="1"/>
+    <dark left="7" top="5" width="1" height="1"/>
+    <dark left="7" top="6" width="1" height="1"/>
+    <dark left="7" top="7" width="1" height="1"/>
+    <dark left="7" top="8" width="1" height="1"/>
+    <dark left="7" top="9" width="1" height="1"/>
+    <dark left="7" top="10" width="1" height="1"/>
+    <dark left="7" top="11" width="1" height="1"/>
+    <dark left="7" top="12" width="1" height="1"/>
+    <dark left="7" top="13" width="1" height="1"/>
+    <dark left="7" top="14" width="1" height="1"/>
+    <dark left="7" top="15" width="1" height="1"/>
+    <dark left="7" top="16" width="1" height="1"/>
+    <dark left="7" top="17" width="1" height="1"/>
+    <dark left="7" top="18" width="1" height="1"/>
+    <dark left="7" top="19" width="1" height="1"/>
+    <dark left="8" top="5" width="1" height="1"/>
+    <dark left="8" top="6" width="1" height="1"/>
+    <dark left="8" top="7" width="1" height="1"/>
+    <dark left="8" top="8" width="1" height="1"/>
+    <dark left="8" top="9" width="1" height="1"/>
+    <dark left="8" top="10" width="1" height="1"/>
+    <dark left="8" top="11" width="1" height="1"/>
+    <dark left="8" top="12" width="1" height="1"/>
+    <dark left="8" top="13" width="1" height="1"/>
+    <dark left="8" top="14" width="1" height="1"/>
+    <dark left="8" top="15" width="1" height="1"/>
+    <dark left="8" top="16" width="1" height="1"/>
+    <dark left="8" top="17" width="1" height="1"/>
+    <dark left="8" top="18" width="1" height="1"/>
+    <dark left="8" top="19" width="1" height="1"/>
+    <dark left="9" top="5" width="1" height="1"/>
+    <dark left="9" top="6" width="1" height="1"/>
+    <dark left="9" top="7" width="1" height="1"/>
+    <dark left="9" top="8" width="1" height="1"/>
+    <dark left="9" top="9" width="1" height="1"/>
+    <dark left="9" top="10" width="1" height="1"/>
+    <dark left="9" top="11" width="1" height="1"/>
+    <dark left="9" top="12" width="1" height="1"/>
+    <dark left="9" top="13" width="1" height="1"/>
+    <dark left="9" top="14" width="1" height="1"/>
+    <dark left="9" top="15" width="1" height="1"/>
+    <dark left="9" top="16" width="1" height="1"/>
+    <dark left="9" top="17" width="1" height="1"/>
+    <dark left="9" top="18" width="1" height="1"/>
+    <dark left="9" top="19" width="1" height="1"/>
+    <dark left="10" top="2" width="1" height="1"/>
+    <dark left="10" top="3" width="1" height="1"/>
+    <dark left="10" top="4" width="1" height="1"/>
+    <dark left="10" top="5" width="1" height="1"/>
+    <dark left="10" top="6" width="1" height="1"/>
+    <dark left="10" top="7" width="1" height="1"/>
+    <dark left="10" top="8" width="1" height="1"/>
+    <dark left="10" top="9" width="1" height="1"/>
+    <dark left="10" top="10" width="1" height="1"/>
+    <dark left="10" top="11" width="1" height="1"/>
+    <dark left="10" top="12" width="1" height="1"/>
+    <dark left="10" top="13" width="1" height="1"/>
+    <dark left="10" top="14" width="1" height="1"/>
+    <dark left="10" top="15" width="1" height="1"/>
+    <dark left="10" top="16" width="1" height="1"/>
+    <dark left="10" top="17" width="1" height="1"/>
+    <dark left="10" top="18" width="1" height="1"/>
+    <dark left="10" top="19" width="1" height="1"/>
+    <dark left="11" top="1" width="1" height="1"/>
+    <dark left="11" top="2" width="1" height="1"/>
+    <dark left="11" top="3" width="1" height="1"/>
+    <dark left="11" top="4" width="1" height="1"/>
+    <dark left="11" top="5" width="1" height="1"/>
+    <dark left="11" top="6" width="1" height="1"/>
+    <dark left="11" top="7" width="1" height="1"/>
+    <dark left="11" top="8" width="1" height="1"/>
+    <dark left="11" top="9" width="1" height="1"/>
+    <dark left="11" top="10" width="1" height="1"/>
+    <dark left="11" top="11" width="1" height="1"/>
+    <dark left="11" top="12" width="1" height="1"/>
+    <dark left="11" top="13" width="1" height="1"/>
+    <dark left="11" top="14" width="1" height="1"/>
+    <dark left="11" top="15" width="1" height="1"/>
+    <dark left="11" top="16" width="1" height="1"/>
+    <dark left="11" top="17" width="1" height="1"/>
+    <dark left="11" top="18" width="1" height="1"/>
+    <dark left="11" top="19" width="1" height="1"/>
+    <dark left="12" top="1" width="1" height="1"/>
+    <dark left="12" top="2" width="1" height="1"/>
+    <dark left="12" top="3" width="1" height="1"/>
+    <dark left="12" top="4" width="1" height="1"/>
+    <dark left="12" top="5" width="1" height="1"/>
+    <dark left="12" top="6" width="1" height="1"/>
+    <dark left="12" top="7" width="1" height="1"/>
+    <dark left="12" top="8" width="1" height="1"/>
+    <dark left="12" top="9" width="1" height="1"/>
+    <dark left="12" top="10" width="1" height="1"/>
+    <dark left="12" top="11" width="1" height="1"/>
+    <dark left="12" top="12" width="1" height="1"/>
+    <dark left="12" top="13" width="1" height="1"/>
+    <dark left="12" top="14" width="1" height="1"/>
+    <dark left="12" top="15" width="1" height="1"/>
+    <dark left="12" top="16" width="1" height="1"/>
+    <dark left="12" top="17" width="1" height="1"/>
+    <dark left="12" top="18" width="1" height="1"/>
+    <dark left="12" top="19" width="1" height="1"/>
+    <dark left="13" top="1" width="1" height="1"/>
+    <dark left="13" top="2" width="1" height="1"/>
+    <dark left="13" top="3" width="1" height="1"/>
+    <dark left="13" top="4" width="1" height="1"/>
+    <dark left="13" top="5" width="1" height="1"/>
+    <dark left="13" top="6" width="1" height="1"/>
+    <dark left="13" top="7" width="1" height="1"/>
+    <dark left="13" top="8" width="1" height="1"/>
+    <dark left="13" top="9" width="1" height="1"/>
+    <dark left="13" top="10" width="1" height="1"/>
+    <dark left="13" top="11" width="1" height="1"/>
+    <dark left="13" top="12" width="1" height="1"/>
+    <dark left="13" top="13" width="1" height="1"/>
+    <dark left="13" top="14" width="1" height="1"/>
+    <dark left="13" top="15" width="1" height="1"/>
+    <dark left="13" top="16" width="1" height="1"/>
+    <dark left="13" top="17" width="1" height="1"/>
+    <dark left="13" top="18" width="1" height="1"/>
+    <dark left="13" top="19" width="1" height="1"/>
+    <dark left="14" top="1" width="1" height="1"/>
+    <dark left="14" top="2" width="1" height="1"/>
+    <dark left="14" top="3" width="1" height="1"/>
+    <dark left="14" top="4" width="1" height="1"/>
+    <dark left="14" top="5" width="1" height="1"/>
+    <dark left="14" top="6" width="1" height="1"/>
+    <dark left="14" top="7" width="1" height="1"/>
+    <dark left="14" top="8" width="1" height="1"/>
+    <dark left="14" top="9" width="1" height="1"/>
+    <dark left="14" top="10" width="1" height="1"/>
+    <dark left="14" top="11" width="1" height="1"/>
+    <dark left="14" top="12" width="1" height="1"/>
+    <dark left="14" top="13" width="1" height="1"/>
+    <dark left="14" top="14" width="1" height="1"/>
+    <dark left="14" top="15" width="1" height="1"/>
+    <dark left="14" top="16" width="1" height="1"/>
+    <dark left="14" top="17" width="1" height="1"/>
+    <dark left="14" top="18" width="1" height="1"/>
+    <dark left="14" top="19" width="1" height="1"/>
+    <dark left="15" top="1" width="1" height="1"/>
+    <dark left="15" top="7" width="1" height="1"/>
+    <dark left="15" top="8" width="1" height="1"/>
+    <dark left="15" top="9" width="1" height="1"/>
+    <dark left="15" top="10" width="1" height="1"/>
+    <dark left="15" top="11" width="1" height="1"/>
+    <dark left="15" top="12" width="1" height="1"/>
+    <dark left="15" top="13" width="1" height="1"/>
+    <dark left="15" top="19" width="1" height="1"/>
+    <dark left="16" top="1" width="1" height="1"/>
+    <dark left="16" top="7" width="1" height="1"/>
+    <dark left="16" top="8" width="1" height="1"/>
+    <dark left="16" top="9" width="1" height="1"/>
+    <dark left="16" top="10" width="1" height="1"/>
+    <dark left="16" top="11" width="1" height="1"/>
+    <dark left="16" top="12" width="1" height="1"/>
+    <dark left="16" top="13" width="1" height="1"/>
+    <dark left="16" top="19" width="1" height="1"/>
+    <dark left="17" top="1" width="1" height="1"/>
+    <dark left="17" top="7" width="1" height="1"/>
+    <dark left="17" top="8" width="1" height="1"/>
+    <dark left="17" top="9" width="1" height="1"/>
+    <dark left="17" top="10" width="1" height="1"/>
+    <dark left="17" top="11" width="1" height="1"/>
+    <dark left="17" top="12" width="1" height="1"/>
+    <dark left="17" top="13" width="1" height="1"/>
+    <dark left="17" top="19" width="1" height="1"/>
+    <dark left="18" top="1" width="1" height="1"/>
+    <dark left="18" top="10" width="1" height="1"/>
+    <dark left="18" top="19" width="1" height="1"/>
+    <dark left="19" top="1" width="1" height="1"/>
+    <dark left="19" top="10" width="1" height="1"/>
+    <dark left="19" top="19" width="1" height="1"/>
+    <dark left="20" top="1" width="1" height="1"/>
+    <dark left="20" top="10" width="1" height="1"/>
+    <dark left="20" top="19" width="1" height="1"/>
+    <dark left="21" top="1" width="1" height="1"/>
+    <dark left="21" top="10" width="1" height="1"/>
+    <dark left="21" top="19" width="1" height="1"/>
+    <dark left="22" top="1" width="1" height="1"/>
+    <dark left="22" top="2" width="1" height="1"/>
+    <dark left="22" top="3" width="1" height="1"/>
+    <dark left="22" top="4" width="1" height="1"/>
+    <dark left="22" top="5" width="1" height="1"/>
+    <dark left="22" top="6" width="1" height="1"/>
+    <dark left="22" top="7" width="1" height="1"/>
+    <dark left="22" top="8" width="1" height="1"/>
+    <dark left="22" top="9" width="1" height="1"/>
+    <dark left="22" top="10" width="1" height="1"/>
+    <dark left="22" top="19" width="1" height="1"/>
+    <dark left="23" top="1" width="1" height="1"/>
+    <dark left="23" top="2" width="1" height="1"/>
+    <dark left="23" top="3" width="1" height="1"/>
+    <dark left="23" top="4" width="1" height="1"/>
+    <dark left="23" top="5" width="1" height="1"/>
+    <dark left="23" top="6" width="1" height="1"/>
+    <dark left="23" top="7" width="1" height="1"/>
+    <dark left="23" top="8" width="1" height="1"/>
+    <dark left="23" top="9" width="1" height="1"/>
+    <dark left="23" top="10" width="1" height="1"/>
+    <dark left="23" top="19" width="1" height="1"/>
+    <dark left="24" top="1" width="1" height="1"/>
+    <dark left="24" top="2" width="1" height="1"/>
+    <dark left="24" top="3" width="1" height="1"/>
+    <dark left="24" top="4" width="1" height="1"/>
+    <dark left="24" top="5" width="1" height="1"/>
+    <dark left="24" top="6" width="1" height="1"/>
+    <dark left="24" top="7" width="1" height="1"/>
+    <dark left="24" top="8" width="1" height="1"/>
+    <dark left="24" top="9" width="1" height="1"/>
+    <dark left="24" top="10" width="1" height="1"/>
+    <dark left="24" top="19" width="1" height="1"/>
+    <dark left="25" top="1" width="1" height="1"/>
+    <dark left="25" top="2" width="1" height="1"/>
+    <dark left="25" top="3" width="1" height="1"/>
+    <dark left="25" top="4" width="1" height="1"/>
+    <dark left="25" top="5" width="1" height="1"/>
+    <dark left="25" top="6" width="1" height="1"/>
+    <dark left="25" top="7" width="1" height="1"/>
+    <dark left="25" top="8" width="1" height="1"/>
+    <dark left="25" top="9" width="1" height="1"/>
+    <dark left="25" top="10" width="1" height="1"/>
+    <dark left="25" top="19" width="1" height="1"/>
+    <dark left="26" top="1" width="1" height="1"/>
+    <dark left="26" top="2" width="1" height="1"/>
+    <dark left="26" top="3" width="1" height="1"/>
+    <dark left="26" top="4" width="1" height="1"/>
+    <dark left="26" top="5" width="1" height="1"/>
+    <dark left="26" top="6" width="1" height="1"/>
+    <dark left="26" top="7" width="1" height="1"/>
+    <dark left="26" top="8" width="1" height="1"/>
+    <dark left="26" top="9" width="1" height="1"/>
+    <dark left="26" top="10" width="1" height="1"/>
+    <dark left="26" top="11" width="1" height="1"/>
+    <dark left="26" top="12" width="1" height="1"/>
+    <dark left="26" top="13" width="1" height="1"/>
+    <dark left="26" top="14" width="1" height="1"/>
+    <dark left="26" top="15" width="1" height="1"/>
+    <dark left="26" top="16" width="1" height="1"/>
+    <dark left="26" top="17" width="1" height="1"/>
+    <dark left="26" top="18" width="1" height="1"/>
+    <dark left="26" top="19" width="1" height="1"/>
+    <object id="SingleBlockedSquare" left="2.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="SingleBlockedSquare" left="10.0" top="1.0" rotation="downward" zorder="-5.0"/>
+    <object id="SecretDoor" left="17.0" top="17.0" rotation="leftward" zorder="-5.0"/>
+    <object id="SecretDoor" left="19.0" top="17.0" rotation="rightward" zorder="-5.0"/>
+    <object id="Stairway" left="2.0" top="17.0" rotation="rightward" zorder="-5.0"/>
+    <object id="Stairway" left="6.0" top="3.0" rotation="rightward" zorder="-5.0"/>
+    <object id="TreasureChest" left="2.0" top="4.0" rotation="downward" zorder="-5.0"/>
+    <object id="TreasureChest" left="15.0" top="2.0" rotation="upward" zorder="-5.0"/>
+    <object id="TreasureChest" left="21.0" top="15.0" rotation="upward" zorder="-5.0"/>
+    <object id="Fireplace" left="18.0" top="16.0" rotation="leftward" zorder="-5.0"/>
+    <object id="AlchemistsBench" left="22.0" top="17.0" rotation="upward" zorder="-5.0"/>
+    <object id="WeaponsRack" left="23.0" top="11.0" rotation="downward" zorder="-5.0"/>
+    <object id="Cupboard" left="18.0" top="9.0" rotation="upward" zorder="-5.0"/>
+    <object id="SorcerersTable" left="20.0" top="3.0" rotation="leftward" zorder="-5.0"/>
+    <object id="PitTrap" left="2.0" top="15.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="5.0" top="2.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="21.0" top="2.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="21.0" top="6.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="18.0" top="11.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="18.0" top="14.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="19.0" top="15.0" rotation="downward" zorder="-5.0"/>
+    <object id="PitTrap" left="25.0" top="18.0" rotation="downward" zorder="-5.0"/>
+    <object id="FallingRock" left="24.0" top="14.0" rotation="downward" zorder="-5.0"/>
+    <object id="Door" left="24.0" top="14.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="9.0" top="1.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="3.0" top="1.0" rotation="downward" zorder="-1.0"/>
+    <object id="Door" left="17.0" top="3.0" rotation="rightward" zorder="-1.0"/>
+    <object id="OpenDoor" left="19.0" top="5.0" rotation="downward" zorder="-1.0"/>
+    <object id="OpenDoor" left="21.0" top="12.0" rotation="rightward" zorder="-1.0"/>
+    <object id="Zombie" left="5.0" top="17.0" rotation="downward" zorder="0.0"/>
+    <object id="Zombie" left="16.0" top="17.0" rotation="downward" zorder="0.0"/>
+    <object id="Zombie" left="19.0" top="13.0" rotation="downward" zorder="0.0"/>
+    <object id="Zombie" left="15.0" top="3.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="16.0" top="2.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="18.0" top="3.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="24.0" top="12.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="23.0" top="13.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="25.0" top="13.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="25.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Skeleton" left="20.0" top="18.0" rotation="downward" zorder="0.0"/>
+    <object id="Mummy" left="20.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Mummy" left="23.0" top="16.0" rotation="downward" zorder="0.0"/>
+    <object id="Mummy" left="19.0" top="11.0" rotation="downward" zorder="0.0"/>
+    <object id="Mummy" left="19.0" top="4.0" rotation="downward" zorder="0.0"/>
+    <object id="Barbarian" left="2.0" top="2.0" rotation="downward" zorder="0.0"/>
+    <object id="LetterA" left="4.0" top="16.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterB" left="16.0" top="15.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterC" left="20.0" top="17.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterD" left="24.0" top="16.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterE" left="23.0" top="12.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterF" left="20.0" top="12.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterG" left="19.0" top="3.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterH" left="16.0" top="5.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterI" left="19.0" top="7.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterJ" left="3.0" top="3.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterK" left="8.0" top="3.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterX" left="19.0" top="8.0" rotation="downward" zorder="5.0"/>
+    <object id="LetterX" left="18.0" top="12.0" rotation="downward" zorder="5.0"/>
+    <object id="Number1" left="3.0" top="15.0" rotation="downward" zorder="5.0"/>
+    <object id="Number2" left="20.0" top="15.0" rotation="downward" zorder="5.0"/>
+    <object id="Number3" left="17.0" top="11.0" rotation="downward" zorder="5.0"/>
+    <object id="Number4" left="21.0" top="7.0" rotation="downward" zorder="5.0"/>
+    <object id="Number4" left="4.0" top="2.0" rotation="downward" zorder="5.0"/>
+    <object id="Number1" left="18.0" top="15.0" rotation="downward" zorder="5.0"/>
+    <object id="Number2" left="25.0" top="17.0" rotation="downward" zorder="5.0"/>
+    <object id="Number3" left="20.0" top="2.0" rotation="downward" zorder="5.0"/>
+  </board>
+  <note>A - The hero starts in this room. The switch in this room makes the secret passage appear. The secret passage in this room leads to the other secret passage marked "1".</note>
+  <note>B - The switch in this room creates the secret door. DO NOT reveal the secret door unless the switch is stepped on, not even if the hero searches for secret doors.</note>
+  <note>C - The chest in this room contans two Potions of Healing that restore up to four lost body points each. The switch activates the secret passage, and the secret passage leads to the other secret passage marked "2".</note>
+  <note>D - When treasure is searched for, Zargon should read the following: "The mummy in front of this Alchemist's Bench was obviouosly trying to guard something before you killed him. As you look at the strewn contents of the bench, you see a small vial of golden, swirling liquid. You don't know what it is, but you have a strange feeling that it will help you later on your quest." The heroes should not enter room E until this vial has been found.</note>
+  <note>E - The door in the west wall of this room is OPEN, but the hero cannot see what is on the other side until he enters that room. The weapons rack contains a crossbow for every character but the Wizard, or a Staff for the Wizard. Both these weapons are exactly the same as their mates in the Armory.</note>
+  <note>F - The Mummy King occupies the square marked "X". Use the Chaos Warlock Figure to represent him. The hero doesn't need to know his stats inthis quest; they will be revealed in another quest. As soon as the hero walks into the room, he casts the "Escape" Chaos Spell. The switch in this room activates the secret passage, which leads to the other passage marked "3". When treasure is searched for, Zargon should read the following: "In the wall behind where the Mummy King was standing, you find that several of the stones in the wall are loose, in the pattern of a sword. You quickly tear the stone from the wall to find the Spirit Blade. Its blade glows with a golden gleam and its hilt and handle with a blue one as you grasp it. This color, however, fades quickly, as if drained from the very metal..." This is
+the same as the Artifact, so give the hero the card.</note>
+  <note>G - When treasure is searched for, Zargon should read the following: "Once again, the mummy has obviously been trying to protect something. The Sorcerer's Table contains a copy of the Chaos Spell "Summon Undead". This can be cast at any time, allowing you to call upon the ancestors of the Empire to come and fight." If this spell is used, though, the monsters will fight AGAINST the hero, not with him. Do not tell the hero this (don't you feel evil?). The door on the south wall is OPEN.</note>
+  <note>H - The chest in this room contains the Artifact "Spell Ring" if the hero is the Elf or Wizard, or the Artifact "Ring of Return" if the hero is the Barbarian or Dwarf. It also contains a Potion of Healing that restores up to four lost body points, no matter what the hero is.</note>
+  <note>I - Again, the Mummy King ocupies the square marked "X". He can be attacked, but will not lose any body points. Once the hero tries to attack the Mummy King with the Spirit Blade, Zargon should read the following: "As you sweep the Spirit Blade into his side, the Mummy King does not flinch. He lets out a chuckle and says 'That blade cannot harm me! I have drained its power into two vials which are guarded very carefully by my most powerful minions. Only when they are reunited can that sword harm me! Ha ha ha ha ha!' and he vanishes. The cupboard contains the Artifact "Wizard's Cloak" for the Wizard, or the Artifact "Borin's Armor" for the other heroes. The switch reveals the secret passage, which leads to the other secret passage marked "4".</note>
+  <note>J - This chest contains 100 gold and a Potion of Healing that restores up to four lost body points.</note>
+  <note>Wandering Monster in this quest: Skeleton</note>
+  <kind id="furniture" name="Furniture" original="true"/>
+  <kind id="mark" name="Marks" original="true"/>
+  <kind id="man-at-arms" name="Men-at-Arms" original="true"/>
+  <kind id="trap" name="Traps" original="true"/>
+  <kind id="room" name="Rooms" original="true"/>
+  <kind id="monster" name="Monsters" original="true"/>
+  <kind id="door" name="Doors" original="true"/>
+  <kind id="various" name="Various" original="true"/>
+  <kind id="hero" name="Heroes" original="true"/>
+</quest>
