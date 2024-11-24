@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.lightless.heroscribe</groupId>
     <artifactId>heroscribe-enhanced-skull</artifactId>
-    <version>1.9</version>
+    <version>1.10-SNAPSHOT</version>
     <name>HeroScribe Enhanced Skull</name>
 
     <properties>
@@ -119,21 +119,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <version>2.9</version>
-                <configuration>
-                    <additionalConfig>
-                        <file>
-                            <name>.settings/org.eclipse.core.resources.prefs</name>
-                            <content>
-                                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-                            </content>
-                        </file>
-                    </additionalConfig>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
@@ -183,7 +168,6 @@
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -191,9 +175,11 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
                                 <descriptor>src/main/resources/assembly.xml</descriptor>
                             </descriptors>
+							<finalName>${project.artifactId}_${project.version}</finalName>
                             <archiverConfig>
                                 <directoryMode>0775</directoryMode>
                                 <defaultDirectoryMode>0775</defaultDirectoryMode>
