@@ -4,11 +4,7 @@
 
 ![Heroscribe Enhance UI and PDF export](screenshot.png)
 
-Changes in HeroScribeEnhanced-1.0, by 2011 Jason Allen.
 
-Using OpenJDK 11 and maven.
-
-Made for home use.
 
 ## What's new in this version of Heroscribe?
 
@@ -56,8 +52,6 @@ In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 The project includes a .tool-versions for asdf.
 See https://asdf-vm.com/ for how to use asdf.
 
-### Build
-
 #### Zin bundle
 In the project's root folder:
 
@@ -71,12 +65,11 @@ This will create a `target` folder with a file called `heroscribe-enhanced-skull
 
 This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.9_all.deb`
 
-
-
 ## Links
 
 - The original HeroScribe: <http://www.heroscribe.org/heroquest.html>
 
+Changes in HeroScribeEnhanced-1.0, by 2011 Jason Allen.
 - The original HeroScribe Enhanced (archived): <https://web.archive.org/web/20170209065300/http://www.propvault.com/heroscribe/>
 
 ## Legal
