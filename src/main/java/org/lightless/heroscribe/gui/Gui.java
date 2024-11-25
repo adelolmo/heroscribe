@@ -722,16 +722,12 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	}
 
 	private Set<Kind> findUnsupportedKinds(Quest newXmlQuest, List<Kind> kinds) {
-		final Set<Kind> unsupportedKinds = new HashSet<>();
 		final List<String> supportedKindIds = kinds.stream()
 				.map(Kind::getId)
 				.collect(Collectors.toList());
-		for (Kind questKind : newXmlQuest.getKinds()) {
-			if (!supportedKindIds.contains(questKind.getId())) {
-				unsupportedKinds.add(questKind);
-			}
-		}
-		return unsupportedKinds;
+		return newXmlQuest.getKinds().stream()
+				.filter(kind -> !supportedKindIds.contains(kind.getId()))
+				.collect(Collectors.toSet());
 	}
 
 	private Optional<File> askPath(String extension) {
