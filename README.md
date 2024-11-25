@@ -52,10 +52,14 @@ In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 The project includes a .tool-versions for asdf.
 See https://asdf-vm.com/ for how to use asdf.
 
-#### Zin bundle
+#### Zip bundle
 In the project's root folder:
 
     make
+
+or
+
+    mvn package -DskipTests
 
 This will create a `target` folder with a file called `heroscribe-enhanced-skull-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
 
