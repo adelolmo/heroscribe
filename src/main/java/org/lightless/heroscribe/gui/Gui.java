@@ -74,9 +74,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private final Vector<JMenuItem> newSpecialKeys;
 
 	private JRadioButtonMenuItem europeItem, usaItem;
-	private JMenuItem newKey, openKey, saveKey, saveAsKey, exportPdfKey, exportEpsKey, exportPngKey, ghostscriptKey,
-			quitKey, listKey, aboutKey, dirKey, exportThumbNail, propertiesKey, paperKey;
-	private JMenuItem iconPackImport, iconPackDownload, iconPackRemove;
+	private JMenuItem newKey;
 	private Quest quest;
 
 	ToolsPanel tools;
@@ -204,108 +202,108 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* Export Menu */
 
-		exportPdfKey = new JMenuItem("PDF…",
+		final JMenuItem exportPdfKey = new JMenuItem("PDF…",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png", 2)));
 		// HSE - add menu modifier 'Ctrl-P'
 		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		exportPdfKey.addActionListener(this);
+		exportPdfKey.addActionListener(exportPdfKeyActionListener());
 		exportMenu.add(exportPdfKey);
 
-		exportThumbNail = new JMenuItem("PDF Thumbnail…");
+		final JMenuItem exportThumbNail = new JMenuItem("PDF Thumbnail…");
 		// HSE - add menu modifier 'Ctrl-T'
 		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		exportThumbNail.addActionListener(this);
+		exportThumbNail.addActionListener(exportThumbnailActionListener());
 		exportMenu.add(exportThumbNail);
 		exportMenu.addSeparator();
 
-		exportEpsKey = new JMenuItem("EPS…");
+		final JMenuItem exportEpsKey = new JMenuItem("EPS…");
 		// HSE - add menu modifier 'Ctrl-E'
 		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		exportEpsKey.addActionListener(this);
+		exportEpsKey.addActionListener(exportEpsKeyActionListener());
 		exportMenu.add(exportEpsKey);
 		exportMenu.addSeparator();
 
-		exportPngKey = new JMenuItem("PNG…");
+		final JMenuItem exportPngKey = new JMenuItem("PNG…");
 		// HSE - add menu modifier 'Ctrl+G'
 		exportPngKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		exportPngKey.addActionListener(this);
+		exportPngKey.addActionListener(exportPngKeyActionListener());
 		exportMenu.add(exportPngKey);
 
 		/* Prefs Menu */
-		ghostscriptKey = new JMenuItem("GhostScript path...",
+		final JMenuItem ghostscriptKey = new JMenuItem("GhostScript path...",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/prefs.png", 2)));
-		ghostscriptKey.addActionListener(this);
+		ghostscriptKey.addActionListener(ghostscriptKeyActionListener());
 		prefsMenu.add(ghostscriptKey);
 
-		dirKey = new JMenuItem("Default directory...");
-		dirKey.addActionListener(this);
+		final JMenuItem dirKey = new JMenuItem("Default directory...");
+		dirKey.addActionListener(dirKeyActionListener());
 		prefsMenu.add(dirKey);
 
-		paperKey = new JMenuItem("Paper size...");
-		paperKey.addActionListener(this);
+		final JMenuItem paperKey = new JMenuItem("Paper size...");
+		paperKey.addActionListener(paperKeyActionListener());
 		prefsMenu.add(paperKey);
 
 		/* File Menu */
 		file.add(newMenu);
 
-		openKey = new JMenuItem("Open Quest...",
+		final JMenuItem openKey = new JMenuItem("Open Quest...",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png", 2)));
 		// HSE - add menu modifier 'Ctrl+O'
 		openKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		openKey.addActionListener(this);
+		openKey.addActionListener(openKeyActionListener());
 		file.add(openKey);
 		file.addSeparator();
 
-		saveKey = new JMenuItem("Save Quest",
+		final JMenuItem saveKey = new JMenuItem("Save Quest",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png", 2)));
 		// HSE - add menu modifier 'Ctrl-S'
 		saveKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		saveKey.addActionListener(this);
+		saveKey.addActionListener(saveKeyActionListener());
 		file.add(saveKey);
-		saveAsKey = new JMenuItem("Save Quest as...");
-		saveAsKey.addActionListener(this);
+		final JMenuItem saveAsKey = new JMenuItem("Save Quest as...");
+		saveAsKey.addActionListener(saveAsKeyActionListener());
 		file.add(saveAsKey);
 		file.addSeparator();
 
 		file.add(exportMenu);
 		file.addSeparator();
 
-		propertiesKey = new JMenuItem("Properties...");
-		propertiesKey.addActionListener(this);
+		final JMenuItem propertiesKey = new JMenuItem("Properties...");
+		propertiesKey.addActionListener(propertiesKeyActionListener());
 		file.add(propertiesKey);
 
 		file.add(prefsMenu);
 		file.addSeparator();
 
-		quitKey = new JMenuItem("Quit");
-		quitKey.addActionListener(this);
+		JMenuItem quitKey = new JMenuItem("Quit");
+		quitKey.addActionListener(quitKeyActionListener());
 		file.add(quitKey);
 
 		menu.add(file);
 
 		/* Icon Packs menu */
-		iconPackDownload = new JMenuItem("Download...");
-		iconPackDownload.addActionListener(this);
+		final JMenuItem iconPackDownload = new JMenuItem("Download...");
+		iconPackDownload.addActionListener(iconPackDownloadActionListener());
 		iconPacks.add(iconPackDownload);
 
-		iconPackImport = new JMenuItem("Import...");
-		iconPackImport.addActionListener(this);
+		final JMenuItem iconPackImport = new JMenuItem("Import...");
+		iconPackImport.addActionListener(iconPackImportActionListener());
 		iconPacks.add(iconPackImport);
 
-		iconPackRemove = new JMenuItem("Remove...");
-		iconPackRemove.addActionListener(this);
+		final JMenuItem iconPackRemove = new JMenuItem("Remove...");
+		iconPackRemove.addActionListener(iconPackRemoveActionListener());
 		iconPacks.add(iconPackRemove);
 
 		menu.add(iconPacks);
@@ -324,14 +322,14 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		menu.add(region);
 
 		/* Help menu */
-		listKey = new JMenuItem("Objects...");
-		listKey.addActionListener(this);
+		JMenuItem listKey = new JMenuItem("Objects...");
+		listKey.addActionListener(listKeyActionListener());
 		help.add(listKey);
 
 		help.addSeparator();
 
-		aboutKey = new JMenuItem("About");
-		aboutKey.addActionListener(this);
+		final JMenuItem aboutKey = new JMenuItem("About");
+		aboutKey.addActionListener(aboutKeyActionListener());
 		help.add(aboutKey);
 
 		menu.add(help);
@@ -480,8 +478,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				board.setSize();
 				board.repaint();
 			}
+		}
+	}
 
-		} else if (openKey == source) {
+	private ActionListener openKeyActionListener() {
+		return e -> {
 			if (!quest.isModified()
 					|| JOptionPane.showConfirmDialog(this,
 					"The current quest has not been saved.\nDo you really want to open a new one?",
@@ -543,105 +544,117 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					}
 				}
 			}
-		} else if (saveKey == source) {
+		};
+	}
 
-			askPath("xml")
-					.ifPresent(file -> {
-						try {
-							quest.setFile(file);
-							questParser.saveToDisk(objectList, quest, quest.getFile());
-							updateTitle();
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file.",
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file.", ex);
-						}
-					});
-		} else if (saveAsKey == source) {
+	private ActionListener saveKeyActionListener() {
+		return e -> askPath("xml")
+				.ifPresent(file -> {
+					try {
+						quest.setFile(file);
+						questParser.saveToDisk(objectList, quest, quest.getFile());
+						updateTitle();
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file.",
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file.", ex);
+					}
+				});
+	}
 
-			askPath("xml")
-					.ifPresent(file -> {
-						try {
-							questParser.saveToDisk(objectList, quest, file);
-							updateTitle();
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file.",
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file.", ex);
-						}
-					});
+	private ActionListener saveAsKeyActionListener() {
+		return e -> askPath("xml")
+				.ifPresent(file -> {
+					try {
+						questParser.saveToDisk(objectList, quest, file);
+						updateTitle();
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file.",
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file.", ex);
+					}
+				});
+	}
 
-		} else if (exportPdfKey == source) {
-			askPath("pdf")
-					.ifPresent(file -> {
-						try {
-							ExportPDF.write(prefs.ghostscriptExec,
-									file,
-									quest,
-									objectList,
-									prefs.getPaperSize());
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(),
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file. Check your ghostscript path", ex);
-						}
-					});
+	private ActionListener exportPdfKeyActionListener() {
+		return e -> askPath("pdf")
+				.ifPresent(file -> {
+					try {
+						ExportPDF.write(prefs.ghostscriptExec,
+								file,
+								quest,
+								objectList,
+								prefs.getPaperSize());
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file. Check your ghostscript path.  Detailed Error: " + ex.getMessage(),
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file. Check your ghostscript path", ex);
+					}
+				});
+	}
 
-		} else if (exportThumbNail == source) {
-			// HSE - export to PDF all boards on one letter sized sheet
-			askPath("pdf")
-					.ifPresent(file -> {
-						try {
-							ExportPDF.writeThumbNail(prefs.ghostscriptExec,
-									file,
-									quest,
-									objectList,
-									prefs.getPaperSize());
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file. Detailed Error: " + ex.getMessage(),
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file.", ex);
-						}
-					});
-		} else if (exportEpsKey == source) {
-			askPath("eps")
-					.ifPresent(file -> {
-						try {
-							ExportEPS.writeMultiPage(prefs.getPaperSize(),
-									file,
-									quest,
-									objectList
-							);
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file.  Detailed Error: " + ex.getMessage(),
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file.", ex);
-						}
-					});
-		} else if (exportPngKey == source) {
-			askPath("png")
-					.ifPresent(file -> {
-						try {
-							ExportRaster.write(file, PNG, boardPainter);
-						} catch (Exception ex) {
-							JOptionPane.showMessageDialog(this,
-									"Can't save file.  Detailed Error: " + ex.getMessage(),
-									"Error",
-									JOptionPane.ERROR_MESSAGE);
-							log.error("Can't save file.", ex);
-						}
-					});
-		} else if (ghostscriptKey == source) {
+	private ActionListener exportThumbnailActionListener() {
+		// HSE - export to PDF all boards on one letter sized sheet
+		return e -> askPath("pdf")
+				.ifPresent(file -> {
+					try {
+						ExportPDF.writeThumbNail(prefs.ghostscriptExec,
+								file,
+								quest,
+								objectList,
+								prefs.getPaperSize());
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file. Detailed Error: " + ex.getMessage(),
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file.", ex);
+					}
+				});
+	}
+
+	private ActionListener exportEpsKeyActionListener() {
+		return e -> askPath("eps")
+				.ifPresent(file -> {
+					try {
+						ExportEPS.writeMultiPage(prefs.getPaperSize(),
+								file,
+								quest,
+								objectList
+						);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file.  Detailed Error: " + ex.getMessage(),
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file.", ex);
+					}
+				});
+	}
+
+	private ActionListener exportPngKeyActionListener() {
+		return e -> askPath("png")
+				.ifPresent(file -> {
+					try {
+						ExportRaster.write(file, PNG, boardPainter);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(this,
+								"Can't save file.  Detailed Error: " + ex.getMessage(),
+								"Error",
+								JOptionPane.ERROR_MESSAGE);
+						log.error("Can't save file.", ex);
+					}
+				});
+	}
+
+	private ActionListener ghostscriptKeyActionListener() {
+		return e -> {
 			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
 
 			if (ghostscriptChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -653,7 +666,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			}
-		} else if (dirKey == source) {
+		};
+	}
+
+	private ActionListener dirKeyActionListener() {
+		return e -> {
 			// HSE - get default directory
 			final JFileChooser chooser = new JFileChooser();
 			chooser.setPreferredSize(DIRECTORY_CHOOSER_DIMENSION);
@@ -671,7 +688,11 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			}
-		} else if (paperKey == source) {
+		};
+	}
+
+	private ActionListener paperKeyActionListener() {
+		return e -> {
 			final PaperSizeModal modal = new PaperSizeModal();
 			modal.showDialog(prefs.getPaperSize()).ifPresent(paperType -> {
 				prefs.setPaperSize(paperType);
@@ -681,20 +702,27 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 					log.error("Error.", ex);
 				}
 			});
+		};
+	}
 
-		} else if (iconPackImport == source) {
-			iconPackImportFileChooser.showModal();
+	private ActionListener iconPackImportActionListener() {
+		return e -> iconPackImportFileChooser.showModal();
+	}
 
-		} else if (iconPackDownload == source) {
-			iconPackDownloadModal.showDialog();
+	private ActionListener iconPackDownloadActionListener() {
+		return e -> iconPackDownloadModal.showDialog();
+	}
 
-		} else if (iconPackRemove == source) {
-			iconPackRemoveModal.showDialog();
+	private ActionListener iconPackRemoveActionListener() {
+		return e -> iconPackRemoveModal.showDialog();
+	}
 
-		} else if (quitKey == source) {
-			windowClosing(null);
+	private ActionListener quitKeyActionListener() {
+		return e -> windowClosing(null);
+	}
 
-		} else if (listKey == source) {
+	private ActionListener listKeyActionListener() {
+		return e -> {
 			final String objectId = tools.selectorPanel.getSelectedObject();
 
 			if ("add".equals(tools.getCommand()) && objectId != null) {
@@ -703,22 +731,25 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			} else {
 				new HtmlPanel(this, objectHtmlPath);
 			}
+		};
+	}
 
-		} else if (propertiesKey == source) {
+	private ActionListener propertiesKeyActionListener() {
+		return e -> {
 			final PropertiesModal modal = new PropertiesModal(this, quest);
 			modal.showDialog();
+		};
+	}
 
-		} else if (aboutKey == source) {
-			JOptionPane.showMessageDialog(this,
-					Constants.APPLICATION_NAME + " " + Constants.VERSION + "\n"
-							+ Constants.APPLICATION_NAME + Constants.applicationVersionSuffix + " modifications (C) 2023 Andoni del Olmo.\n"
-							+ "HeroScribe Enhanced modifications (C) 2011 Jason Allen.\n"
-							+ "HeroScribe original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
-							+ Constants.APPLICATION_NAME + " is free software, distributed under the terms of the GNU GPL 2.\n"
-							+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
-					"About", JOptionPane.PLAIN_MESSAGE);
-		}
-
+	private ActionListener aboutKeyActionListener() {
+		return e -> JOptionPane.showMessageDialog(this,
+				Constants.APPLICATION_NAME + " " + Constants.VERSION + "\n"
+						+ Constants.APPLICATION_NAME + Constants.applicationVersionSuffix + " modifications (C) 2023 Andoni del Olmo.\n"
+						+ "HeroScribe Enhanced modifications (C) 2011 Jason Allen.\n"
+						+ "HeroScribe original program is (C) 2003-2004 Flavio Chierichetti and Valerio Chierichetti.\n"
+						+ Constants.APPLICATION_NAME + " is free software, distributed under the terms of the GNU GPL 2.\n"
+						+ "HeroQuest and its icons are (C) of Milton Bradley Co.\n",
+				"About", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	private Set<Kind> findUnsupportedKinds(Quest newXmlQuest, List<Kind> kinds) {
