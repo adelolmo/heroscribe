@@ -19,7 +19,7 @@
 
 ## How to download
 
-Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package depending on you OS (for _Linux_ the `.deb` and for _Win_ and _Mac_ the `.zip`)
+Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package depending on you OS (for _Debian/Ubuntu_ the `.deb` and for other _Linux distros_, _Win_ and _Mac_ the `.zip`)
 
 ## Running HeroScribe
 
