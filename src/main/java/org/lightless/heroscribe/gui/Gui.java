@@ -98,7 +98,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		this.objectHtmlPath = objectHtmlPath;
 
 		// HSE - set app icon
-		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png", 1));
+		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png"));
 
 		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
 		ghostscriptChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
@@ -183,7 +183,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* New Menu */
 		newKey = new JMenuItem("Quest",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/new.png", 2)));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/new.png")));
 		// HSE - add menu modifier 'Ctrl+N'
 		newKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -203,7 +203,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		/* Export Menu */
 
 		final JMenuItem exportPdfKey = new JMenuItem("PDF…",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png", 2)));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png")));
 		// HSE - add menu modifier 'Ctrl-P'
 		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -239,7 +239,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		/* Prefs Menu */
 		final JMenuItem ghostscriptKey = new JMenuItem("GhostScript path...",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/prefs.png", 2)));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/prefs.png")));
 		ghostscriptKey.addActionListener(ghostscriptKeyActionListener());
 		prefsMenu.add(ghostscriptKey);
 
@@ -255,7 +255,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		file.add(newMenu);
 
 		final JMenuItem openKey = new JMenuItem("Open Quest...",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png", 2)));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png")));
 		// HSE - add menu modifier 'Ctrl+O'
 		openKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -265,7 +265,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		file.addSeparator();
 
 		final JMenuItem saveKey = new JMenuItem("Save Quest",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png", 2)));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png")));
 		// HSE - add menu modifier 'Ctrl-S'
 		saveKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
@@ -322,7 +322,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		menu.add(region);
 
 		/* Help menu */
-		JMenuItem listKey = new JMenuItem("Objects...");
+		final JMenuItem listKey = new JMenuItem("Objects...");
 		listKey.addActionListener(listKeyActionListener());
 		help.add(listKey);
 

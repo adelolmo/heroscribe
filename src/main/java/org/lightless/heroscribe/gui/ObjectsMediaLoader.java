@@ -39,22 +39,22 @@ public class ObjectsMediaLoader {
 		objectList.getBoard()
 				.getIcon("Europe")
 				.setImage(imageLoader
-						.addImage(objectList.getBoardRasterPath("Europe").toString(), 10));
+						.addImage(objectList.getBoardRasterPath("Europe").toString()));
 
 		objectList.getBoard()
 				.getIcon("USA")
 				.setImage(imageLoader
-						.addImage(objectList.getBoardRasterPath("USA").toString(), 10));
+						.addImage(objectList.getBoardRasterPath("USA").toString()));
 
 		objectList.getObjects().forEach(object -> {
 			/* Icons */
 			object.getIcon("Europe")
 					.setImage(imageLoader
-							.addImage(objectList.getObjectRasterPath(object.getId(), "Europe").toString(), 20));
+							.addImage(objectList.getObjectRasterPath(object.getId(), "Europe").toString()));
 
 			object.getIcon("USA")
 					.setImage(imageLoader
-							.addImage(objectList.getObjectRasterPath(object.getId(), "USA").toString(), 20));
+							.addImage(objectList.getObjectRasterPath(object.getId(), "USA").toString()));
 		});
 
 		imageLoader.flush();

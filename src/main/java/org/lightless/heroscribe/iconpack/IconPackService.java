@@ -185,7 +185,7 @@ public class IconPackService {
 				iconPath + systemObjectList.getRasterSuffix());
 
 		object.getIcon(region)
-				.setImage(imageLoader.addImage(path.toString(), 20));
+				.setImage(imageLoader.addImage(path.toString()));
 	}
 
 	public static class IconPack {

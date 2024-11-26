@@ -18,15 +18,19 @@
 
 package org.lightless.heroscribe.gui;
 
-import org.lightless.heroscribe.*;
+import org.lightless.heroscribe.HeroScribeException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ImageLoader extends JWindow {
 
 	private final MediaTracker mt;
 	private final Toolkit tk;
+	private final ImageCache imageTracker = new ImageCache();
 
 	public ImageLoader() {
 		super();
@@ -38,26 +42,28 @@ public class ImageLoader extends JWindow {
 		return tk.getScreenSize();
 	}
 
-	public Image addImageAndFlush(String path, int id) {
+	public Image addImageAndFlush(String path) {
 		final Image image = tk.createImage(ClassLoader.getSystemResource(path));
-		mt.addImage(image, id);
+		final int imageId = imageTracker.addResource(path);
+		mt.addImage(image, imageId);
 
 		try {
-			mt.waitForID(id);
+			mt.waitForID(imageId);
 		} catch (InterruptedException e) {
 			throw new HeroScribeException(e);
 		}
 
-		if (mt.isErrorID(id)) {
+		if (mt.isErrorID(imageId)) {
 			throw new HeroScribeException("Can't load images.");
 		}
 
 		return image;
 	}
 
-	public Image addImage(String path, int id) {
+	public Image addImage(String path) {
+		final int imageId = imageTracker.addResource(path);
 		final Image image = tk.createImage(path);
-		mt.addImage(image, id);
+		mt.addImage(image, imageId);
 		return image;
 	}
 
@@ -72,9 +78,30 @@ public class ImageLoader extends JWindow {
 			throw new HeroScribeException(e);
 		}
 
-		if (mt.isErrorAny()) {
-			throw new HeroScribeException("Can't load all PNG icons.");
+		for (int i = 0; i < imageTracker.size(); i++) {
+			if (mt.isErrorID(i)) {
+				final String resource = imageTracker.getResource(i);
+				throw new HeroScribeException(String.format("Can't load image icon '%s'", resource));
+			}
 		}
 	}
 
+	private static class ImageCache {
+		private final AtomicInteger imageCounter = new AtomicInteger(0);
+		private final Map<Integer, String> cache = new HashMap<>();
+
+		public int addResource(String path) {
+			final int id = imageCounter.getAndIncrement();
+			cache.put(id, path);
+			return id;
+		}
+
+		public String getResource(int id) {
+			return cache.get(id);
+		}
+
+		public int size() {
+			return cache.size();
+		}
+	}
 }

@@ -35,7 +35,7 @@ public class SplashScreenImageLoader extends JWindow {
 	public SplashScreenImageLoader(ImageLoader imageLoader) {
 		super();
 
-		splash = imageLoader.addImageAndFlush("Splash.jpg", splashID);
+		splash = imageLoader.addImageAndFlush("Splash.jpg");
 		mt = new MediaTracker(this);
 
 		setSize(splash.getWidth(null), splash.getHeight(null));
