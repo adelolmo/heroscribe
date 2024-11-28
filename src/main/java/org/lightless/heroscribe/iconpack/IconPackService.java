@@ -153,8 +153,8 @@ public class IconPackService {
 							iconPackFile.getName(), object.getKind(), object.getId());
 
 					// remove icons
-					imageLoader.removeImage(object.getIcon("Europe").getImage());
-					imageLoader.removeImage(object.getIcon("USA").getImage());
+					imageLoader.removeImage(object.getIcon("Europe").imageResource());
+					imageLoader.removeImage(object.getIcon("USA").imageResource());
 
 					// update system objects
 					systemObjectList.removeObject(object);
@@ -185,7 +185,7 @@ public class IconPackService {
 				iconPath + systemObjectList.getRasterSuffix());
 
 		object.getIcon(region)
-				.setImage(imageLoader.addImage(path.toString()));
+				.setImage(imageLoader.addImage(path));
 	}
 
 	public static class IconPack {

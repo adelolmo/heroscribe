@@ -425,11 +425,11 @@ public class BoardPainter implements ImageObserver {
 	}
 
 	private Image getObjectIconById(String id) {
-		return gui.getObjectList().getObjectById(id).getIcon(getRegion()).getImage();
+		return gui.getObjectList().getObjectById(id).getIcon(getRegion()).imageResource().data();
 	}
 
 	private Image getBoardIcon() {
-		return gui.getObjectList().getBoard().getIcon(getRegion()).getImage();
+		return gui.getObjectList().getBoard().getIcon(getRegion()).imageResource().data();
 	}
 
 	private String getRegion() {

@@ -22,6 +22,8 @@ import org.lightless.heroscribe.HeroScribeException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -60,15 +62,20 @@ public class ImageLoader extends JWindow {
 		return image;
 	}
 
-	public Image addImage(String path) {
-		final int imageId = imageTracker.addResource(path);
-		final Image image = tk.createImage(path);
-		mt.addImage(image, imageId);
-		return image;
+	public ImageResource addImage(Path path) {
+		try {
+			final int imageId = imageTracker.addResource(path);
+			final Image image = tk.createImage(path.toUri().toURL());
+			mt.addImage(image, imageId);
+			return new ImageResource(image, imageId);
+		} catch (MalformedURLException e) {
+			throw new HeroScribeException("Can't load image icon '%s'");
+		}
 	}
 
-	public void removeImage(Image image) {
-		mt.removeImage(image);
+	public void removeImage(ImageResource image) {
+		imageTracker.removeResource(image);
+		mt.removeImage(image.data());
 	}
 
 	public void flush() {
@@ -80,7 +87,7 @@ public class ImageLoader extends JWindow {
 
 		for (int i = 0; i < imageTracker.size(); i++) {
 			if (mt.isErrorID(i)) {
-				final String resource = imageTracker.getResource(i);
+				final Path resource = imageTracker.getResource(i);
 				throw new HeroScribeException(String.format("Can't load image icon '%s'", resource));
 			}
 		}
@@ -88,20 +95,30 @@ public class ImageLoader extends JWindow {
 
 	private static class ImageCache {
 		private final AtomicInteger imageCounter = new AtomicInteger(0);
-		private final Map<Integer, String> cache = new HashMap<>();
+		private final Map<Integer, Path> cache = new HashMap<>();
 
 		public int addResource(String path) {
+			final int id = imageCounter.getAndIncrement();
+			cache.put(id, Path.of(path));
+			return id;
+		}
+
+		public int addResource(Path path) {
 			final int id = imageCounter.getAndIncrement();
 			cache.put(id, path);
 			return id;
 		}
 
-		public String getResource(int id) {
+		public Path getResource(int id) {
 			return cache.get(id);
 		}
 
 		public int size() {
 			return cache.size();
+		}
+
+		public void removeResource(ImageResource imageResource) {
+			cache.remove(imageResource.id());
 		}
 	}
 }

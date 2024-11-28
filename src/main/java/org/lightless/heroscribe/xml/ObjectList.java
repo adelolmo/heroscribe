@@ -22,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.lightless.heroscribe.gui.ImageResource;
 import org.lightless.heroscribe.iconpack.IconType;
 import org.lightless.heroscribe.utils.Modifiable;
 
-import java.awt.*;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -496,7 +496,7 @@ public class ObjectList extends Modifiable<ObjectList.Type> {
 		private float yoffset;
 		@JacksonXmlProperty(isAttribute = true)
 		private float xoffset;
-		private Image image;
+		private ImageResource imageResource;
 
 		public String getRegion() {
 			return region;
@@ -538,12 +538,12 @@ public class ObjectList extends Modifiable<ObjectList.Type> {
 			this.xoffset = xoffset;
 		}
 
-		public Image getImage() {
-			return image;
+		public ImageResource imageResource() {
+			return imageResource;
 		}
 
-		public void setImage(Image image) {
-			this.image = image;
+		public void setImage(ImageResource imageData) {
+			this.imageResource = imageData;
 		}
 	}
 
