@@ -20,6 +20,8 @@ package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.io.FileUtils;
 import org.lightless.heroscribe.Constants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -35,6 +37,7 @@ import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
 
 public class IconPackImportFileChooser extends JFileChooser {
 
+	private static final Logger log = LoggerFactory.getLogger(IconPackImportFileChooser.class);
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
 
 	private final IconPackService iconPackService;
@@ -90,6 +93,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 	}
 
 	private void handleException(File importedIconPackFile, IOException e) {
+		log.error(e.getMessage(), e);
 		JOptionPane.showMessageDialog(this,
 				errorMessage(e),
 				"Error",
