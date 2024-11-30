@@ -29,9 +29,9 @@ import org.lightless.heroscribe.gui.Gui;
 import org.lightless.heroscribe.gui.ImageLoader;
 import org.lightless.heroscribe.gui.ObjectsMediaLoader;
 import org.lightless.heroscribe.gui.SplashScreenImageLoader;
-import org.lightless.heroscribe.utils.OS;
 import org.lightless.heroscribe.iconpack.IconPackService;
 import org.lightless.heroscribe.iconpack.ZipExtractor;
+import org.lightless.heroscribe.utils.OS;
 import org.lightless.heroscribe.xml.ObjectList;
 import org.lightless.heroscribe.xml.ObjectsParser;
 import org.lightless.heroscribe.xml.Quest;
@@ -71,7 +71,7 @@ public class HeroScribe {
 		final ObjectMapper xmlMapper = new XmlMapper()
 				.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
 				.enable(SerializationFeature.INDENT_OUTPUT);
-		final ObjectsParser objectsParser = new ObjectsParser(xmlMapper, basePath);
+		final ObjectsParser objectsParser = new ObjectsParser(basePath, preferences);
 		final QuestParser questParser = new QuestParser(xmlMapper);
 
 		final ObjectList objectList = objectsParser.parse(objectXmlPath.toFile());

@@ -18,24 +18,38 @@
 
 package org.lightless.heroscribe.xml;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import org.lightless.heroscribe.Preferences;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 public class ObjectsParser {
 
-	private final ObjectMapper objectMapper;
 	private final Path basePath;
+	private final Preferences preferences;
 
-	public ObjectsParser(ObjectMapper objectMapper, Path basePath) {
-		this.objectMapper = objectMapper;
+	public ObjectsParser(Path basePath, Preferences preferences) {
 		this.basePath = basePath;
+		this.preferences = preferences;
 	}
 
 	public ObjectList parse(File file) throws IOException {
-		final ObjectList objectList = objectMapper.readValue(file, ObjectList.class);
+		final ObjectList objectList = getObjectMapper(preferences.forceIconPackInstall)
+				.readValue(file, ObjectList.class);
 		objectList.setBasePath(basePath);
 		return objectList;
+	}
+
+	private ObjectMapper getObjectMapper(boolean failOnUnknownProperties) {
+		return new XmlMapper()
+				.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true)
+				.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, !failOnUnknownProperties)
+				.enable(SerializationFeature.INDENT_OUTPUT);
 	}
 }

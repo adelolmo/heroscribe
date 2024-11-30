@@ -32,7 +32,8 @@ import java.io.*;
 public class Preferences extends DefaultHandler {
 	public File ghostscriptExec;
 	public File defaultDir;
-	private PaperType paperType;
+	public boolean forceIconPackInstall;
+	public PaperType paperType;
 
 	public Preferences() {
 		super();
@@ -95,6 +96,9 @@ public class Preferences extends DefaultHandler {
 		if ("paperSize".equals(qName)) {
 			paperType = PaperType.valueOf(attrs.getValue("type"));
 		}
+		if ("forceIconPackInstall".equals(qName)) {
+			forceIconPackInstall = Boolean.parseBoolean(attrs.getValue("enabled"));
+		}
 	}
 
 	public PaperType getPaperSize() {
@@ -116,6 +120,7 @@ public class Preferences extends DefaultHandler {
 		out.println("<ghostscript path=\"" + ghostscriptExec.getAbsoluteFile().toString().replaceAll("\"", "&quot;") + "\"/>");
 		out.println("<defaultDir path=\"" + defaultDir.getAbsolutePath().replaceAll("\"", "&quot;") + "\"/>");
 		out.println("<paperSize type=\"" + paperType.name() + "\"/>");
+		out.println("<forceIconPackInstall enabled=\"" + forceIconPackInstall + "\"/>");
 		out.println("</preferences>");
 
 		out.close();

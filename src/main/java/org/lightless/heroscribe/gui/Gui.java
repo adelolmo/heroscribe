@@ -57,10 +57,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private static final Logger log = LoggerFactory.getLogger(Gui.class);
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
-	private static final Dimension DIRECTORY_CHOOSER_DIMENSION = new Dimension(600, 700);
 
 	private final JFileChooser fileChooser = new FileChooser();
-	private final JFileChooser ghostscriptChooser = new JFileChooser();
 	private final TreeMap<String, FileFilter> filters = new TreeMap<>();
 
 	private final ImageLoader imageLoader;
@@ -100,8 +98,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		// HSE - set app icon
 		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png"));
 
-		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
-		ghostscriptChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
+//		final JFileChooser ghostscriptChooser = new JFileChooser();
+//		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
+//		ghostscriptChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 
 		fileChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
@@ -175,7 +174,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		final JMenu newMenu = new JMenu("New");
 		final JMenu exportMenu = new JMenu("Export");
-		final JMenu prefsMenu = new JMenu("Preferences");
 
 		final JPanel bottom = new JPanel();
 
@@ -237,20 +235,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportPngKey.addActionListener(exportPngKeyActionListener());
 		exportMenu.add(exportPngKey);
 
-		/* Prefs Menu */
-		final JMenuItem ghostscriptKey = new JMenuItem("GhostScript path...",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/prefs.png")));
-		ghostscriptKey.addActionListener(ghostscriptKeyActionListener());
-		prefsMenu.add(ghostscriptKey);
-
-		final JMenuItem dirKey = new JMenuItem("Default directory...");
-		dirKey.addActionListener(dirKeyActionListener());
-		prefsMenu.add(dirKey);
-
-		final JMenuItem paperKey = new JMenuItem("Paper size...");
-		paperKey.addActionListener(paperKeyActionListener());
-		prefsMenu.add(paperKey);
-
 		/* File Menu */
 		file.add(newMenu);
 
@@ -284,7 +268,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		propertiesKey.addActionListener(propertiesKeyActionListener());
 		file.add(propertiesKey);
 
-		file.add(prefsMenu);
+		final JMenuItem settingsKey = new JMenuItem("Settings...");
+		settingsKey.addActionListener(settingsKeyActionListener());
+		file.add(settingsKey);
+
 		file.addSeparator();
 
 		JMenuItem quitKey = new JMenuItem("Quit");
@@ -653,58 +640,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				});
 	}
 
-	private ActionListener ghostscriptKeyActionListener() {
-		return e -> {
-			ghostscriptChooser.setSelectedFile(prefs.ghostscriptExec);
-
-			if (ghostscriptChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				prefs.ghostscriptExec = ghostscriptChooser.getSelectedFile();
-
-				try {
-					prefs.write();
-				} catch (Exception ex) {
-					log.error("Error.", ex);
-				}
-			}
-		};
-	}
-
-	private ActionListener dirKeyActionListener() {
-		return e -> {
-			// HSE - get default directory
-			final JFileChooser chooser = new JFileChooser();
-			chooser.setPreferredSize(DIRECTORY_CHOOSER_DIMENSION);
-			chooser.setCurrentDirectory(new File("."));
-			chooser.setDialogTitle("Default Directory");
-			chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			// disable the "All files" option.
-			chooser.setAcceptAllFileFilterUsed(false);
-
-			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-				prefs.defaultDir = chooser.getSelectedFile();
-				try {
-					prefs.write();
-				} catch (Exception ex) {
-					log.error("Error.", ex);
-				}
-			}
-		};
-	}
-
-	private ActionListener paperKeyActionListener() {
-		return e -> {
-			final PaperSizeModal modal = new PaperSizeModal();
-			modal.showDialog(prefs.getPaperSize()).ifPresent(paperType -> {
-				prefs.setPaperSize(paperType);
-				try {
-					prefs.write();
-				} catch (Exception ex) {
-					log.error("Error.", ex);
-				}
-			});
-		};
-	}
-
 	private ActionListener iconPackImportActionListener() {
 		return e -> iconPackImportFileChooser.showModal();
 	}
@@ -731,6 +666,13 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			} else {
 				new HtmlPanel(this, objectHtmlPath);
 			}
+		};
+	}
+
+	private ActionListener settingsKeyActionListener() {
+		return e -> {
+			final SettingsModal modal = new SettingsModal(prefs);
+			modal.showDialog();
 		};
 	}
 

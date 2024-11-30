@@ -119,6 +119,7 @@ public class IconPackService {
 		iconPackObjectList.getObjects()
 				.stream()
 				.filter(object -> !systemObjectList.getKindIds().contains(object.getKind()))
+				.filter(object -> !object.getIconPath("Europe").contains("Base"))
 				.forEach(object -> {
 					log.info("<{}> <{}> Importing object '{}'...",
 							iconPackFile.getName(), object.getKind(), object.getId());
