@@ -29,6 +29,8 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SettingsModal extends JPanel {
 
@@ -37,6 +39,7 @@ public class SettingsModal extends JPanel {
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(600, 700);
 
 	private final Preferences preferences;
+	private final List<Runnable> preferenceUpdates = new ArrayList<>();
 
 	public SettingsModal(Preferences preferences) {
 		super();
@@ -53,8 +56,7 @@ public class SettingsModal extends JPanel {
 		defaultPathPanel.add(defaultPathTextField);
 		final JButton defaultPathButton = new JButton("Select...");
 		defaultPathButton.addActionListener(
-				defaultPathActionListener(preferences, defaultPathTextField)
-		);
+				defaultPathActionListener(preferences, defaultPathTextField));
 		defaultPathPanel.add(defaultPathButton);
 
 		// Section: Icon Packs
@@ -64,7 +66,8 @@ public class SettingsModal extends JPanel {
 		forceInstallCheckBox.setToolTipText("It might lead to broken functionality e.g. Unable to export");
 		forceInstallCheckBox.setSelected(preferences.forceIconPackInstall);
 		forceInstallCheckBox.addActionListener(e ->
-				preferences.forceIconPackInstall = forceInstallCheckBox.isSelected());
+				preferenceUpdates.add(() ->
+						preferences.forceIconPackInstall = forceInstallCheckBox.isSelected()));
 		iconPacksPanel.add(forceInstallCheckBox);
 
 		// Section: Export pdf
@@ -84,7 +87,8 @@ public class SettingsModal extends JPanel {
 			ghostscriptChooser.setSelectedFile(preferences.ghostscriptExec);
 			if (JFileChooser.APPROVE_OPTION == ghostscriptChooser.showOpenDialog(this)) {
 				ghostscriptTextField.setText(ghostscriptChooser.getSelectedFile().getAbsolutePath());
-				preferences.ghostscriptExec = ghostscriptChooser.getSelectedFile();
+				preferenceUpdates.add(() ->
+						preferences.ghostscriptExec = ghostscriptChooser.getSelectedFile());
 			}
 		});
 		ghostscriptPanel.add(ghostscriptButton);
@@ -95,8 +99,11 @@ public class SettingsModal extends JPanel {
 		paperPanel.add(new JLabel("Paper size:", SwingConstants.LEFT));
 		final JComboBox<PaperType> paperTypeComboBox = new JComboBox<>(PaperType.values());
 		paperTypeComboBox.setSelectedItem(preferences.getPaperSize());
-		paperTypeComboBox.addActionListener(e ->
-				preferences.setPaperSize((PaperType) paperTypeComboBox.getSelectedItem()));
+		paperTypeComboBox.addActionListener(e -> {
+			final PaperType paperType = (PaperType) paperTypeComboBox.getSelectedItem();
+			preferenceUpdates.add(() ->
+					preferences.setPaperSize(paperType));
+		});
 		paperPanel.add(paperTypeComboBox);
 		exportSectionPanel.add(paperPanel);
 	}
@@ -113,7 +120,8 @@ public class SettingsModal extends JPanel {
 			chooser.setAcceptAllFileFilterUsed(false);
 			if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 				defaultPathTextField.setText(chooser.getSelectedFile().getAbsolutePath());
-				preferences.defaultDir = chooser.getSelectedFile();
+				preferenceUpdates.add(() ->
+						preferences.defaultDir = chooser.getSelectedFile());
 			}
 		};
 	}
@@ -127,6 +135,8 @@ public class SettingsModal extends JPanel {
 				null,
 				null,
 				null) == JOptionPane.YES_OPTION) {
+
+			preferenceUpdates.forEach(Runnable::run);
 
 			try {
 				preferences.write();
