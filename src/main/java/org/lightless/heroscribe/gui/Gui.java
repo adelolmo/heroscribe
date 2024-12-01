@@ -170,7 +170,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		final JMenu newQuestMenu = new JMenu("New");
 
 		newKey = new JMenuItem("Quest",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/new.png")));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/document-new.png")));
 		// HSE - add menu modifier 'Ctrl+N'
 		newKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
