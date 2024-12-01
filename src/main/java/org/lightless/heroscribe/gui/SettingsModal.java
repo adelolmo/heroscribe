@@ -43,7 +43,7 @@ public class SettingsModal extends JPanel {
 		this.preferences = preferences;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-		setPreferredSize(new Dimension(600, 240));
+		setPreferredSize(new Dimension(530, 240));
 
 		// Section: General
 		// Default path
@@ -92,7 +92,7 @@ public class SettingsModal extends JPanel {
 
 		// Paper Type
 		final JPanel paperPanel = createPanel();
-		paperPanel.add(new JLabel("Select paper size:", SwingConstants.LEFT));
+		paperPanel.add(new JLabel("Paper size:", SwingConstants.LEFT));
 		final JComboBox<PaperType> paperTypeComboBox = new JComboBox<>(PaperType.values());
 		paperTypeComboBox.setSelectedItem(preferences.getPaperSize());
 		paperTypeComboBox.addActionListener(e ->
