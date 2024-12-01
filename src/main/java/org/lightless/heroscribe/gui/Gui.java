@@ -98,10 +98,6 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		// HSE - set app icon
 		setIconImage(imageLoader.addImageAndFlush("HeroScribe.png"));
 
-//		final JFileChooser ghostscriptChooser = new JFileChooser();
-//		ghostscriptChooser.setFileFilter(new GhostScriptFileFilter());
-//		ghostscriptChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
-
 		fileChooser.setPreferredSize(FILE_CHOOSER_DIMENSION);
 		fileChooser.setCurrentDirectory(prefs.defaultDir);
 		filters.put("pdf", new ActualFileFilter("pdf", "PDF files (*.pdf)"));
@@ -166,20 +162,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 	private void populateFrame() {
 		Container content;
-		final JMenuBar menu = new JMenuBar();
-		final JMenu file = new JMenu("File");
-		final JMenu iconPacks = new JMenu("Icon Packs");
-		final JMenu region = new JMenu("Region");
-		final JMenu help = new JMenu("Help");
-
-		final JMenu newMenu = new JMenu("New");
-		final JMenu exportMenu = new JMenu("Export");
-
-		final JPanel bottom = new JPanel();
-
-		final ButtonGroup regionGroup = new ButtonGroup();
 
 		/* New Menu */
+		final JMenu newQuestMenu = new JMenu("New");
+
 		newKey = new JMenuItem("Quest",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/new.png")));
 		// HSE - add menu modifier 'Ctrl+N'
@@ -187,19 +173,19 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
 		newKey.addActionListener(this);
-		newMenu.add(newKey);
+		newQuestMenu.add(newKey);
 
-		newMenu.addSeparator();
+		newQuestMenu.addSeparator();
 
 		for (JMenuItem newSpecialKey : newSpecialKeys) {
 			SpecialQuestMenuItem menuItem = (SpecialQuestMenuItem) newSpecialKey;
 
 			menuItem.addActionListener(this);
-			newMenu.add(menuItem);
+			newQuestMenu.add(menuItem);
 		}
 
 		/* Export Menu */
-
+		final JMenu exportMenu = new JMenu("Export");
 		final JMenuItem exportPdfKey = new JMenuItem("PDF…",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png")));
 		// HSE - add menu modifier 'Ctrl-P'
@@ -236,7 +222,8 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		exportMenu.add(exportPngKey);
 
 		/* File Menu */
-		file.add(newMenu);
+		final JMenu fileMenu = new JMenu("File");
+		fileMenu.add(newQuestMenu);
 
 		final JMenuItem openKey = new JMenuItem("Open Quest...",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png")));
@@ -245,42 +232,44 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
 		openKey.addActionListener(openKeyActionListener());
-		file.add(openKey);
-		file.addSeparator();
+		fileMenu.add(openKey);
+		fileMenu.addSeparator();
 
-		final JMenuItem saveKey = new JMenuItem("Save Quest",
+		final JMenuItem saveKeyMenuItem = new JMenuItem("Save Quest",
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png")));
 		// HSE - add menu modifier 'Ctrl-S'
-		saveKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		saveKeyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		saveKey.addActionListener(saveKeyActionListener());
-		file.add(saveKey);
-		final JMenuItem saveAsKey = new JMenuItem("Save Quest as...");
-		saveAsKey.addActionListener(saveAsKeyActionListener());
-		file.add(saveAsKey);
-		file.addSeparator();
+		saveKeyMenuItem.addActionListener(saveKeyActionListener());
+		fileMenu.add(saveKeyMenuItem);
+		final JMenuItem saveAsKeyMenuItem = new JMenuItem("Save Quest as...");
+		saveAsKeyMenuItem.addActionListener(saveAsKeyActionListener());
+		fileMenu.add(saveAsKeyMenuItem);
+		fileMenu.addSeparator();
 
-		file.add(exportMenu);
-		file.addSeparator();
+		final JMenuItem settingsMenuItem = new JMenuItem("Settings...");
+		settingsMenuItem.addActionListener(settingsKeyActionListener());
+		fileMenu.add(settingsMenuItem);
 
-		final JMenuItem propertiesKey = new JMenuItem("Properties...");
-		propertiesKey.addActionListener(propertiesKeyActionListener());
-		file.add(propertiesKey);
+		final JMenuItem propertiesMenuItem = new JMenuItem("Properties...");
+		propertiesMenuItem.addActionListener(propertiesKeyActionListener());
+		fileMenu.add(propertiesMenuItem);
 
-		final JMenuItem settingsKey = new JMenuItem("Settings...");
-		settingsKey.addActionListener(settingsKeyActionListener());
-		file.add(settingsKey);
+		fileMenu.addSeparator();
 
-		file.addSeparator();
+		fileMenu.add(exportMenu);
+		fileMenu.addSeparator();
 
-		JMenuItem quitKey = new JMenuItem("Quit");
-		quitKey.addActionListener(quitKeyActionListener());
-		file.add(quitKey);
+		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		exitMenuItem.addActionListener(exitKeyActionListener());
+		fileMenu.add(exitMenuItem);
 
-		menu.add(file);
+		final JMenuBar menu = new JMenuBar();
+		menu.add(fileMenu);
 
 		/* Icon Packs menu */
+		final JMenu iconPacks = new JMenu("Icon Packs");
 		final JMenuItem iconPackDownload = new JMenuItem("Download...");
 		iconPackDownload.addActionListener(iconPackDownloadActionListener());
 		iconPacks.add(iconPackDownload);
@@ -296,8 +285,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		menu.add(iconPacks);
 
 		/* Region menu */
+		final JMenu region = new JMenu("Region");
 		europeItem = new JRadioButtonMenuItem("Europe layout");
 		europeItem.addItemListener(this);
+		final ButtonGroup regionGroup = new ButtonGroup();
 		regionGroup.add(europeItem);
 		region.add(europeItem);
 
@@ -309,6 +300,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		menu.add(region);
 
 		/* Help menu */
+		final JMenu help = new JMenu("Help");
 		final JMenuItem listKey = new JMenuItem("Objects...");
 		listKey.addActionListener(listKeyActionListener());
 		help.add(listKey);
@@ -334,6 +326,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		content.add(new JScrollPane(board));
 		content.add(tools, BorderLayout.WEST);
 
+		final JPanel bottom = new JPanel();
 		bottom.setLayout(new BorderLayout());
 
 		hint = new JLabel();
@@ -652,7 +645,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		return e -> iconPackRemoveModal.showDialog();
 	}
 
-	private ActionListener quitKeyActionListener() {
+	private ActionListener exitKeyActionListener() {
 		return e -> windowClosing(null);
 	}
 
