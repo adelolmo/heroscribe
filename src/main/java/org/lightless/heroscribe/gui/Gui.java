@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.awt.event.ActionEvent.ALT_MASK;
 import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.PNG;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
@@ -218,7 +217,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				new ImageIcon(imageLoader.addImageAndFlush("Icons/system-run.png")));
 		settingsMenuItem.setAccelerator(
 				KeyStroke.getKeyStroke(KeyEvent.VK_S,
-						ActionEvent.CTRL_MASK | ALT_MASK));
+						Event.CTRL_MASK | Event.ALT_MASK));
 		settingsMenuItem.addActionListener(settingsKeyActionListener());
 		fileMenu.add(settingsMenuItem);
 
