@@ -39,11 +39,16 @@ public class ObjectsParser {
 		this.preferences = preferences;
 	}
 
-	public ObjectList parse(File file) throws IOException {
-		final ObjectList objectList = getObjectMapper(preferences.forceIconPackInstall)
-				.readValue(file, ObjectList.class);
-		objectList.setBasePath(basePath);
-		return objectList;
+	public ObjectList parse(File file) throws HeroScribeParseException {
+		try {
+			final ObjectList objectList = getObjectMapper(preferences.forceIconPackInstall)
+					.readValue(file, ObjectList.class);
+			objectList.setBasePath(basePath);
+			return objectList;
+		} catch (IOException e) {
+			throw new HeroScribeParseException(
+					String.format("Cannot parse objects xml '%s'", file.getAbsoluteFile()),e);
+		}
 	}
 
 	private ObjectMapper getObjectMapper(boolean failOnUnknownProperties) {

@@ -20,13 +20,9 @@ package org.lightless.heroscribe.export;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.lightless.heroscribe.Preferences;
-import org.lightless.heroscribe.xml.ObjectList;
-import org.lightless.heroscribe.xml.ObjectsParser;
-import org.lightless.heroscribe.xml.Quest;
-import org.lightless.heroscribe.xml.Rotation;
+import org.lightless.heroscribe.xml.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -60,9 +56,9 @@ class ExportQuestTest {
 	private ObjectList objectList;
 
 	@BeforeEach
-	void setUp() throws IOException {
+	void setUp() throws HeroScribeParseException {
 		TMP_DIR.toFile().mkdirs();
-		final ObjectsParser parser = new ObjectsParser( Path.of("."), new Preferences());
+		final ObjectsParser parser = new ObjectsParser(Path.of("."), new Preferences());
 		final String currentPath = getResourceAsFile(".").getAbsolutePath();
 		objectList = parser.parse(
 				new File(currentPath.substring(0, currentPath.indexOf("/target")),

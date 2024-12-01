@@ -20,7 +20,9 @@ package org.lightless.heroscribe.iconpack;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lightless.heroscribe.Constants;
+import org.lightless.heroscribe.HeroScribeException;
 import org.lightless.heroscribe.gui.ImageLoader;
+import org.lightless.heroscribe.xml.HeroScribeParseException;
 import org.lightless.heroscribe.xml.Kind;
 import org.lightless.heroscribe.xml.ObjectList;
 import org.lightless.heroscribe.xml.ObjectsParser;
@@ -94,12 +96,14 @@ public class IconPackService {
 
 							return new IconPack(file,
 									iconPackKinds);
-						} catch (IOException e) {
-							throw new RuntimeException(e);
+						} catch (HeroScribeParseException e) {
+							throw new HeroScribeException(
+									String.format("Cannot parse objects xml from icon pack '%s'", file.getAbsoluteFile()), e);
 						}
 					}).collect(Collectors.toList());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (HeroScribeParseException e) {
+			throw new HeroScribeException(
+					String.format("Cannot parse objects xml from '%s'", objectXmlPath), e);
 		}
 	}
 

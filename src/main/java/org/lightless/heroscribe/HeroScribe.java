@@ -40,9 +40,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+
+import static java.lang.String.format;
 
 public class HeroScribe {
 
@@ -87,8 +90,18 @@ public class HeroScribe {
 
 		final SplashScreenImageLoader loader = new SplashScreenImageLoader(imageLoader);
 		loader.run(() -> {
-			mediaLoader.loadIcons(objectList);
-			iconPackService.loadImportedIconPacks();
+			try {
+				mediaLoader.loadIcons(objectList);
+				iconPackService.loadImportedIconPacks();
+			} catch (IOException e) {
+				log.error("Unable to start application.", e);
+				JOptionPane.showMessageDialog(null,
+						format("Unable to start application.\nError: %s\nRoot cause: %s",
+								e.getMessage(), e.getCause().getMessage()),
+						"Error",
+						JOptionPane.ERROR_MESSAGE);
+				System.exit(1);
+			}
 			return null;
 		});
 

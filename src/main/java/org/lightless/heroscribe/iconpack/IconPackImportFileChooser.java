@@ -94,11 +94,11 @@ public class IconPackImportFileChooser extends JFileChooser {
 
 	private void handleException(File importedIconPackFile, IOException e) {
 		log.error(e.getMessage(), e);
+		FileUtils.deleteQuietly(importedIconPackFile);
 		JOptionPane.showMessageDialog(this,
 				errorMessage(e),
 				"Error",
 				JOptionPane.ERROR_MESSAGE);
-		FileUtils.deleteQuietly(importedIconPackFile);
 	}
 
 	private static JPanel errorMessage(IOException e) {
@@ -107,11 +107,15 @@ public class IconPackImportFileChooser extends JFileChooser {
 		textArea.setAutoscrolls(false);
 		textArea.setLineWrap(true);
 		textArea.setText(e.getMessage());
+		if(e.getCause()!=null){
+			textArea.setText(e.getMessage() + "\n" + e.getCause().getMessage());
+		}
+		textArea.setCaretPosition(0);  // Scroll to top
 
 		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(new Label(format("The Icon Pack is not compatible with %s.", APPLICATION_NAME)));
-		panel.add(new Label("Technical reason:"));
+		panel.add(new JLabel(format("The Icon Pack is not compatible with %s.", APPLICATION_NAME)));
+		panel.add(new JLabel("Technical reason:"));
 		panel.add(new JScrollPane(textArea), BorderLayout.PAGE_START);
 		return panel;
 	}

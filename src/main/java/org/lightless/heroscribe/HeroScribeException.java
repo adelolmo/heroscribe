@@ -2,14 +2,15 @@ package org.lightless.heroscribe;
 
 public class HeroScribeException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-
-	public HeroScribeException(Exception cause) {
-		super(cause);
+	public HeroScribeException(String message, Exception exception) {
+		super(message, exception);
 	}
 
-	public HeroScribeException(String msg) {
-		super(msg);
+	public HeroScribeException(Exception exception) {
+		super(exception);
 	}
 
+	public HeroScribeException(String message) {
+		super(message);
+	}
 }
