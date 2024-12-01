@@ -46,8 +46,7 @@ public class ObjectsParser {
 			objectList.setBasePath(basePath);
 			return objectList;
 		} catch (IOException e) {
-			throw new HeroScribeParseException(
-					String.format("Cannot parse objects xml '%s'", file.getAbsoluteFile()),e);
+			throw new HeroScribeParseException(file, e);
 		}
 	}
 

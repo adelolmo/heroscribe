@@ -20,13 +20,14 @@ package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.compress.archivers.*;
 import org.apache.commons.io.*;
+import org.lightless.heroscribe.HeroScribeException;
 
 import java.io.*;
 import java.nio.file.*;
 
 public class ZipExtractor {
 
-	protected void extract(final File zipFile, final Path targetDir) throws IOException {
+	protected void extract(final File zipFile, final Path targetDir) throws HeroScribeException {
 		final Path zipFilePath = zipFile.toPath();
 		final ArchiveStreamFactory archiveStreamFactory = new ArchiveStreamFactory();
 
@@ -52,8 +53,8 @@ public class ZipExtractor {
 					}
 				}
 			}
-		} catch (ArchiveException e) {
-			throw new IOException(e);
+		} catch (Exception e) {
+			throw new HeroScribeException(e);
 		}
 	}
 

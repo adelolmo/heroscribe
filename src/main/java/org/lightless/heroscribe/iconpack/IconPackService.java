@@ -107,7 +107,7 @@ public class IconPackService {
 		}
 	}
 
-	public void importIconPack(final File iconPackFile) throws IOException {
+	public void importIconPack(final File iconPackFile) throws HeroScribeParseException {
 		log.info("Importing icon pack {}...", iconPackFile.getName());
 
 		final Path tempIconPackDirectory = getTempIconPackDirectory(iconPackFile);

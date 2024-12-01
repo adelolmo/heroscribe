@@ -18,11 +18,19 @@
 
 package org.lightless.heroscribe.xml;
 
+import java.io.File;
 import java.io.IOException;
 
 public class HeroScribeParseException extends IOException {
 
-	public HeroScribeParseException(String message, Exception exception) {
-		super(message, exception);
+	private final File file;
+
+	public HeroScribeParseException(File file, Throwable exception) {
+		super(String.format("Cannot parse objects xml '%s'", file.getAbsoluteFile()), exception);
+		this.file = file;
+	}
+
+	public File getFile() {
+		return file;
 	}
 }

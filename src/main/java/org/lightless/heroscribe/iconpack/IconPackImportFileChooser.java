@@ -20,6 +20,7 @@ package org.lightless.heroscribe.iconpack;
 
 import org.apache.commons.io.FileUtils;
 import org.lightless.heroscribe.Constants;
+import org.lightless.heroscribe.xml.HeroScribeParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.ExecutionException;
 
 import static java.lang.String.format;
 import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
@@ -41,10 +43,12 @@ public class IconPackImportFileChooser extends JFileChooser {
 	private static final Dimension FILE_CHOOSER_DIMENSION = new Dimension(900, 700);
 
 	private final IconPackService iconPackService;
+	private final JDialog pleaseWaitDialog;
 
 	public IconPackImportFileChooser(File defaultDir, IconPackService iconPackService) {
 		super(defaultDir);
 		this.iconPackService = iconPackService;
+		pleaseWaitDialog = createPleaseWaitDialog(this);
 		setPreferredSize(FILE_CHOOSER_DIMENSION);
 		setDialogTitle("Import");
 		setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -59,12 +63,43 @@ public class IconPackImportFileChooser extends JFileChooser {
 			try {
 				Files.copy(getSelectedFile().toPath(),
 						importedIconPackFile.toPath());
-				iconPackService.importIconPack(importedIconPackFile);
 
-				JOptionPane.showMessageDialog(this,
-						"Icon Pack successfully imported",
-						"Import",
-						JOptionPane.INFORMATION_MESSAGE);
+				new Thread(new DialogThread(pleaseWaitDialog))
+						.start();
+
+				final SwingWorker<Void, String> worker = new SwingWorker<>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						pleaseWaitDialog.setVisible(false);
+						iconPackService.importIconPack(importedIconPackFile);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						try {
+							final Void unused = get();
+							pleaseWaitDialog.setVisible(false);
+							pleaseWaitDialog.dispose();
+							JOptionPane.showMessageDialog(null,
+									"Icon Pack successfully imported",
+									"Import",
+									JOptionPane.INFORMATION_MESSAGE);
+						} catch (InterruptedException | ExecutionException e) {
+							if (e.getCause() instanceof HeroScribeParseException) {
+								final HeroScribeParseException exception = (HeroScribeParseException) e.getCause();
+								handleException(importedIconPackFile, exception);
+							}
+
+						} finally {
+							pleaseWaitDialog.setVisible(false);
+							pleaseWaitDialog.dispose();
+						}
+					}
+				};
+				worker.execute();
+
+
 			} catch (FileAlreadyExistsException ex) {
 				if (JOptionPane.showConfirmDialog(this,
 						"The Icon Pack already exists.\nDo you want to replace it?",
@@ -92,13 +127,32 @@ public class IconPackImportFileChooser extends JFileChooser {
 		}
 	}
 
-	private void handleException(File importedIconPackFile, IOException e) {
+	private void handleException(File iconPackFile, IOException e) {
 		log.error(e.getMessage(), e);
-		FileUtils.deleteQuietly(importedIconPackFile);
+		FileUtils.deleteQuietly(iconPackFile);
 		JOptionPane.showMessageDialog(this,
 				errorMessage(e),
 				"Error",
 				JOptionPane.ERROR_MESSAGE);
+	}
+
+	private JDialog createPleaseWaitDialog(Component parent) {
+		final JDialog dialog = new JDialog();
+//		dialog.setPreferredSize(new Dimension(400, 60));
+		dialog.setModal(true);
+		dialog.setResizable(false);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+//		dialog.pack();
+		dialog.setLocationRelativeTo(parent);
+		dialog.setVisible(false);
+		dialog.setContentPane(new JOptionPane(
+				"Installing Icon Pack, please wait...",
+				JOptionPane.INFORMATION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION,
+				null,
+				new Object[]{},
+				null));
+		return dialog;
 	}
 
 	private static JPanel errorMessage(IOException e) {
@@ -107,7 +161,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 		textArea.setAutoscrolls(false);
 		textArea.setLineWrap(true);
 		textArea.setText(e.getMessage());
-		if(e.getCause()!=null){
+		if (e.getCause() != null) {
 			textArea.setText(e.getMessage() + "\n" + e.getCause().getMessage());
 		}
 		textArea.setCaretPosition(0);  // Scroll to top
@@ -135,6 +189,20 @@ public class IconPackImportFileChooser extends JFileChooser {
 		@Override
 		public String getDescription() {
 			return null;
+		}
+	}
+
+	private static class DialogThread implements Runnable {
+		private final JDialog dialog;
+
+		public DialogThread(JDialog dialog) {
+			this.dialog = dialog;
+		}
+
+		@Override
+		public void run() {
+			dialog.pack();
+			dialog.setVisible(true);
 		}
 	}
 }
