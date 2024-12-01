@@ -51,6 +51,7 @@ import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.awt.event.ActionEvent.ALT_MASK;
 import static org.lightless.heroscribe.export.ExportRaster.ImageFormat.PNG;
 
 public class Gui extends JFrame implements WindowListener, ItemListener, ActionListener {
@@ -161,7 +162,10 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	}
 
 	private void populateFrame() {
-		Container content;
+		final Container content = getContentPane();
+
+		/* File Menu */
+		final JMenu fileMenu = new JMenu("File");
 
 		/* New Menu */
 		final JMenu newQuestMenu = new JMenu("New");
@@ -183,72 +187,38 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 			menuItem.addActionListener(this);
 			newQuestMenu.add(menuItem);
 		}
-
-		/* Export Menu */
-		final JMenu exportMenu = new JMenu("Export");
-		final JMenuItem exportPdfKey = new JMenuItem("PDF…",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/export.png")));
-		// HSE - add menu modifier 'Ctrl-P'
-		exportPdfKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
-				false));
-		exportPdfKey.addActionListener(exportPdfKeyActionListener());
-		exportMenu.add(exportPdfKey);
-
-		final JMenuItem exportThumbNail = new JMenuItem("PDF Thumbnail…");
-		// HSE - add menu modifier 'Ctrl-T'
-		exportThumbNail.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
-				false));
-		exportThumbNail.addActionListener(exportThumbnailActionListener());
-		exportMenu.add(exportThumbNail);
-		exportMenu.addSeparator();
-
-		final JMenuItem exportEpsKey = new JMenuItem("EPS…");
-		// HSE - add menu modifier 'Ctrl-E'
-		exportEpsKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
-				false));
-		exportEpsKey.addActionListener(exportEpsKeyActionListener());
-		exportMenu.add(exportEpsKey);
-		exportMenu.addSeparator();
-
-		final JMenuItem exportPngKey = new JMenuItem("PNG…");
-		// HSE - add menu modifier 'Ctrl+G'
-		exportPngKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
-				false));
-		exportPngKey.addActionListener(exportPngKeyActionListener());
-		exportMenu.add(exportPngKey);
-
-		/* File Menu */
-		final JMenu fileMenu = new JMenu("File");
 		fileMenu.add(newQuestMenu);
 
-		final JMenuItem openKey = new JMenuItem("Open Quest...",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/open.png")));
+
+		final JMenuItem openQuestMenuItem = new JMenuItem("Open Quest...",
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/document-open.png")));
 		// HSE - add menu modifier 'Ctrl+O'
-		openKey.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
+		openQuestMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
-		openKey.addActionListener(openKeyActionListener());
-		fileMenu.add(openKey);
+		openQuestMenuItem.addActionListener(openKeyActionListener());
+		fileMenu.add(openQuestMenuItem);
 		fileMenu.addSeparator();
 
 		final JMenuItem saveKeyMenuItem = new JMenuItem("Save Quest",
-				new ImageIcon(imageLoader.addImageAndFlush("Icons/save.png")));
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/document-save.png")));
 		// HSE - add menu modifier 'Ctrl-S'
 		saveKeyMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
 				false));
 		saveKeyMenuItem.addActionListener(saveKeyActionListener());
 		fileMenu.add(saveKeyMenuItem);
+
 		final JMenuItem saveAsKeyMenuItem = new JMenuItem("Save Quest as...");
 		saveAsKeyMenuItem.addActionListener(saveAsKeyActionListener());
 		fileMenu.add(saveAsKeyMenuItem);
 		fileMenu.addSeparator();
 
-		final JMenuItem settingsMenuItem = new JMenuItem("Settings...");
+		final JMenuItem settingsMenuItem = new JMenuItem("Settings...",
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/system-run.png")));
+		settingsMenuItem.setAccelerator(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S,
+						ActionEvent.CTRL_MASK | ALT_MASK));
 		settingsMenuItem.addActionListener(settingsKeyActionListener());
 		fileMenu.add(settingsMenuItem);
 
@@ -258,15 +228,52 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 
 		fileMenu.addSeparator();
 
+		/* Export Menu */
+		final JMenu exportMenu = new JMenu("Export");
+		final JMenuItem exportPdfMenuItem = new JMenuItem("PDF…",
+				new ImageIcon(imageLoader.addImageAndFlush("Icons/printer.png")));
+		// HSE - add menu modifier 'Ctrl-P'
+		exportPdfMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
+				false));
+		exportPdfMenuItem.addActionListener(exportPdfKeyActionListener());
+		exportMenu.add(exportPdfMenuItem);
+
+		final JMenuItem exportThumbNailMenuItem = new JMenuItem("PDF Thumbnail…");
+		// HSE - add menu modifier 'Ctrl-T'
+		exportThumbNailMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
+				false));
+		exportThumbNailMenuItem.addActionListener(exportThumbnailActionListener());
+		exportMenu.add(exportThumbNailMenuItem);
+		exportMenu.addSeparator();
+
+		final JMenuItem exportEpsMenuItem = new JMenuItem("EPS…");
+		// HSE - add menu modifier 'Ctrl-E'
+		exportEpsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
+				false));
+		exportEpsMenuItem.addActionListener(exportEpsKeyActionListener());
+		exportMenu.add(exportEpsMenuItem);
+		exportMenu.addSeparator();
+
+		final JMenuItem exportPngMenuItem = new JMenuItem("PNG…");
+		// HSE - add menu modifier 'Ctrl+G'
+		exportPngMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx(),
+				false));
+		exportPngMenuItem.addActionListener(exportPngKeyActionListener());
+		exportMenu.add(exportPngMenuItem);
+
 		fileMenu.add(exportMenu);
 		fileMenu.addSeparator();
 
-		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		final JMenuItem exitMenuItem = new JMenuItem("Exit");
 		exitMenuItem.addActionListener(exitKeyActionListener());
 		fileMenu.add(exitMenuItem);
 
-		final JMenuBar menu = new JMenuBar();
-		menu.add(fileMenu);
+		final JMenuBar menuBar = new JMenuBar();
+		menuBar.add(fileMenu);
 
 		/* Icon Packs menu */
 		final JMenu iconPacks = new JMenu("Icon Packs");
@@ -282,7 +289,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		iconPackRemove.addActionListener(iconPackRemoveActionListener());
 		iconPacks.add(iconPackRemove);
 
-		menu.add(iconPacks);
+		menuBar.add(iconPacks);
 
 		/* Region menu */
 		final JMenu region = new JMenu("Region");
@@ -297,27 +304,26 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 		regionGroup.add(usaItem);
 		region.add(usaItem);
 
-		menu.add(region);
+		menuBar.add(region);
 
 		/* Help menu */
-		final JMenu help = new JMenu("Help");
-		final JMenuItem listKey = new JMenuItem("Objects...");
-		listKey.addActionListener(listKeyActionListener());
-		help.add(listKey);
+		final JMenu helpMenu = new JMenu("Help");
+		final JMenuItem objectsMenuItem = new JMenuItem("Objects...");
+		objectsMenuItem.addActionListener(listKeyActionListener());
+		helpMenu.add(objectsMenuItem);
 
-		help.addSeparator();
+		helpMenu.addSeparator();
 
-		final JMenuItem aboutKey = new JMenuItem("About");
-		aboutKey.addActionListener(aboutKeyActionListener());
-		help.add(aboutKey);
+		final JMenuItem aboutMenuItem = new JMenuItem("About");
+		aboutMenuItem.addActionListener(aboutKeyActionListener());
+		helpMenu.add(aboutMenuItem);
 
-		menu.add(help);
+		menuBar.add(helpMenu);
 
-		menu.setBorderPainted(false);
+		menuBar.setBorderPainted(false);
 
-		setJMenuBar(menu);
+		setJMenuBar(menuBar);
 
-		content = getContentPane();
 
 		content.setLayout(new BorderLayout());
 
