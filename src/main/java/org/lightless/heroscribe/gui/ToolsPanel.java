@@ -28,9 +28,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 
 public class ToolsPanel extends JPanel implements ItemListener, ListSelectionListener {
 
@@ -146,6 +144,7 @@ public class ToolsPanel extends JPanel implements ItemListener, ListSelectionLis
 
 		newNote.addActionListener(newNoteActionListener());
 		editNote.addActionListener(editNoteActionListener());
+		note.addMouseListener(noteMouseListener());
 		delNote.addActionListener(deleteNoteActionListener());
 
 		note.addListSelectionListener(this);
@@ -205,14 +204,47 @@ public class ToolsPanel extends JPanel implements ItemListener, ListSelectionLis
 	}
 
 	private ActionListener editNoteActionListener() {
-		return e -> {
-			noteModal.setInitialText(note.getSelectedValue());
-			noteModal.showDialog().ifPresent(text -> {
-				noteData.setElementAt(text, note.getLeadSelectionIndex());
-				xmlQuest.setNote(note.getLeadSelectionIndex(), text);
-				xmlQuest.setModified(true);
-			});
+		return e -> openNoteModal();
+	}
+
+	private MouseListener noteMouseListener() {
+		return new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				if (event.getClickCount() == 2 && SwingUtilities.isLeftMouseButton(event)) {
+					openNoteModal();
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+			}
 		};
+	}
+
+	private void openNoteModal() {
+		noteModal.setInitialText(note.getSelectedValue());
+		noteModal.showDialog().ifPresent(text -> {
+			noteData.setElementAt(text, note.getLeadSelectionIndex());
+			xmlQuest.setNote(note.getLeadSelectionIndex(), text);
+			xmlQuest.setModified(true);
+		});
 	}
 
 	private ActionListener deleteNoteActionListener() {
