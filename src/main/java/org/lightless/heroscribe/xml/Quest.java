@@ -259,6 +259,10 @@ public class Quest {
 		return this.modified;
 	}
 
+	public boolean hasFile() {
+		return file != null;
+	}
+
 	@JsonIgnore
 	public Quest.Board getBoard(int column, int row) {
 		int rowIndex = 0;

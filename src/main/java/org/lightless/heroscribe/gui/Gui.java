@@ -46,6 +46,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.*;
@@ -533,36 +534,39 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	}
 
 	private ActionListener saveKeyActionListener() {
-		return e -> askPath("xml")
-				.ifPresent(file -> {
-					try {
+		return e -> {
+			if (quest.hasFile()) {
+				saveQuestToDisk(quest.getFile());
+				return;
+			}
+
+			askPath("xml")
+					.ifPresent(file -> {
 						quest.setFile(file);
-						questParser.saveToDisk(objectList, quest, quest.getFile());
+						saveQuestToDisk(quest.getFile());
 						updateTitle();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(this,
-								"Can't save file.",
-								"Error",
-								JOptionPane.ERROR_MESSAGE);
-						log.error("Can't save file.", ex);
-					}
-				});
+					});
+		};
 	}
 
 	private ActionListener saveAsKeyActionListener() {
 		return e -> askPath("xml")
 				.ifPresent(file -> {
-					try {
-						questParser.saveToDisk(objectList, quest, file);
-						updateTitle();
-					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(this,
-								"Can't save file.",
-								"Error",
-								JOptionPane.ERROR_MESSAGE);
-						log.error("Can't save file.", ex);
-					}
+					saveQuestToDisk(file);
+					updateTitle();
 				});
+	}
+
+	private void saveQuestToDisk(File file) {
+		try {
+			questParser.saveToDisk(objectList, quest, file);
+		} catch (IOException exception) {
+			JOptionPane.showMessageDialog(this,
+					"Can't save file.",
+					"Error",
+					JOptionPane.ERROR_MESSAGE);
+			log.error("Can't save file.", exception);
+		}
 	}
 
 	private ActionListener exportPdfKeyActionListener() {
