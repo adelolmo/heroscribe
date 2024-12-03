@@ -70,7 +70,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 				final SwingWorker<Void, String> worker = new SwingWorker<>() {
 					@Override
 					protected Void doInBackground() throws Exception {
-						pleaseWaitDialog.setVisible(false);
+						pleaseWaitDialog.setVisible(true);
 						iconPackService.importIconPack(importedIconPackFile);
 						return null;
 					}
