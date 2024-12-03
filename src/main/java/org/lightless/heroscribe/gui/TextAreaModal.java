@@ -44,7 +44,9 @@ public class TextAreaModal extends JPanel implements AncestorListener {
 		textArea.addAncestorListener(this);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(new Label(label));
+		final JPanel labelPanel = createPanel();
+		labelPanel.add(new JLabel(label, SwingConstants.LEFT));
+		add(labelPanel);
 		add(new JScrollPane(textArea), BorderLayout.PAGE_START);
 	}
 
@@ -69,6 +71,12 @@ public class TextAreaModal extends JPanel implements AncestorListener {
 		}
 
 		return Optional.empty();
+	}
+
+	private static JPanel createPanel() {
+		final JPanel panel = new JPanel();
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		return panel;
 	}
 
 	@Override
