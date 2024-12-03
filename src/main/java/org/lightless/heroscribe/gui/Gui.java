@@ -112,8 +112,9 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 				boardPainter.init(objectList);
 			}
 		});
+		quest.addModificationListener(modificationType -> updateTitle());
 
-		tools = new ToolsPanel(this, this.quest);
+		tools = new ToolsPanel(this, quest);
 		board = new Board(this);
 
 		newSpecialKeys = new Vector<>();
@@ -493,6 +494,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 										objectList.getBoard().getWidth(),
 										objectList.getBoard().getHeight());
 
+						newXmlQuest.addModificationListener(modificationType -> updateTitle());
 						tools.none.doClick();
 
 						final Set<Kind> unsupportedKinds = findUnsupportedKinds(newXmlQuest, objectList.getKinds());

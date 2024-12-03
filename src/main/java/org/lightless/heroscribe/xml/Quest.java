@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.lightless.heroscribe.utils.Modifiable;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +41,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @JsonRootName("quest")
-public class Quest {
+public class Quest extends Modifiable<Quest.Type> {
 
 	private static final String WANDERING_MONSTER_NOTE_MESSAGE =
 			"Wandering Monster in this quest: ";
@@ -218,21 +219,6 @@ public class Quest {
 
 	public void setNote(int index, String text) {
 		notes.set(index, text);
-		/*int wanderingMonsterNoteIndex = -1;
-		for (int i = 0; i < notes.size(); i++) {
-			final String note = notes.get(i);
-			if (!note.startsWith(WANDERING_MONSTER_NOTE_MESSAGE)) {
-				continue;
-			}
-			wanderingMonsterNoteIndex = i;
-		}
-		if (wanderingMonsterNoteIndex == -1) {
-			notes.add(text);
-		} else {
-			final String wanderingMonsterNote = notes.get(wanderingMonsterNoteIndex);
-			notes.set(wanderingMonsterNoteIndex, text);
-			notes.add(wanderingMonsterNote);
-		}*/
 	}
 
 	public List<String> getNotes() {
@@ -253,6 +239,9 @@ public class Quest {
 
 	public void setModified(boolean modified) {
 		this.modified = modified;
+		if (modified) {
+			notifyMutation(Type.NOTES);
+		}
 	}
 
 	public boolean isModified() {
@@ -587,5 +576,7 @@ public class Quest {
 			}
 		}
 	}
-
+	public enum Type {
+		NOTES
+	}
 }

@@ -241,9 +241,11 @@ public class ToolsPanel extends JPanel implements ItemListener, ListSelectionLis
 	private void openNoteModal() {
 		noteModal.setInitialText(note.getSelectedValue());
 		noteModal.showDialog().ifPresent(text -> {
+			if (!note.getSelectedValue().equals(text)) {
+				xmlQuest.setModified(true);
+			}
 			noteData.setElementAt(text, note.getLeadSelectionIndex());
 			xmlQuest.setNote(note.getLeadSelectionIndex(), text);
-			xmlQuest.setModified(true);
 		});
 	}
 
