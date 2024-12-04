@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +32,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static org.lightless.heroscribe.utils.SwingUtils.createLabelPanel;
+import static org.lightless.heroscribe.utils.SwingUtils.createVerticalScrollBar;
 
 public class IconPackDownloadModal extends JPanel {
 
@@ -49,21 +50,16 @@ public class IconPackDownloadModal extends JPanel {
 	public IconPackDownloadModal(IconPackService iconPackService) {
 		super();
 		this.iconPackService = iconPackService;
-		setLayout(new BorderLayout());
-
-		final JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(600, 400));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(600, 400));
 
 		box = new Box(BoxLayout.Y_AXIS);
-		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
 		jScrollPane.setVerticalScrollBar(createVerticalScrollBar(jScrollPane));
+		jScrollPane.setPreferredSize(new Dimension(600, 375));
 
-		panel.add(new JLabel("Select the Icon Packs to install from www.heroscribe.org:"));
-		panel.add(jScrollPane, BorderLayout.PAGE_START);
-
-		add(panel, BorderLayout.NORTH);
+		add(createLabelPanel("Select the Icon Packs to install from www.heroscribe.org:"));
+		add(jScrollPane);
 	}
 
 	public void showDialog() {
@@ -183,12 +179,6 @@ public class IconPackDownloadModal extends JPanel {
 		return iconPackDetails.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getName()))
 				.collect(Collectors.toList());
-	}
-
-	private static JScrollBar createVerticalScrollBar(JScrollPane jScrollPane) {
-		final JScrollBar scrollBar = jScrollPane.createVerticalScrollBar();
-		scrollBar.setUnitIncrement(16);
-		return scrollBar;
 	}
 
 	private static class DownloadReport {

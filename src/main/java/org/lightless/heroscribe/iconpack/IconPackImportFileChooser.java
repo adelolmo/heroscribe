@@ -36,6 +36,7 @@ import java.util.concurrent.ExecutionException;
 
 import static java.lang.String.format;
 import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
+import static org.lightless.heroscribe.utils.SwingUtils.createLabelPanel;
 
 public class IconPackImportFileChooser extends JFileChooser {
 
@@ -69,7 +70,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 
 				final SwingWorker<Void, String> worker = new SwingWorker<>() {
 					@Override
-					protected Void doInBackground() throws Exception {
+					protected Void doInBackground() throws HeroScribeParseException {
 						pleaseWaitDialog.setVisible(true);
 						iconPackService.importIconPack(importedIconPackFile);
 						return null;
@@ -138,7 +139,6 @@ public class IconPackImportFileChooser extends JFileChooser {
 
 	private JDialog createPleaseWaitDialog(Component parent) {
 		final JDialog dialog = new JDialog();
-//		dialog.setPreferredSize(new Dimension(400, 60));
 		dialog.setModal(true);
 		dialog.setResizable(false);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
@@ -168,8 +168,8 @@ public class IconPackImportFileChooser extends JFileChooser {
 
 		final JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.add(new JLabel(format("The Icon Pack is not compatible with %s.", APPLICATION_NAME)));
-		panel.add(new JLabel("Technical reason:"));
+		panel.add(createLabelPanel(format("The Icon Pack is not compatible with %s.", APPLICATION_NAME)));
+		panel.add(createLabelPanel("Technical reason:"));
 		panel.add(new JScrollPane(textArea), BorderLayout.PAGE_START);
 		return panel;
 	}

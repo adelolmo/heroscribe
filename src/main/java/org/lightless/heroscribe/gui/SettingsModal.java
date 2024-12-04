@@ -25,12 +25,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.lightless.heroscribe.utils.SwingUtils.createPanel;
+import static org.lightless.heroscribe.utils.SwingUtils.createTitledBorder;
 
 public class SettingsModal extends JPanel {
 
@@ -158,19 +160,5 @@ public class SettingsModal extends JPanel {
 		panel.setMaximumSize(new Dimension(600, 60 * numberOfFields));
 		add(panel);
 		return panel;
-	}
-
-	private static JPanel createPanel() {
-		final JPanel panel = new JPanel();
-		panel.setLayout(new FlowLayout(FlowLayout.LEFT));
-//		panel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 1));
-		return panel;
-	}
-
-	private static TitledBorder createTitledBorder(String title) {
-		final TitledBorder border = BorderFactory.createTitledBorder(title);
-		border.setTitleJustification(TitledBorder.LEFT);
-//		border.setBorder(BorderFactory.createLineBorder(Color.GREEN, 1));
-		return border;
 	}
 }

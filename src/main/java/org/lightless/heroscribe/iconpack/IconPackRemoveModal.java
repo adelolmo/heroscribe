@@ -19,7 +19,6 @@
 package org.lightless.heroscribe.iconpack;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +26,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static org.lightless.heroscribe.utils.SwingUtils.createLabelPanel;
+import static org.lightless.heroscribe.utils.SwingUtils.createVerticalScrollBar;
 
 public class IconPackRemoveModal extends JPanel {
 
@@ -36,21 +37,16 @@ public class IconPackRemoveModal extends JPanel {
 	public IconPackRemoveModal(IconPackService iconPackService) {
 		super();
 		this.iconPackService = iconPackService;
-		setLayout(new BorderLayout());
-
-		final JPanel panel = new JPanel();
-		panel.setPreferredSize(new Dimension(300, 300));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(300, 300));
 
 		box = new Box(BoxLayout.Y_AXIS);
-		box.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		final JScrollPane jScrollPane = new JScrollPane(box);
 		jScrollPane.setVerticalScrollBar(createVerticalScrollBar(jScrollPane));
+		jScrollPane.setPreferredSize(new Dimension(300, 275));
 
-		panel.add(new JLabel("Select the Icon Packs to remove:"));
-		panel.add(jScrollPane, BorderLayout.PAGE_START);
-
-		add(panel, BorderLayout.NORTH);
+		add(createLabelPanel("Select the Icon Packs to remove:"));
+		add(jScrollPane);
 	}
 
 	public void showDialog() {
@@ -101,11 +97,5 @@ public class IconPackRemoveModal extends JPanel {
 		return installedIconPacks.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getKindNames()))
 				.collect(Collectors.toList());
-	}
-
-	private static JScrollBar createVerticalScrollBar(JScrollPane jScrollPane) {
-		final JScrollBar scrollBar = jScrollPane.createVerticalScrollBar();
-		scrollBar.setUnitIncrement(16);
-		return scrollBar;
 	}
 }
