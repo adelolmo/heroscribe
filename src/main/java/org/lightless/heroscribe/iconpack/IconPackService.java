@@ -112,10 +112,14 @@ public class IconPackService {
 
 		final Path tempIconPackDirectory = getTempIconPackDirectory(iconPackFile);
 		tempIconPackDirectory.toFile().mkdirs();
+		log.debug("extracting zip file {}...", iconPackFile.getAbsolutePath());
 		zipExtractor.extract(iconPackFile, tempIconPackDirectory);
+		log.debug("done extracting");
 
-		final ObjectList iconPackObjectList =
-				objectsParser.parse(new File(tempIconPackDirectory.toString(), "Objects.xml"));
+		final File objectsFile = new File(tempIconPackDirectory.toString(), "Objects.xml");
+		log.debug("parsing objects {}...", objectsFile.getAbsolutePath());
+		final ObjectList iconPackObjectList = objectsParser.parse(objectsFile);
+		log.debug("done parsing");
 
 		final List<Kind> iconPackKinds = getNewKindsFromIconPack(systemObjectList, iconPackObjectList);
 		iconPackKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
@@ -138,6 +142,7 @@ public class IconPackService {
 
 		iconPackKinds.forEach(systemObjectList::addKind);
 		imageLoader.flush();
+		log.debug("done adding kinds");
 	}
 
 	public void removePack(File iconPackFile) throws IOException {

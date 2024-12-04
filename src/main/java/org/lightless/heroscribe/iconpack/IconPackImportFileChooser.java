@@ -68,38 +68,8 @@ public class IconPackImportFileChooser extends JFileChooser {
 				new Thread(new DialogThread(pleaseWaitDialog))
 						.start();
 
-				final SwingWorker<Void, String> worker = new SwingWorker<>() {
-					@Override
-					protected Void doInBackground() throws HeroScribeParseException {
-						pleaseWaitDialog.setVisible(true);
-						iconPackService.importIconPack(importedIconPackFile);
-						return null;
-					}
-
-					@Override
-					protected void done() {
-						try {
-							final Void unused = get();
-							pleaseWaitDialog.setVisible(false);
-							pleaseWaitDialog.dispose();
-							JOptionPane.showMessageDialog(null,
-									"Icon Pack successfully imported",
-									"Import",
-									JOptionPane.INFORMATION_MESSAGE);
-						} catch (InterruptedException | ExecutionException e) {
-							if (e.getCause() instanceof HeroScribeParseException) {
-								final HeroScribeParseException exception = (HeroScribeParseException) e.getCause();
-								handleException(importedIconPackFile, exception);
-							}
-
-						} finally {
-							pleaseWaitDialog.setVisible(false);
-							pleaseWaitDialog.dispose();
-						}
-					}
-				};
-				worker.execute();
-
+				installPackBackgroundWorker(importedIconPackFile, pleaseWaitDialog)
+						.execute();
 
 			} catch (FileAlreadyExistsException ex) {
 				if (JOptionPane.showConfirmDialog(this,
@@ -111,12 +81,12 @@ public class IconPackImportFileChooser extends JFileChooser {
 						Files.copy(getSelectedFile().toPath(),
 								importedIconPackFile.toPath(),
 								StandardCopyOption.REPLACE_EXISTING);
-						iconPackService.importIconPack(importedIconPackFile);
 
-						JOptionPane.showMessageDialog(this,
-								"Icon Pack successfully imported",
-								"Import",
-								JOptionPane.INFORMATION_MESSAGE);
+						new Thread(new DialogThread(pleaseWaitDialog))
+								.start();
+
+						installPackBackgroundWorker(importedIconPackFile, pleaseWaitDialog)
+								.execute();
 
 					} catch (IOException e) {
 						handleException(importedIconPackFile, e);
@@ -126,6 +96,40 @@ public class IconPackImportFileChooser extends JFileChooser {
 				handleException(importedIconPackFile, e);
 			}
 		}
+	}
+
+	private SwingWorker<Void, String> installPackBackgroundWorker(
+			File importedIconPackFile,
+			JDialog pleaseWaitDialog) {
+		return new SwingWorker<>() {
+			@Override
+			protected Void doInBackground() throws HeroScribeParseException {
+				iconPackService.importIconPack(importedIconPackFile);
+				return null;
+			}
+
+			@Override
+			protected void done() {
+				try {
+					final Void unused = get();
+					pleaseWaitDialog.setVisible(false);
+					pleaseWaitDialog.dispose();
+					JOptionPane.showMessageDialog(null,
+							"Icon Pack successfully imported",
+							"Import",
+							JOptionPane.INFORMATION_MESSAGE);
+				} catch (InterruptedException | ExecutionException e) {
+					if (e.getCause() instanceof HeroScribeParseException) {
+						final HeroScribeParseException exception = (HeroScribeParseException) e.getCause();
+						handleException(importedIconPackFile, exception);
+					}
+
+				} finally {
+					pleaseWaitDialog.setVisible(false);
+					pleaseWaitDialog.dispose();
+				}
+			}
+		};
 	}
 
 	private void handleException(File iconPackFile, IOException e) {
