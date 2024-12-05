@@ -50,4 +50,22 @@ public class SwingUtils {
 		scrollBar.setUnitIncrement(16);
 		return scrollBar;
 	}
+
+	public static JDialog createButtonlessDialog(String message) {
+		final JDialog dialog = new JDialog();
+		dialog.setModal(true);
+		dialog.setResizable(false);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.setSize(new Dimension(290, 126));  // used only to center the dialog
+		dialog.setLocationRelativeTo(null);
+		dialog.setVisible(false);
+		dialog.setContentPane(new JOptionPane(
+				message,
+				JOptionPane.INFORMATION_MESSAGE,
+				JOptionPane.DEFAULT_OPTION,
+				null,
+				new Object[]{},
+				null));
+		return dialog;
+	}
 }

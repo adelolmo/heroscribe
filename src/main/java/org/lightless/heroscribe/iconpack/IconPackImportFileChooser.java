@@ -37,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 import static java.lang.String.format;
 import static org.lightless.heroscribe.Constants.APPLICATION_NAME;
 import static org.lightless.heroscribe.utils.SwingUtils.createLabelPanel;
+import static org.lightless.heroscribe.utils.SwingUtils.createButtonlessDialog;
 
 public class IconPackImportFileChooser extends JFileChooser {
 
@@ -49,7 +50,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 	public IconPackImportFileChooser(File defaultDir, IconPackService iconPackService) {
 		super(defaultDir);
 		this.iconPackService = iconPackService;
-		pleaseWaitDialog = createPleaseWaitDialog();
+		pleaseWaitDialog = createButtonlessDialog("Installing Icon Pack, please wait...");
 		setPreferredSize(FILE_CHOOSER_DIMENSION);
 		setDialogTitle("Import");
 		setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -139,24 +140,6 @@ public class IconPackImportFileChooser extends JFileChooser {
 				errorMessage(e),
 				"Error",
 				JOptionPane.ERROR_MESSAGE);
-	}
-
-	private JDialog createPleaseWaitDialog() {
-		final JDialog dialog = new JDialog();
-		dialog.setModal(true);
-		dialog.setResizable(false);
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-		dialog.setSize(new Dimension(290, 126));  // used only to center the dialog
-		dialog.setLocationRelativeTo(null);
-		dialog.setVisible(false);
-		dialog.setContentPane(new JOptionPane(
-				"Installing Icon Pack, please wait...",
-				JOptionPane.INFORMATION_MESSAGE,
-				JOptionPane.DEFAULT_OPTION,
-				null,
-				new Object[]{},
-				null));
-		return dialog;
 	}
 
 	private static JPanel errorMessage(IOException e) {

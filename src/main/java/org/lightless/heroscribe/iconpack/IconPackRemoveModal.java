@@ -23,20 +23,22 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static org.lightless.heroscribe.utils.SwingUtils.createLabelPanel;
-import static org.lightless.heroscribe.utils.SwingUtils.createVerticalScrollBar;
+import static org.lightless.heroscribe.utils.SwingUtils.*;
 
 public class IconPackRemoveModal extends JPanel {
 
 	private final IconPackService iconPackService;
 	private final Box box;
+	private final JDialog pleaseWaitDialog;
 
 	public IconPackRemoveModal(IconPackService iconPackService) {
 		super();
 		this.iconPackService = iconPackService;
+		pleaseWaitDialog = createButtonlessDialog("Removing Icon Pack(s), please wait...");
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setPreferredSize(new Dimension(300, 300));
 
@@ -72,30 +74,66 @@ public class IconPackRemoveModal extends JPanel {
 					continue;
 				}
 
+				new Thread(new DialogThread(pleaseWaitDialog))
+						.start();
+
+				removePacksBackgroundWorker(checkBox)
+						.execute();
+			}
+		}
+	}
+
+	private SwingWorker<Void, String> removePacksBackgroundWorker(JCheckBox checkBox) {
+		return new SwingWorker<>() {
+			@Override
+			protected Void doInBackground() throws IOException {
 				for (IconPackService.IconPack iconPackFile :
 						getSelectedIconPacks(iconPackService.getInstalledIconPackDetails(), checkBox)) {
-					try {
-						iconPackService.removePack(iconPackFile.getZipFile());
-					} catch (IOException e) {
-						JOptionPane.showMessageDialog(this,
-								format("Can't remove Icon Pack %s.\nDetailed Error: %s",
-										iconPackFile.getZipFile().getName(), e.getMessage()),
-								"Error",
-								JOptionPane.ERROR_MESSAGE);
-						return;
-					}
+					iconPackService.removePack(iconPackFile.getZipFile());
+				}
+				return null;
+			}
+
+			@Override
+			protected void done() {
+				try {
+					final Void unused = get();
+					pleaseWaitDialog.setVisible(false);
+					pleaseWaitDialog.dispose();
+					JOptionPane.showMessageDialog(null,
+							"Icon Pack(s) successfully removed",
+							"Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				} catch (InterruptedException | ExecutionException e) {
+					JOptionPane.showMessageDialog(null,
+							format("Can't remove Icon Pack.\nDetailed Error: %s", e.getMessage()),
+							"Error",
+							JOptionPane.ERROR_MESSAGE);
+				} finally {
+					pleaseWaitDialog.setVisible(false);
+					pleaseWaitDialog.dispose();
 				}
 			}
-			JOptionPane.showMessageDialog(this,
-					"Icon Pack(s) successfully removed",
-					"Success",
-					JOptionPane.INFORMATION_MESSAGE);
-		}
+		};
 	}
 
 	private List<IconPackService.IconPack> getSelectedIconPacks(List<IconPackService.IconPack> installedIconPacks, JCheckBox checkBox) {
 		return installedIconPacks.stream()
 				.filter(iconPack -> checkBox.getText().equals(iconPack.getKindNames()))
 				.collect(Collectors.toList());
+	}
+
+	private static class DialogThread implements Runnable {
+		private final JDialog dialog;
+
+		public DialogThread(JDialog dialog) {
+			this.dialog = dialog;
+		}
+
+		@Override
+		public void run() {
+			dialog.pack();
+			dialog.setVisible(true);
+		}
 	}
 }
