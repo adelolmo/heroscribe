@@ -49,7 +49,7 @@ public class IconPackImportFileChooser extends JFileChooser {
 	public IconPackImportFileChooser(File defaultDir, IconPackService iconPackService) {
 		super(defaultDir);
 		this.iconPackService = iconPackService;
-		pleaseWaitDialog = createPleaseWaitDialog(this);
+		pleaseWaitDialog = createPleaseWaitDialog();
 		setPreferredSize(FILE_CHOOSER_DIMENSION);
 		setDialogTitle("Import");
 		setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -141,13 +141,13 @@ public class IconPackImportFileChooser extends JFileChooser {
 				JOptionPane.ERROR_MESSAGE);
 	}
 
-	private JDialog createPleaseWaitDialog(Component parent) {
+	private JDialog createPleaseWaitDialog() {
 		final JDialog dialog = new JDialog();
 		dialog.setModal(true);
 		dialog.setResizable(false);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-//		dialog.pack();
-		dialog.setLocationRelativeTo(parent);
+		dialog.setSize(new Dimension(290, 126));  // used only to center the dialog
+		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(false);
 		dialog.setContentPane(new JOptionPane(
 				"Installing Icon Pack, please wait...",
