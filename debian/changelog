@@ -1,3 +1,15 @@
+heroscribe-enhanced-skull (1.10) unstable; urgency=medium
+
+  * Improve speed installing and removing Icon Packs
+  * Add "please wait" dialog on installing and removing icon packs
+  * Add option to force the installation of incompatible Icon Packs
+  * Move application configuration to new Settings menu
+  * Set new menu icons
+  * Open note edition modal with double click
+  * Mark quest as modified (* at the end of the title in window bar) when adding/editing/deleting notes
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Thu, 05 Dec 2024 22:01:02 +0100
+
 heroscribe-enhanced-skull (1.9) unstable; urgency=medium
 
   * Show user friendly error in modal if the Icon Pack cannot be loaded
