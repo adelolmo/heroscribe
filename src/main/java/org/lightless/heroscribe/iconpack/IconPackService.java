@@ -124,21 +124,16 @@ public class IconPackService {
 		final List<Kind> iconPackKinds = getNewKindsFromIconPack(systemObjectList, iconPackObjectList);
 		iconPackKinds.forEach(kind -> log.info("<{}> Importing kind {}...", iconPackFile.getName(), kind.getId()));
 
-		iconPackObjectList.getObjects()
+		final List<ObjectList.Object> objectList = iconPackObjectList.getObjects()
 				.stream()
 				.filter(object -> !systemObjectList.getKindIds().contains(object.getKind()))
 				.filter(object -> !object.getIconPath("Europe").contains("Base"))
-				.forEach(object -> {
-					log.info("<{}> <{}> Importing object '{}'...",
-							iconPackFile.getName(), object.getKind(), object.getId());
-
-					// add icons
+				.peek(object -> {
 					loadObjectIcons(object, "Europe", tempIconPackDirectory);
 					loadObjectIcons(object, "USA", tempIconPackDirectory);
-
-					// update system objects
-					systemObjectList.addObject(object);
-				});
+				})
+				.collect(Collectors.toList());
+		systemObjectList.addObjects(objectList);
 
 		iconPackKinds.forEach(systemObjectList::addKind);
 		imageLoader.flush();

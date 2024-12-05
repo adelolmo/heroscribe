@@ -154,8 +154,8 @@ public class ObjectList extends Modifiable<ObjectList.Type> {
 		this.objects = objects;
 	}
 
-	public void addObject(Object object) {
-		objects.add(object);
+	public void addObjects(List<Object> objectList) {
+		objects.addAll(objectList);
 		notifyMutation(Type.OBJECTS);
 	}
 
