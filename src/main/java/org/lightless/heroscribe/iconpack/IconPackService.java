@@ -146,6 +146,8 @@ public class IconPackService {
 	}
 
 	public void removePack(File iconPackFile) throws IOException {
+		log.info("<{}> Removing Icon Pack...", iconPackFile.getName());
+
 		final ObjectList iconPackObjectList =
 				objectsParser.parse(
 						new File(getTempIconPackDirectory(iconPackFile).toString(), "Objects.xml"));
@@ -156,19 +158,15 @@ public class IconPackService {
 				.stream()
 				.map(Kind::getId)
 				.collect(Collectors.toList());
-		Arrays.stream(systemObjectList.getObjects().toArray(new ObjectList.Object[]{}))
+		final List<ObjectList.Object> objectList = Arrays.stream(systemObjectList.getObjects().toArray(new ObjectList.Object[]{}))
 				.filter(object -> iconPackKindIds.contains(object.getKind()))
-				.forEach(object -> {
-					log.info("<{}> <{}> Removing object '{}'...",
-							iconPackFile.getName(), object.getKind(), object.getId());
-
+				.peek(object -> {
 					// remove icons
 					imageLoader.removeImage(object.getIcon("Europe").imageResource());
 					imageLoader.removeImage(object.getIcon("USA").imageResource());
-
-					// update system objects
-					systemObjectList.removeObject(object);
-				});
+				})
+				.collect(Collectors.toList());
+		systemObjectList.removeObjects(objectList);
 
 		kinds.forEach(systemObjectList::removeKind);
 		FileUtils.deleteDirectory(getTempIconPackDirectory(iconPackFile).toFile());

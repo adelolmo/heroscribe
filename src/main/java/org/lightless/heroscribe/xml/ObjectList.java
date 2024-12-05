@@ -159,8 +159,8 @@ public class ObjectList extends Modifiable<ObjectList.Type> {
 		notifyMutation(Type.OBJECTS);
 	}
 
-	public void removeObject(Object object) {
-		objects.remove(object);
+	public void removeObjects(List<Object> objectList) {
+		objects.removeAll(objectList);
 		notifyMutation(Type.OBJECTS);
 	}
 
