@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
@@ -36,6 +37,8 @@ class ExportQuestTest {
 	private static final Path TMP_DIR =
 			Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe-test");
 
+	private static final String SHORT_LOREM_IPSUM =
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 	private static final String LOREM_IPSUM =
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
 					"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" +
@@ -150,7 +153,11 @@ class ExportQuestTest {
 			final Quest quest = createEmptyQuest();
 			quest.setSpeech(LOREM_IPSUM);
 			quest.getBoards().get(0).addObject(TREASURE_CHEST);
-			quest.setNotes(Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ).collect(Collectors.toList()));
+			quest.setNotes(Stream.concat(
+							Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+							Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ))
+					.map(s -> s + " " + SHORT_LOREM_IPSUM)
+					.collect(Collectors.toList()));
 			ExportPDF.write(GHOSTSCRIPT_BIN,
 					createFile("many-short-notes.pdf", paperType),
 					quest,

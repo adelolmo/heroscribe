@@ -611,7 +611,7 @@ public class ExportEPS {
 		out.println("/Times-Roman findfont 12 scalefont setfont");
 		out.println("0 0 0 setrgbcolor");
 
-		int numberOfLinesInPage = 0;
+		double numberOfLinesInPage = 0;
 		final int speechLines = GhostscriptUtils.numberOfLines(quest.getSpeech(), 12);
 		log.info("Speech. number of lines: {}", speechLines);
 		numberOfLinesInPage += speechLines;
@@ -663,6 +663,7 @@ public class ExportEPS {
 						sanitize(noteLine));
 			}
 			out.println("newline");
+			numberOfLinesInPage += paperType.getNewLineHeight();
 		}
 
 		if (numberOfLinesInPage >= pageMaxNumberOfLines) {
