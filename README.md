@@ -36,7 +36,7 @@ Postscript is required for PDF generation.
 Install the debian package in your system
 
     # apt-get install default-jre-headless ghostscript
-    # dpkg -i ../heroscribe-enhanced-skull_1.9_all.deb
+    # dpkg -i ../heroscribe-enhanced-skull_1.10_all.deb
 
 In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
@@ -61,13 +61,13 @@ or
 
     mvn package -DskipTests
 
-This will create a `target` folder with a file called `heroscribe-enhanced-skull-bundle.zip`, which contains the HeroScribeEnhanced ready to use.
+This will create a `target` folder with a file called `heroscribe-enhanced-skull_1.10.zip`, which contains the HeroScribeEnhanced ready to use.
 
 #### Debian package
 
     gbp buildpackage --no-sign --git-ignore-branch --git-ignore-new
 
-This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.9_all.deb`
+This will create the debian package in the parent directory. e.g: `../heroscribe-enhanced-skull_1.10_all.deb`
 
 ## Links
 
