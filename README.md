@@ -17,26 +17,57 @@
 - Barak Tor - Barrow of the Witch Lord: [xml](examples/HQBase-12-BarakTor-BarrowoftheWitchLord_EU.xml), [pdf](examples/HQBase-12-BarakTor-BarrowoftheWitchLord_EU.pdf)
 - Journey to the Bottom of the Crypt: [xml](examples/Journey%20to%20the%20Bottom%20of%20the%20Crypt.xml), [pdf](examples/Journey%20to%20the%20Bottom%20of%20the%20Crypt.pdf)
 
-## How to download
+## Install
 
-Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package depending on you OS (for _Debian/Ubuntu_ the `.deb` and for other _Linux distros_, _Win_ and _Mac_ the `.zip`)
+### Debian/Ubuntu
+
+There are two ways of installing the application: via debian _repository_ and as a _package_.
+
+I recommend setting up the debian repository, because you won't only get the application installed,
+but you'll get future updates right away.
+
+If you don't want to set up the repository, then you can always install the package directly.
+
+#### Repository
+
+Set up the repository:
+
+    sudo apt install apt-transport-https
+    sudo curl -sS -fsSLo /usr/share/keyrings/adelolmo-archive-keyring.gpg https://adelolmo.github.io/andoni.delolmo@gmail.com.gpg
+    echo "deb [signed-by=/usr/share/keyrings/adelolmo-archive-keyring.gpg] https://adelolmo.github.io/$(lsb_release -cs) $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/adelolmo.github.io.list
+
+Install the package:
+
+    sudo apt update && sudo apt install heroscribe-enhanced-skull
+
+#### Package
+
+Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package
+and download the debian package (e.g. `heroscribe-enhanced-skull_1.10_all.deb`)
+
+First of all, install the dependencies and then the package itself:
+
+    sudo apt-get install default-jre-headless ghostscript
+    sudo dpkg -i heroscribe-enhanced-skull_1.10_all.deb
+
+### Windows, Mac and other Linux distros
+
+Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package
+and download the zip artefact (e.g. `heroscribe-enhanced-skull_1.10.zip`)
+
+Then extract the zip file.
 
 ## Running HeroScribe
 
 ### Zip bundle
 
-Unzip the bundle and run
+Go to the directory where the application was extracted and execute java application:
 
     java -jar heroscribe-enhanced-skull.jar
 
-Postscript is required for PDF generation.
+You still require to install Postscript for PDF generation.
 
 ### Debian package
-
-Install the debian package in your system
-
-    # apt-get install default-jre-headless ghostscript
-    # dpkg -i ../heroscribe-enhanced-skull_1.10_all.deb
 
 In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
