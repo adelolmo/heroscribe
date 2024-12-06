@@ -53,11 +53,15 @@ First of all, install the dependencies and then the package itself:
 ### Windows, Mac and other Linux distros
 
 Go to the [releases section](https://github.com/adelolmo/heroscribe/releases/latest) and download the package
-and download the zip artefact (e.g. `heroscribe-enhanced-skull_1.10.zip`)
+and download the zip bundle (e.g. `heroscribe-enhanced-skull_1.10.zip`)
 
 Then extract the zip file.
 
 ## Running HeroScribe
+
+### Debian/Ubuntu package
+
+In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
 ### Zip bundle
 
@@ -66,10 +70,6 @@ Go to the directory where the application was extracted and execute java applica
     java -jar heroscribe-enhanced-skull.jar
 
 You still require to install Postscript for PDF generation.
-
-### Debian package
-
-In your desktop, go to _Applications -> Graphics -> Heroscribe Enhanced Skull_
 
 ## Building
 
