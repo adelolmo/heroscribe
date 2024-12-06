@@ -145,6 +145,21 @@ class ExportQuestTest {
 	}
 
 	@Test
+	void shouldExportPDFQuestWithSpeechAndManyShortNotes() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setSpeech(LOREM_IPSUM);
+			quest.getBoards().get(0).addObject(TREASURE_CHEST);
+			quest.setNotes(Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ).collect(Collectors.toList()));
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("many-short-notes.pdf", paperType),
+					quest,
+					objectList,
+					paperType);
+		}
+	}
+
+	@Test
 	void shouldExportEpsQuestWithSpeechAndFewNotes() throws Exception {
 		for (PaperType paperType : PaperType.values()) {
 			ExportEPS.writeMultiPage(paperType,
