@@ -2,7 +2,7 @@
 
 <img src="src/main/resources/Splash.jpg" width="220" height="160">
 
-![Heroscribe Enhance UI and PDF export](screenshot.png)
+![Heroscribe Enhance UI and PDF export](examples/screenshot.png)
 
 
 
