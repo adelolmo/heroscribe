@@ -239,9 +239,7 @@ public class Quest extends Modifiable<Quest.Type> {
 
 	public void setModified(boolean modified) {
 		this.modified = modified;
-		if (modified) {
-			notifyMutation(Type.NOTES);
-		}
+		notifyMutation(Type.NOTES);
 	}
 
 	public boolean isModified() {
@@ -576,6 +574,7 @@ public class Quest extends Modifiable<Quest.Type> {
 			}
 		}
 	}
+
 	public enum Type {
 		NOTES
 	}

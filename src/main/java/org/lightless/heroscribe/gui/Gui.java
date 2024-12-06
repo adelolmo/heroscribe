@@ -562,6 +562,7 @@ public class Gui extends JFrame implements WindowListener, ItemListener, ActionL
 	private void saveQuestToDisk(File file) {
 		try {
 			questParser.saveToDisk(objectList, quest, file);
+			quest.setModified(false);
 		} catch (IOException exception) {
 			JOptionPane.showMessageDialog(this,
 					"Can't save file.",
