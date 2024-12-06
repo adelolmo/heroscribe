@@ -1,3 +1,9 @@
+heroscribe-enhanced-skull (1.11) unstable; urgency=medium
+
+  * Fix to remove * in title bar after saving quest
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Fri, 06 Dec 2024 19:04:54 +0100
+
 heroscribe-enhanced-skull (1.10) unstable; urgency=medium
 
   * Improve speed installing and removing Icon Packs
