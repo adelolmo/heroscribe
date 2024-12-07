@@ -58,8 +58,9 @@ public enum PaperType {
 			612,
 			792,
 			"8.5\" x 11.0\"",
-			55,
-			21),
+			69,
+			26,
+			0.41),
 	//	LEGAL("legal", "Legal", 612, 1008, "8.5\" x 14.0\""),
 //	A3("a3", "A3", 595, 842, "297mm x 420mm"),
 	A4("a4",
@@ -67,8 +68,9 @@ public enum PaperType {
 			595,
 			842,
 			"210mm x 297mm",
-			58,
-			24),
+			73,
+			27,
+			0.37),
 //	A5("a5", "A5", 420, 595, "148mm x 210mm")
 	;
 
@@ -79,6 +81,7 @@ public enum PaperType {
 	private final String humanDimension;
 	private final int numberLinesFullPage;
 	private final int numberLinesHalfPage;
+	private final double newLineHeight;
 
 	PaperType(String id,
 			  String name,
@@ -86,7 +89,8 @@ public enum PaperType {
 			  int height,
 			  String humanDimension,
 			  int numberLinesFullPage,
-			  int numberLinesHalfPage) {
+			  int numberLinesHalfPage,
+			  double newLineHeight) {
 		this.id = id;
 		this.name = name;
 		this.width = width;
@@ -94,6 +98,7 @@ public enum PaperType {
 		this.humanDimension = humanDimension;
 		this.numberLinesFullPage = numberLinesFullPage;
 		this.numberLinesHalfPage = numberLinesHalfPage;
+		this.newLineHeight = newLineHeight;
 	}
 
 	public String getId() {
@@ -126,6 +131,10 @@ public enum PaperType {
 
 	public int getNumberLinesHalfPage() {
 		return numberLinesHalfPage;
+	}
+
+	public double getNewLineHeight() {
+		return newLineHeight;
 	}
 
 	@Override

@@ -611,7 +611,7 @@ public class ExportEPS {
 		out.println("/Times-Roman findfont 12 scalefont setfont");
 		out.println("0 0 0 setrgbcolor");
 
-		int numberOfLinesInPage = 0;
+		double numberOfLinesInPage = 0;
 		final int speechLines = GhostscriptUtils.numberOfLines(quest.getSpeech(), 12);
 		log.info("Speech. number of lines: {}", speechLines);
 		numberOfLinesInPage += speechLines;
@@ -626,6 +626,7 @@ public class ExportEPS {
 		out.println("/Times-Roman findfont 10 scalefont setfont");
 		out.println("newline (NOTES ) S");
 		out.println("newline");
+		numberOfLinesInPage += paperType.getNewLineHeight();
 
 		int pageMaxNumberOfLines = 0;
 		for (String note : quest.getNotesForUI()) {
@@ -659,10 +660,14 @@ public class ExportEPS {
 					}
 				}
 
+				out.println("/newline { tm 10 sub /tm exch def lm tm moveto } def");
 				out.println("newline (%s ) S",
 						sanitize(noteLine));
 			}
+			// make space between notes smaller for newline
+			out.println("/newline { tm 4 sub /tm exch def lm tm moveto } def");
 			out.println("newline");
+			numberOfLinesInPage += paperType.getNewLineHeight();
 		}
 
 		if (numberOfLinesInPage >= pageMaxNumberOfLines) {

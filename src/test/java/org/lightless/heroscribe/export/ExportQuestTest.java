@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.lightless.heroscribe.ResourceUtils.getResourceAsFile;
 
@@ -36,6 +37,8 @@ class ExportQuestTest {
 	private static final Path TMP_DIR =
 			Paths.get(System.getProperty("java.io.tmpdir"), "heroscribe-test");
 
+	private static final String SHORT_LOREM_IPSUM =
+			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 	private static final String LOREM_IPSUM =
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n" +
 					"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n" +
@@ -46,6 +49,10 @@ class ExportQuestTest {
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 	private static final String[] ABCDEFGHIJKLMNOPQRSTUVWXYZ =
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+	private static final List<String> ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2 = Stream.concat(
+					Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+					Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ))
+			.collect(Collectors.toList());
 	private static final Quest.Board.Object TREASURE_CHEST = new Quest.Board.Object() {{
 		setId("TreasureChest");
 		setLeft(2.0f);
@@ -138,6 +145,25 @@ class ExportQuestTest {
 			quest.getBoards().get(0).addObject(TREASURE_CHEST);
 			ExportPDF.write(GHOSTSCRIPT_BIN,
 					createFile("speech-only.pdf", paperType),
+					quest,
+					objectList,
+					paperType);
+		}
+	}
+
+	@Test
+	void shouldExportPDFQuestWithSpeechAndManyShortNotes() throws Exception {
+		for (PaperType paperType : PaperType.values()) {
+			final Quest quest = createEmptyQuest();
+			quest.setSpeech(LOREM_IPSUM);
+			quest.getBoards().get(0).addObject(TREASURE_CHEST);
+			quest.setNotes(Stream.concat(
+							ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2.stream(),
+							ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2.stream())
+					.map(s -> s + " " + SHORT_LOREM_IPSUM)
+					.collect(Collectors.toList()));
+			ExportPDF.write(GHOSTSCRIPT_BIN,
+					createFile("many-short-notes.pdf", paperType),
 					quest,
 					objectList,
 					paperType);
