@@ -1,3 +1,9 @@
+heroscribe-enhanced-skull (1.12) unstable; urgency=medium
+
+  * Fix to prevent the overlaping of notes over wandering monster
+
+ -- Andoni del Olmo <andoni.delolmo@gmail.com>  Sat, 07 Dec 2024 10:40:32 +0100
+
 heroscribe-enhanced-skull (1.11) unstable; urgency=medium
 
   * Fix to remove * in title bar after saving quest
