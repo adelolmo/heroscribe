@@ -49,6 +49,10 @@ class ExportQuestTest {
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I"};
 	private static final String[] ABCDEFGHIJKLMNOPQRSTUVWXYZ =
 			new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
+	private static final List<String> ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2 = Stream.concat(
+					Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
+					Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ))
+			.collect(Collectors.toList());
 	private static final Quest.Board.Object TREASURE_CHEST = new Quest.Board.Object() {{
 		setId("TreasureChest");
 		setLeft(2.0f);
@@ -154,8 +158,8 @@ class ExportQuestTest {
 			quest.setSpeech(LOREM_IPSUM);
 			quest.getBoards().get(0).addObject(TREASURE_CHEST);
 			quest.setNotes(Stream.concat(
-							Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ),
-							Arrays.stream(ABCDEFGHIJKLMNOPQRSTUVWXYZ))
+							ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2.stream(),
+							ABCDEFGHIJKLMNOPQRSTUVWXYZ_x2.stream())
 					.map(s -> s + " " + SHORT_LOREM_IPSUM)
 					.collect(Collectors.toList()));
 			ExportPDF.write(GHOSTSCRIPT_BIN,
