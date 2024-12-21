@@ -9,6 +9,7 @@
 ## What's new in this version of Heroscribe?
 
 - Your quest notes correctly exported to PDF even if they extend to multiple pages
+- Support ISO DIN A4 and US Letter paper size
 - Install and remove `Icon Packs` from `https://www.heroscribe.org/icons.html` with a single click
 
 ## Examples
