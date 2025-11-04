@@ -10,7 +10,7 @@ Package: heroscribe-enhanced-skull
 Architecture: all
 Priority: optional
 Section: java
-Depends: ${misc:Depends}, default-jre-headless, ghostscript
+Depends: ${misc:Depends}, default-jre, ghostscript
 Description: Easily produce typographic quality HeroQuest© maps
  Its main output format is EPS, the de-facto standard in the printing industry;
  EPS files can be opened by almost any CG application (GNU Ghostscript is
