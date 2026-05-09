@@ -1,1 +1,1 @@
-%JAVA_HOME%\bin\java -jar heroscribe-enhanced-skull.jar
+"%JAVA_HOME%\bin\java" -jar -Duser.home="%cd%"  heroscribe-enhanced-skull.jar
